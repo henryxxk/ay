@@ -1,0 +1,316 @@
+<include file="Public:headernew" />
+<include file="Public:menunew" />
+    <div class="silder index-slider">
+        <div id="Indexbanner" class="nivoSlider">
+        </div>
+    </div>
+
+
+<!--div class="container">
+    <div class="index-news">
+        <div class="icon-news p-l">
+            <img src="__PUBLIC__/Image/icon-news.png">
+        </div>
+        <ul class="p-l">
+            <li id="article">
+                热门资讯：
+            </li>
+        </ul>
+    </div>
+</div>
+<div class="container">
+    <div class="hot-list">
+        <div class="icon-host-list">
+            <img src="__PUBLIC__/Image/hot-list.png">
+        </div>
+        <ul id="hots" class="p-l">
+
+        </ul>
+    </div>
+</div-->
+<style>
+    
+</style>
+<div id="subGoodsAll">
+
+</div>
+<!--<div class="container">
+	<div id="typename1" class="cate-list-title">
+		
+	</div>
+	<div class="cate-list">
+		<div class="left">
+			<a href="">
+				<img id="type-first" src="">
+			</a>
+		</div>
+		<div class="right">
+			<ul id="typegoods-first">
+				
+			</ul>
+		</div>
+	</div>
+</div>
+
+<div class="container">
+	<div id="typename2" class="cate-list-title">
+		
+	</div>
+	<div class="cate-list">
+		<div class="left">
+			<a href="">
+				<img id="type-two" src="">
+			</a>
+		</div>
+		<div class="right">
+			<ul id="typegoods-two">
+				
+			</ul>
+		</div>
+	</div>
+</div>-->
+
+
+<style>
+    #subGoodsAll{
+        margin:0 auto;
+        width:1418px;
+    }
+    .cate-list .left {
+        height: 453px;
+        width: 365px;
+        float: left;
+        margin-right: 20px;
+        position:relative;
+    }
+    .cate-list .left img{
+        height: 393px;
+        width: 305px;
+        margin: 30px;
+    }
+
+    .headphoto{
+        background: url(__PUBLIC__/Image/headphoto.png) no-repeat;
+        width:305px;
+        height:437px;
+        background-size: 100% 100%;
+        overflow: hidden;
+
+    }
+    .littlephoto{
+        width:136px;
+        height:164px;
+        background: url(__PUBLIC__/Image/littlephoto.png) no-repeat;
+        background-size: 100% 100%;
+    }
+    body{
+        background: url(__PUBLIC__/Image/bg.png) no-repeat;
+        background-size: 100% 100%;
+    }
+    .cate-list .right ul{
+        float: left;
+        display: block;
+        height: 453px;
+        width: 796px;
+        background:  url(__PUBLIC__/Image/conbg.png) no-repeat;
+        background-size: 100% 100%;
+    }
+    .cate-list .right ul li a img {
+        margin-top: 11px;
+        margin-left: 10px;
+        height: 154px;
+        width: 164px;
+    }
+    .cate-list .right ul li a p{
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+    #subGoodsAll{
+        margin-top: 20px;
+    }
+    .cate-list .right ul li a .title {
+        font-size: 16px;
+        line-height: 20px;
+        font-weight: bold;
+        margin-top: 0;
+        color: #212121;
+    }
+    .cate-list .right ul li.pbot{
+        float: left;
+        width: 198px;
+        height: 225.5px;
+        border-right: 1px solid #ddd;
+        border-bottom: none;
+        text-align: center;
+    }
+    .cate-list .right ul li.prig{
+        float: left;
+        width: 198px;
+        height: 225.5px;
+        border-right: none;
+        border-bottom: 1px solid #ddd;
+        text-align: center;
+    }
+    .tg0,.tg1,.tg2,.tg3{
+        display: block;
+        position: absolute;
+        left:-5px;
+        bottom: 10px;
+        width:120px;
+        height:80px;
+
+    }
+    .tg0{
+        background: url(__PUBLIC__/Image/tg0.png) no-repeat;
+        background-size: 100% 100%;
+    }
+    .tg1{
+        background: url(__PUBLIC__/Image/tg1.png) no-repeat;
+        background-size: 100% 100%;
+    }
+    .tg2{
+        background: url(__PUBLIC__/Image/tg2.png) no-repeat;
+        background-size: 100% 100%;
+    }
+    .tg3{
+        background: url(__PUBLIC__/Image/tg3.png) no-repeat;
+        background-size: 100% 100%;
+    }
+</style>
+<script type="text/javascript" src="__PUBLIC__/Js/logic/index.js"></script>
+<include file="Public:footernew" />
+<script>
+    function getAdvert(){
+        //获取广告
+        var url1 = "{:U('Index/getAllAdvert')}";
+        var postData = {
+            'mapStr':'banner'
+        };
+        $.post(url1,postData,function(data){
+            console.log(data);
+            if(data["code"]==2000){
+                var list = data["data"].list;
+                var imgs = "";
+                for(var i=0;i<list.length;i++){
+                    //imgs += "<img src='"+list[i].imgs+"' title='a'>";
+                    imgs += "<a class='bannerImg' href='"+list[i].url+"' ><img class='"+list[i].url+"' style='width:100%;height:470px;z-index:222;' src='"+list[i].imgs+"' ></a>";
+                }
+                $("#Indexbanner").append(imgs);
+                $('#Indexbanner').nivoSlider(); //$('#Indexbanner').nivoSlider({pauseTime: 2000});
+
+            }
+        });
+    }
+    $(function(){
+        getAdvert();
+        var url = "{:U('Index/getAll')}";
+        var tgpos = 0;
+        $.post(url,null,function(data){
+            console.log(data);
+            if(data["code"] == 2000){
+                var list = data["data"].list;
+                var hots = data["data"].hots;
+                var goods = data["data"].goods;
+                var keywords = data["data"].keywords;
+                var article = data["data"].article;
+                var brands = data["data"].brands;
+                var info = "";
+                for(var i=0;i<article.length;i++){
+                    if(article[i].typeId=="28"){
+                        info += "<li>"+
+                                "<a class='article-consult'>"+article[i].title+"</a>"+
+                                "</li>";
+                    }
+                }
+                $("#article").after(info);
+                $(".article-consult").bind({
+                    mouseover:function(){
+                        $(this).css({"color":"orange","cursor":"pointer"});
+                    },
+                    mouseout:function(){
+                        $(this).css({"color":"#000","cursor":"default"});
+                    }
+                });
+                $("#article").siblings().click(function(){
+                    window.location.href = "__APP__/Index/article/title/"+$(this).text();
+                });x
+                info = "";
+                for(var i=0;i<4;i++){
+                    info += "<li class='goodInfoId' id='"+hots[i].id+"'>"+
+                            "<a id='"+hots[i].isOrNoExchange+"' class='isOrExchange' href='javascript:;'>"+
+                            "<div class='p-l left'>"+
+                            "<div class='content'>"+
+                            "<p class='title'>"+hots[i].brandname+"</p>"+
+                            "<p class='info'>"+hots[i].name.substring(0,18)+"</p>"+
+                            "<p class='price'>￥"+hots[i].vipPrice+"</p>"+
+                            "</div>"+
+                            "</div>"+
+                            "<div class='p-r right'>"+
+                            "<img src='"+hots[i].imgsArr[0]+"'>"+
+                            "</div>"+
+                            "</a>"+
+                            "</li>";
+                }
+                $("#hots").append(info);
+                info = "";
+                tgpos = 0;
+                for(var j=0;j<goods.length;j++){
+                    tgpos++;
+                    var zi1 = goods[j].goodsArr;
+                    info += '<div class="container photoback">'+
+                            '<div class="cate-list">'+
+                            '<div class="left headphoto">'+
+                            '<a href="">'+
+                            '<img id="type-first" src="'+goods[j].img+'">'+
+                            '</a>'+
+                            '<div class="tg'+tgpos+'"></div>'+
+                            '</div>'+
+                            '<div class="right">'+
+                            '<ul id="typegoods-first">';
+                    for(var i=0;i<zi1.length;i++){
+                        info += "<li class='goodInfoId "+(i>3 ? " pbot ": "")+(i%4==3 ? " prig ": "")+"' id='"+zi1[i].id+"'>"+
+                                "<a id='"+zi1[i].isOrNoExchange+"' class='isOrExchange' href='javascript:;' >"+
+                                "<img src='"+zi1[i].imgsArr[0]+"'>"+
+                                "<p class='title'>"+zi1[i].brandname+"</p>"+
+                                "<p class='info'>"+zi1[i].name.substring(0,18)+"</p>"+
+                                "<p class='price'>新鲜价：￥"+zi1[i].vipPrice+"</p>"+
+
+                                "</a>"+
+                                "</li>";
+                    }
+                    info +=          '</ul>'+
+                            '</div>'+
+                            '</div>'+
+                            '</div>';
+                }
+                $("#subGoodsAll").html(info);
+                info = "";
+                $.each(brands,function(k,v){
+                    if(k<19){
+                        info += "<li><a><img src='"+v.imgs+"'></a></li>";
+                    }
+                });
+                $("#hotbrands").after(info);
+
+                $(".goodInfoId").click(function(){
+                    var isOr = $(this).children(".isOrExchange").attr("id");
+                    console.log(isOr+",");
+                    var gId = $(this).attr("id");
+                    if(isOr==0){
+                        window.location.href = "__APP__/GoodInfo/goodInfo/gId/"+gId;
+                    }else if(isOr==1){
+                        window.location.href = "__APP__/GoodInfo/exchangeInfo/gId/"+gId;
+                    }else if(isOr==2){
+                        window.location.href = "__APP__/GoodInfo/vipexchangeInfo/gId/"+gId;
+                    }else{
+                        window.location.href = "__APP__/GoodInfo/goodInfo/gId/"+gId;
+                    }
+
+
+                });
+
+            }
+        });
+    });
+</script>

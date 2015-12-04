@@ -1,0 +1,317 @@
+<include file="Public:header" />
+
+    <!--dynamic table-->
+    <link href="__PUBLIC__/Template/assets/advanced-datatable/media/css/demo_page.css" rel="stylesheet" />
+    <link href="__PUBLIC__/Template/assets/advanced-datatable/media/css/demo_table.css" rel="stylesheet" />
+    <link rel="stylesheet" href="__PUBLIC__/Template/assets/data-tables/DT_bootstrap.css" />
+
+ <include file="Public:menu" />
+
+    <!--main content start-->
+    <section id="main-content">
+        <section class="wrapper">
+        <!-- page start--> 
+        <div class="row">
+            <div class="col-md-12">
+                <!--breadcrumbs start -->
+                <ul class="breadcrumb">
+                    <li><a href="#"><i class="fa fa-home"></i> 首页</a></li>
+                    <li><a href="#"> 代金券管理</a></li>
+                    <li class="active"> 添加代金券</li>
+                </ul>
+                <!--breadcrumbs end -->
+            </div>
+        </div>
+
+        
+            <div class="row">
+                <div class="col-lg-12">
+                    <section class="panel">
+                        <header class="panel-heading">
+                            发布代金券
+                        </header>
+                        <div class="panel-body">
+                            
+                             <div class="form">
+                                <form class="cmxform form-horizontal " id="AddForm" method="post" action="{:U('Voucherinfo/insert')}"> 
+									<!--
+                                    <div class="form-group ">
+                                        <label for="typeId" class="control-label col-lg-3">选择所属分类</label>
+                                        <div class="col-lg-6">
+                                            <select id="typeId" name="typeId" class="form-control form-inline  m-bot15" style="width:200px;float:left;color:#000">
+                                                <option value="0">[无分类]</option>
+                                                <volist name="goodsType" id="vo"> 
+                                                    <option value="{$vo.id}">{$vo.name}</option> 
+                                                </volist> 
+                                            </select>  
+                                            <select id="typeId2" name="typeId2" class="form-control form-inline  m-bot15" style="width:200px;margin-left: 215px;color:#000">
+                                                <option value="">[选择子分类]</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group ">
+                                        <label for="brandId" class="control-label col-lg-3">选择商品品牌</label>
+                                        <div class="col-lg-6">
+                                            <select id="brandId" name="brandId" class="form-control form-inline  m-bot15" style="width:200px;float:left;color:#000">
+                                                <option value="0">[无品牌]</option>
+                                            </select>  
+                                        </div>
+                                    </div> 
+									-->
+ 
+<!--------------------------- 在这里 -------------------------------------->
+                                        <div class="form-group">
+                                            <label for="desc" class="control-label col-lg-3">已选择的商品</label>
+                                            <div class="col-lg-6"> 
+                                                 <p id="showGoods"></p>
+                                                </select> 
+                                            </div>
+                                        </div> 
+                                        <div class="form-group">
+                                            <label for="desc" class="control-label col-lg-3">选择展示商品</label>
+                                            <div class="col-lg-6"> 
+                                                 <select id="selectGoods" class="js-example-basic-single" style="width:500px;">
+                                                    <option value="">[选择模块展示的商品]</option>
+                                                   <volist name="listgoods" id="vo">
+                                                        <option value="{$vo.id}">{$vo.name}</option>
+                                                    </volist>
+                                                </select> 
+                                                <input type="hidden" id="selGoods" name="goodsId" value="" />
+                                            </div>
+                                        </div> 
+<!----------------------------------------------------------------->
+									<!--
+                                    <div class="form-group ">
+                                        <label for="goodsId" class="control-label col-lg-3">选择商品</label>
+                                        <div class="col-lg-6">
+                                            <select id="goodsId"  multiple="multiple" class="form-control form-inline  m-bot15" style="width:500px;height:350px;float:left;color:#000">
+                                                <option value="0">[无商品]</option>
+                                            </select>  
+                                            <input type="hidden" name="goodsId" id="goodsIds" value="" />
+                                        </div>
+                                    </div> 
+									-->
+                                    <div class="form-group ">
+                                        <label for="isOrNoExchange" class="control-label col-lg-3" for="inputSuccess">商品所属</label>
+                                        <div class="col-lg-6">
+                                            <label class="radio-inline">
+                                                <!-- <input type="radio" name="isOrNoExchange" value="0" checked="checked"> 普通商品 -->
+                                            </label>
+                                            <label class="radio-inline">
+                                                <!-- <input type="radio" name="isOrNoExchange" value="1"> 积分兑换商品 -->
+                                            </label>
+                                            <label class="radio-inline">
+                                                <!-- <input type="radio" name="isOrNoExchange" value="2"> VIP兑换商品 -->
+                                            </label>
+                                            <label class="radio-inline">
+                                                <input type="radio" name="isOrNoExchange" value="3" checked="checked"> 可使用代金券商品
+                                            </label>
+                                        </div>
+                                    </div> 
+                                   
+                                    <div class="form-group ">
+                                        <label for="name" class="control-label col-lg-3">代金券名称</label>
+                                        <div class="col-lg-4">
+                                            <input class=" form-control" id="name" name="name" type="text" />
+                                        </div>
+                                        <div class="col-lg-2">* 10个汉字以内</div>
+                                    </div> 
+                                    <div class="form-group ">
+                                        <label for="num" class="control-label col-lg-3">代金券数量</label>
+                                        <div class="col-lg-5">
+                                            <input class=" form-control" id="num" name="num" type="text" value="1" />
+                                        </div>
+                                        <div class="col-lg-1"> 张</div>
+                                    </div> 
+                                    <div class="form-group ">
+                                        <label for="money" class="control-label col-lg-3">代金券金额</label>
+                                        <div class="col-lg-5">
+                                            <input class=" form-control" id="money" name="money" type="text" value="0.00" />
+                                        </div>
+                                        <div class="col-lg-1"> 元</div>
+                                    </div> 
+                                  <!--   <div class="form-group " id="prGroupPrice">
+                                        <label for="condition" class="control-label col-lg-3">代金券使用条件</label>
+                                        <div class="col-lg-6">
+                                            <input class=" form-control" id="condition" name="condition" type="text" />
+                                        </div>
+                                    </div>  -->
+                                    <!-- <div class="form-group " id="prVipPrice">
+                                        <label for="meetmoney" class="control-label col-lg-3">代金券使用条件必须满足金额</label>
+                                        <div class="col-lg-6">
+                                            <input class=" form-control" id="meetmoney" name="meetmoney" type="text"  value="0.00"/>
+                                        </div>
+                                    </div>  --> 
+
+                                    <div class="form-group " id="prVipPrice">
+                                        <label for="startTime" class="control-label col-lg-3">生效时间</label>
+                                        <div class="col-lg-6">
+                                            <input class="Wdate" id="startTime" name="startTime" type="text" onClick="WdatePicker()">
+                                        </div>
+                                    </div> 
+                                    <div class="form-group " id="prVipPrice">
+                                        <label for="endTime" class="control-label col-lg-3">失效时间</label>
+                                        <div class="col-lg-6">
+                                            <input class="Wdate" id="endTime" name="endTime" type="text"  onClick="WdatePicker()" />
+                                        </div>
+                                    </div> 
+                                  <!--   <div class="form-group "> 
+                                        <div class="form-group last">
+                                            <label class="control-label col-md-3">商品图片</label>
+                                            <div class="col-md-9">
+                                                <div class="fileupload fileupload-new" data-provides="fileupload">
+                                                    <div class="fileupload-new thumbnail" style="width: 200px; height: 150px;">
+                                                        <img id="imgView" src="http://www.placehold.it/200x150/EFEFEF/AAAAAA&amp;text=no+image" alt="" />
+                                                    </div>
+                                                    <div class="fileupload-preview fileupload-exists thumbnail" style="max-width: 200px; max-height: 150px; line-height: 20px;"></div>
+                                                    <div>
+                                                               <span class="btn btn-white btn-file">
+                                                               <span class="fileupload-new fuBtn1"><i class="fa fa-paper-clip"></i> 选择图片</span>
+                                                               <span class="fileupload-exists fuBtn2"><i class="fa fa-undo"></i> 更换</span>
+                                                               <input type="file" id="uploadIcon" class="default" />
+                                                               </span>
+                                                                <a href="javascript:delImg()" class="btn btn-danger fileupload-exists fuBtn3" data-dismiss="fileupload"><i class="fa fa-trash"></i> 删除</a>
+                                                    </div>
+                                                </div> 
+                                            </div> 
+                                        </div>
+                                    </div>  -->
+                                     
+                                   
+ 
+                                    <input type="hidden" name="status" value="1" />
+                                    <input type="hidden" name="imgs" id="imgs" value="" />
+
+                                    <div class="form-group">
+                                        <div class="col-lg-offset-3 col-lg-6">
+                                            <button class="btn btn-primary" type="submit"> 新增</button>
+                                            <button class="btn btn-default cancelBtn" dataurl="/Admin/Voucherinfo/index" type="button"> 取消</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div><!-- end form -->
+                    </section>
+                </div>
+            </div>
+            <!-- page end-->
+        <!-- page end-->
+        </section>
+    </section>
+    <!--main content end-->
+ 
+
+</section>
+
+<include file="Public:footer" />
+
+<!--common script init for all pages-->
+<script type="text/javascript" src="__PUBLIC__/Template/js/scripts.js"></script> 
+<script type="text/javascript" src="__PUBLIC__/Template/js/jquery-validate/jquery.validate.min.js"></script>
+<script language="javascript" type="text/javascript" src="__PUBLIC__/Plugin/My97DatePicker/WdatePicker.js"></script>
+<script src="__PUBLIC__/Js/select2.min.js"></script>
+
+<script> 
+//select2
+$(document).ready(function() {
+  $("#selectGoods").select2();
+  $('#selectGoods').change(function(){
+    var selVal = $(this).select2("val");
+    var selText = $(this).select2("data"); 
+    var gIds = $("#selGoods").val();
+    if(gIds != ''){
+        gIds = gIds+','+selVal;
+    }else{
+        gIds = selVal;
+    }
+    //数量限制
+    /*var arr = new Array();
+    arr = gIds.split(","); 
+    if(arr.length>8){
+        alert('商品数量最多8个');
+        return;
+    }*/
+    $("#selGoods").val(gIds);
+    var str = '<a href="/Admin/Goods/show/id/'+selVal+'" target="_blank" >'+selText.text+'</a><br>'; 
+    $('#showGoods').append(str);
+  });
+});
+
+//
+$(function(){  
+    $("#AddForm").validate({
+        rules: {
+            //typeId: "required",
+            num: "required",
+            money: "required",
+            startTime: "required",
+            endTime: "required",
+            // groupPrice: "required",
+            // vipPrice: "required",
+        },
+        messages: {
+            //typeId: "请选择分类",
+            num: "数量不可为空",
+            money: "金额不可为空",
+            startTime: "生效时间不可为空",
+            endTime: "失效时间不可为空",
+            // groupPrice: "商品团购价不可为空",
+            // vipPrice: "商品VIP价格不可为空",
+        }
+    });
+    
+    //多选商品
+    /*$('#goodsId').click(function(){
+        $('#goodsIds').val('');
+        $('#goodsIds').val($(this).val());
+    });*/    
+});
+</script>
+<script> 
+//联动分类
+/*$(function(){
+    $('#typeId').change(function(){
+        var url = "/Admin/Base/getSubTypeName";
+        var postData = {
+            'pid':$('#typeId').val(),
+        };
+        console.log(postData);
+        $.post(url,postData,function(data){
+                console.log(data);
+            if(data.code == 2000){
+                $('#typeId2').html('<option value="">[选择子分类]</option>');
+                $.each(data.data,function(k,v){
+                    $('#typeId2').append('<option value="'+v.id+'">'+v.name+'</option>');
+                });
+            }
+        });
+    });
+    $('#typeId2').change(function(){ 
+        var postData = {
+            'typeid':$('#typeId2').val(),
+        }; 
+        //品牌
+        $.post("/Admin/Base/getBrandName",postData,function(data){
+                console.log(data);
+            if(data.code == 2000){
+                $('#brandId').html('<option value="">[选择品牌]</option>');
+                $.each(data.data,function(k,v){
+                    $('#brandId').append('<option value="'+v.id+'">'+v.name+'</option>');
+                });
+            }
+        });
+        //商品
+        $.post("/Admin/Base/getGoodsName",postData,function(data){
+                console.log(data);
+            if(data.code == 2000){
+                $('#goodsId').html('<option value="">[选择商品]</option>');
+                $.each(data.data,function(k,v){
+                    $('#goodsId').append('<option value="'+v.id+'">'+v.name+'</option>');
+                });
+            }
+        });
+    });
+}); */
+</script>
+</body>
+</html>

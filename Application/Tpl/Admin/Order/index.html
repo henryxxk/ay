@@ -1,0 +1,129 @@
+<include file="Public:header" />
+
+    <!--dynamic table-->
+    <link href="__PUBLIC__/Template/assets/advanced-datatable/media/css/demo_page.css" rel="stylesheet" />
+    <link href="__PUBLIC__/Template/assets/advanced-datatable/media/css/demo_table.css" rel="stylesheet" />
+    <link rel="stylesheet" href="__PUBLIC__/Template/assets/data-tables/DT_bootstrap.css" />
+
+ <include file="Public:menu" />
+
+    <!--main content start-->
+    <section id="main-content">
+        <section class="wrapper">
+        <!-- page start--> 
+        <div class="row">
+            <div class="col-md-12">
+                <!--breadcrumbs start -->
+                <ul class="breadcrumb">
+                    <li><a href="#"><i class="fa fa-home"></i> 首页</a></li>
+                    <li><a href="#">订单管理</a></li>
+                    <li class="active">订单列表</li>
+                </ul>
+                <!--breadcrumbs end -->
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-12">
+                <section class="panel">
+                    <header class="panel-heading">
+                       <!--  <button type="button" onclick="javascript:btnJump('add','')" class="btn btn-primary"><i class="fa fa-plus"></i> 新增商品</button> -->
+                        <!-- <button type="button" onclick="javascript:btnJump('ruleEdit')" class="btn btn-primary"><i class="fa fa-pencil"></i> 编辑</button> -->
+                        <!-- <button type="button" class="btn btn-primary"><i class="fa  fa-mail-reply"></i> 返回</button> -->
+                        <!-- <button type="button" onclick="javascript:btnJump('ruleDel')" class="btn btn-danger"><i class="fa fa-trash-o"></i> 删除</button> -->
+                    </header>
+                    <div class="panel-body">
+                    <div class="adv-table">
+                    <table cellpadding="0" cellspacing="0" border="0" class="display table table-bordered" id="myTable">
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>订单编号</th>
+                        <th>会员</th>
+                        <th>付款时间</th>
+                        <th>商品总金额</th>
+                        <th>运费</th>
+                        <th>实收金额</th>
+                        <th>收货人</th>
+                        <th class="hidden-phone">状态</th>
+                        <th>下单时间</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <volist name="list" id="vo">
+                    <tr class="gradeX">
+                        <td>{$vo.id}</td>
+                        <td>{$vo.orderNum}</td>
+                        <td>{$vo.memberId|getUserField}</td>
+                        <td>{$vo.payTime|date="Y-m-d H:i:s",###}</td>
+                        <td>￥ {$vo.money} </td>
+                        <td>￥ {$vo.freight} </td>
+                        <td>￥ {$vo.payment} </td>
+                        <td>{$vo.addressId|getField=###,name,Address}</td>
+                        <td class="center hidden-phone">
+                        <!-- 表示订单状态，待付款0、待发货1、已发货2、交易成功3、交易关闭4、退款中订单5,待评价6，已完成7 -->
+                            <if condition="$vo.status eq 0 ">
+                                待付款
+                            <elseif condition="$vo.status eq 1 " />
+                                待发货
+                            <elseif condition="$vo.status eq 2 " />
+                                已发货
+                            <elseif condition="$vo.status eq 3 " />
+                                交易成功
+                            <elseif condition="$vo.status eq 4 " />
+                                交易关闭
+                            <elseif condition="$vo.status eq 5 " />
+                                退款中
+                            <elseif condition="$vo.status eq 6 " />
+                                待评价
+                            <elseif condition="$vo.status eq 7 " />
+                                已完成
+                            </if>    
+                        </td>
+                        <td>{$vo.createtime|date="Y-m-d H:i:s",###}</td>
+                        <td>
+                            <button type="button" onclick="javascript:btnJump('/Admin/Order/show/menu/order',{$vo.id})" class="btn btn-primary"><i class="fa fa-eye"></i> 查看</button>&nbsp;&nbsp;
+                        <!-- <button type="button" class="btn btn-primary"><i class="fa  fa-mail-reply"></i> 返回</button> --> 
+                           <!--  <button type="button" onclick="javascript:btnJump('/Admin/Order/edit',{$vo.id})" class="btn btn-primary"><i class="fa fa-pencil"></i> 改价</button>&nbsp;&nbsp; -->
+                            
+                     <!--    <if condition="$vo.status eq 0 ">
+                            <button type="button" onclick="javascript:changStatus('你确定要启用吗','/Admin/Order/statuschange',{$vo.id},1)" class="btn btn-round btn-danger"><i class="fa fa-magic"></i> 激活</button>
+                        <elseif condition="$vo.status eq 1 "/>
+                            <button type="button" onclick="javascript:btnJump('/Admin/Order/edit',{$vo.id})" class="btn btn-primary"><i class="fa fa-pencil"></i> 改价</button>&nbsp;&nbsp;
+                            <button type="button" onclick="javascript:changStatus('你确定要禁用吗','/Admin/Order/statuschange',{$vo.id},0)" class="btn btn-round btn-danger"><i class="fa fa-exclamation-triangle"></i> 屏蔽</button>
+                        <elseif condition="$vo.status eq 2 " />
+                            <button type="button" onclick="javascript:btnJump('/Admin/Order/edit',{$vo.id})" class="btn btn-primary"><i class="fa fa-pencil"></i> 改价</button>&nbsp;&nbsp;
+                            <button type="button" onclick="javascript:changStatus('你确定要禁用吗','/Admin/Order/statuschange',{$vo.id},0)" class="btn btn-round btn-danger"><i class="fa fa-exclamation-triangle"></i> 屏蔽</button>
+                        </if>  -->  
+                        </td>
+                    </tr>
+                    </volist> 
+                    </tbody>
+                    </table>
+
+                    </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+        <!-- page end-->
+        </section>
+    </section>
+    <!--main content end-->
+ 
+
+</section>
+
+<include file="Public:footer" />
+
+<!--common script init for all pages-->
+<script src="__PUBLIC__/Template/js/scripts.js"></script> 
+<script>
+//表格
+$(function(){ 
+    dTable('#myTable'); 
+});
+</script>
+</body>
+</html>

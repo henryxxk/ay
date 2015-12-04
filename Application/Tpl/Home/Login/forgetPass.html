@@ -1,0 +1,91 @@
+
+
+<include file="Public:header" />
+
+	<div class="login-logo">
+		<div class="container">
+			<a href="{:U("Index/index")}">
+				<img src="__PUBLIC__/Image/login-logo.png" class="p-l">
+			</a>
+			<span class="p-l title">找回密码</span>
+		</div>
+	</div>
+	<div class="container">
+		
+		<div class="register">
+			<div class="forget-pass-step">
+				<div class="line line-lbordered line-lighted">
+					<div class="step">1</div>
+					<div class="text">验证手机</div>
+				</div>
+				<div class="line">
+					<div class="step">2</div>
+					<div class="text">重置密码</div>
+				</div>
+				<div class="line line-rbordered">
+					<div class="step">3</div>
+					<div class="text">设置成功</div>
+				</div>
+			</div>
+			<div class="register-form">
+				<div class="line">
+					<label class="p-l">手 机 号：</label>
+					<input name="tel" type="text" class="p-l">
+					<span class="p-l">*手机号不能为空</span>
+				</div>
+				<div class="line">
+					<label class="p-l">验 证 码：</label>
+					<input id="yzm" type="text" style="width:123px;" class="p-l">
+					<a href="javascript:;" class="login-btn p-l" style="width:123px;margin-left: 30px;" onclick="send()">发送验证码</a>
+					<span class="p-l"></span>
+				</div>
+				<div class="line">
+					<label class="p-l"></label>
+					<a id="regist" href="javascript:;"  class="login-btn p-l" style="display:inline-block; width: 300px;" onclick="isOk()">确认手机号</a>
+					<span class="p-l"></span>
+				</div>
+			</div>
+		</div>
+	</div>
+
+<script>
+	function send(){
+		if($.trim($("[name='tel']").val())==""){
+    			alert("请输入手机号！");
+    			return;
+    		}
+    		var url = "{:U('Login/sendCheckcode')}";
+    		var postData = {
+    			'phone':$("[name='tel']").val()
+    		}
+    		$.post(url,postData,function(data){
+    			console.log(data);
+    		});
+	}
+	function isOk(){
+		var tel = $("[name=tel]").val();
+	            if($.trim(tel)==""||$.trim($("#yzm").val())==""){
+	                alert("手机号或验证码不能为空！");
+	                return;
+	            }
+
+	            var postData = {
+	                'tel':tel,
+	                'code':$("#yzm").val()
+	            };
+	            var url = "{:U('Login/checkCode')}";
+	            $.post(url,postData,function(data){
+	                switch(data["code"]){
+	                    case 2000:   //跳到登录页
+	                        window.location.href = "{:U('Login/resetPass')}";
+	                        break;
+	                    case -4000:
+	                    	  alert(data.msg);	
+	                        break;
+	                    default:
+	                        break;
+	                }
+	            });
+	}
+</script>
+<include file="Public:footer" />

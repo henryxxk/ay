@@ -1,0 +1,752 @@
+<?php
+class GoodInfoAction extends BaseAction{
+    public function __construct(){
+        parent::__construct();
+        if (isset($_SESSION['user'])){
+            $this->assign("isLogin",1);
+        }
+        else{
+            $this->assign("isLogin",0);
+//            $this->redirect("Login/index");
+        }
+        $this->assign("isBuycar",0);
+        $this->assign("isLoginPage",0);
+    }
+    /**
+    *商品详情-购物车的"立即结算",核对订单信息在OrderAction
+    */
+    //商品兑换页
+    public function exchangeInfo(){
+        $model = D('Goods');
+        $goodId = I('gId');
+        $map['m_goods.id'] = array('eq',$goodId);
+        $good = $model->where($map)->join('m_type ON m_goods.typeId=m_type.id')->field('m_goods.*,m_type.name typename,m_type.parentId parentId')->select();
+        
+        $colorIds = $good[0]['colorId'];
+        $parendId = $good[0]['parentId'];
+        if($parendId!=0){
+            $model = D('Type');
+            $map2['id'] = array('eq',$parendId); 
+            $parentName = $model->where($map2)->find();
+        }
+        $imgStr = $good[0]['imgs'];
+        $imgArr = explode(',',$imgStr);
+        
+        $_SESSION['gtypeId'] = $good[0]['typeId'];
+//        var_dump($good[0]['typeId']);exit;
+        $model = D('Type');
+        $map3['m_type.id'] = array('eq',$good[0]['typeId']);
+        $hotGoods = $model->where($map3)->join('m_goods ON m_goods.typeId=m_type.id')->field('m_goods.*,m_type.name typename,m_type.parentId parentId')->limit(C('LIST_NUM'))->select();
+        /*$hotimgStr = $hotGoods[0]['imgs'];
+        $hotimgArr = explode(',',$hotimgStr);*/
+        foreach($hotGoods as $k=>$v){
+            $hotimgStr = $hotGoods[$k]['imgs'];
+            $hotimgArr = explode(',',$hotimgStr);
+//                var_dump($hotimgArr);exit;
+            $hotGoods[$k]['imgsArr'] = $hotimgArr;
+        }
+//        var_dump($hotGoods);exit;
+        
+        $model = D('Goodscolor');
+        $map1['id'] = array('in',$colorIds);
+        $colors = $model->where($map1)->select();
+        $str = unserialize($good[0]['desc']);  //对数据库中序列化的字符串进行解码
+        $good[0]['desc'] = htmlspecialchars_decode($str);  //html标签解码
+        $count = $good[0]['stock'] - $good[0]['sales'];
+        
+        $model = D('Comment');
+        $map5['goodsId'] = array('eq',$goodId);
+        $apprSum = $model->where($map5)->count();
+
+        $model = D('Comment');
+        $map6['m_comment.goodsId'] = array('eq',$goodId);
+        $appraises = $model->where($map5)->join('m_member ON m_member.id=m_comment.memberId')->field('m_comment.*,m_member.name memName')->select();
+        $loginstains = 0;
+        $desc = 0;
+        $service = 0;
+        foreach($appraises as $k=>$v){
+            $appraises[$k]['apprscore'] = ceil(($appraises[$k]['loginstics']+$appraises[$k]['desc']+$appraises[$k]['service'])/3);
+            $loginstains += $appraises[$k]['loginstics'];
+            $desc += $appraises[$k]['desc'];
+            $service += $appraises[$k]['service'];
+        }
+//        var_dump($good);
+        $loginstains = $loginstains/$apprSum;
+        $desc = $desc/$apprSum;
+        $service = $service/$apprSum;
+        $this->assign('parentName',$parentName);
+        $this->assign('goods',$good);
+        $this->assign('colors',$colors);
+        $this->assign('count',$count);
+        $this->assign('hotGoods',$hotGoods);
+        $this->assign('imgArr',$imgArr);
+        $this->assign('hotimgArr',$hotimgArr);
+        $this->assign('apprSum',$apprSum);
+        $this->assign('appraises',$appraises);
+        $this->assign('loginstains',$loginstains);
+        $this->assign('desc',$desc);
+        $this->assign('service',$service);
+        
+        $this->display();
+    }
+    
+    //团体认证
+    public function pleaseGroup(){
+        if (isset($_SESSION['user'])){
+            $this->assign("isLogin",1);
+        }
+        else{
+            $this->assign("isLogin",0);
+            $this->redirect("Login/index");
+        }
+        $this->display();
+    }
+    //升级VIp
+    public function shenjivip(){
+        if (isset($_SESSION['user'])){
+            $this->assign("isLogin",1);
+        }
+        else{
+            $this->assign("isLogin",0);
+            $this->redirect("Login/index");
+        }
+        $this->display();
+    }
+    //我的购物车
+    public function index(){
+        $this->assign("isBuycar",1);  //头部：我的购物车文本
+        if (isset($_SESSION['user'])){
+            $this->assign("isLogin",1);
+        }
+        else{
+            $this->assign("isLogin",0);
+            $this->redirect("Login/index");
+        }
+        $this->display();
+    }
+    //核对订单信息
+    public function order(){
+        $this->assign("isBuycar",1);
+        $model = D('Province');
+        $provinces = $model->select();
+        $this->assign("pros",$provinces);
+        $this->display();
+        
+    }
+    //支付
+    public function payment(){
+        $this->assign("isBuycar",1);
+        $this->display();
+    }
+    //支付成功
+    public function payover(){
+        $this->assign("isBuycar",1);
+        //更新订单状态,更新会员积分
+        $model = D('Order');
+        if(isset($_SESSION['memberId'])){
+            $mId = $_SESSION['memberId'];
+        }else{
+            $mId = I('mId');
+        }
+        $orderNum = session('orderNum');  //获取session中保存的订单号
+        $orderId = session('orderId');
+        if($orderNum==""||$mId==""){
+            $this->ajaxReturn(array('code'=>-2001,'msg'=>'参数错误'));
+        }
+        //根据订单号更新订单状态
+        $map['orderNum'] = array('eq',$orderNum);
+        $data['status'] = 1;
+        $data['payTime'] = time(0);
+        $res = $model->where($map)->save($data);
+        $model = D('Orderinfo');
+        $map4['memberId'] = array('eq',$mId);
+        $map4['orderId'] = array('eq',$orderId);
+        $orderInfos = $model->where($map4)->select();
+        $goodIdArr = array();
+        foreach($orderInfos as $k=>$v){
+            $goodIdArr[$k] = $orderInfos[$k]["goodsId"];
+        }
+        //更新会员所拥有的积分
+        $model = D('Member');
+        $map2['id'] = array('eq',$mId);
+        $memberInfo = $model->where($map2)->find();
+        $memScore = $memberInfo['score'];
+        $score = session("shopScore");
+        $data['score'] = $memScore+$score;
+        $res1 = $model->where($map2)->save($data);
+        //更新购物车里的商品状态
+        $model = D('Buycar');
+        $map3['goodsId'] = array('in',$goodIdArr);
+        $map3['memberId'] = array('eq',$mId);
+        $data['payStatus'] = 1;
+        $res2 = $model->where($map3)->save($data);
+        
+        //返回一个热卖商品
+        $model = D('Goods');
+        $goods = $model->order('sales desc')->limit(1)->select();
+        foreach($goods as $k=>$v){
+            $hotimgStr = $goods[$k]['imgs'];
+            $hotimgArr = explode(',',$hotimgStr);
+//                var_dump($hotimgArr);exit;
+            $goods[$k]['imgsArr'] = $hotimgArr;
+        }
+        $this->assign('goods',$goods);
+        $this->assign('orderNum',$res);
+        $this->assign('shopScore',$res1);
+        $this->display();
+    }
+    //商品详情页
+    public function goodInfo(){
+        $model = D('Goods');
+        $goodId = I('gId');
+        $map['m_goods.id'] = array('eq',$goodId);
+        $good = $model->where($map)->join('m_type ON m_goods.typeId=m_type.id')->field('m_goods.*,m_type.name typename,m_type.parentId parentId')->select();
+        
+        $colorIds = $good[0]['colorId'];
+        $parendId = $good[0]['parentId'];
+        if($parendId!=0){
+            $model = D('Type');
+            $map2['id'] = array('eq',$parendId); 
+            $parentName = $model->where($map2)->find();
+        }
+        $imgStr = $good[0]['imgs'];
+        $imgArr = explode(',',$imgStr);
+        
+        $_SESSION['gtypeId'] = $good[0]['typeId'];
+//        var_dump($good[0]['typeId']);exit;
+        $model = D('Type');
+        $map3['m_type.id'] = array('eq',$good[0]['typeId']);
+        $hotGoods = $model->where($map3)->join('m_goods ON m_goods.typeId=m_type.id')->field('m_goods.*,m_type.name typename,m_type.parentId parentId')->limit(C('LIST_NUM'))->select();
+        /*$hotimgStr = $hotGoods[0]['imgs'];
+        $hotimgArr = explode(',',$hotimgStr);*/
+        foreach($hotGoods as $k=>$v){
+            $hotimgStr = $hotGoods[$k]['imgs'];
+            $hotimgArr = explode(',',$hotimgStr);
+//                var_dump($hotimgArr);exit;
+            $hotGoods[$k]['imgsArr'] = $hotimgArr;
+        }
+//        var_dump($hotGoods);exit;
+        
+        $model = D('Goodscolor');
+        $map1['id'] = array('in',$colorIds);
+        $colors = $model->where($map1)->select();
+        $str = unserialize($good[0]['desc']);  //对数据库中序列化的字符串进行解码
+        $good[0]['desc'] = htmlspecialchars_decode($str);  //html标签解码
+        $count = $good[0]['stock'] - $good[0]['sales'];
+        
+        $model = D('Comment');
+        $map5['goodsId'] = array('eq',$goodId);
+        $apprSum = $model->where($map5)->count();
+
+        $model = D('Comment');
+        $map6['m_comment.goodsId'] = array('eq',$goodId);
+        $appraises = $model->where($map5)->join('m_member ON m_member.id=m_comment.memberId')->field('m_comment.*,m_member.name memName')->select();
+        $loginstains = 0;
+        $desc = 0;
+        $service = 0;
+        foreach($appraises as $k=>$v){
+            $appraises[$k]['apprscore'] = ceil(($appraises[$k]['loginstics']+$appraises[$k]['desc']+$appraises[$k]['service'])/3);
+            $loginstains += $appraises[$k]['loginstics'];
+            $desc += $appraises[$k]['desc'];
+            $service += $appraises[$k]['service'];
+        }
+//        var_dump($good);
+        $loginstains = $loginstains/$apprSum;
+        $desc = $desc/$apprSum;
+        $service = $service/$apprSum;
+        $this->assign('parentName',$parentName);
+        $this->assign('goods',$good);
+        $this->assign('colors',$colors);
+        $this->assign('count',$count);
+        $this->assign('hotGoods',$hotGoods);
+        $this->assign('imgArr',$imgArr);
+        $this->assign('hotimgArr',$hotimgArr);
+        $this->assign('apprSum',$apprSum);
+        $this->assign('appraises',$appraises);
+        $this->assign('loginstains',$loginstains);
+        $this->assign('desc',$desc);
+        $this->assign('service',$service);
+        
+        $this->display();
+    }
+    
+    /**
+    *根据商品id查询商品信息(以及每件商品对应的所有的颜色信息集合)
+    */
+    public function getGoodByGoodId(){
+        $model = D('Goods');
+        $goodId = I('gId');
+        if($goodId==""){
+            $this->ajaxReturn(array('code'=>-2001,'msg'=>'参数错误'));
+        }
+        $map['m_goods.id'] = array('eq',$goodId);
+        $good = $model->where($map)->join('m_type ON m_goods.typeId=m_type.id')->field('m_goods.*,m_type.name typename')->select();
+
+        if(!$good){
+            $this->ajaxReturn(array('code'=>-3000,'msg'=>'查询失败'));
+        }
+        $colorIds = $good[0]['colorId'];
+        $model = D('Goodscolor');
+        $map1['id'] = array('in',$colorIds);
+        $colors = $model->where($map1)->select();
+        if(!$colors){
+            $this->ajaxReturn(array('code'=>-3001,'msg'=>'获取颜色值失败'));
+        }
+        $this->ajaxReturn(array('code'=>2000,'msg'=>'获取颜色值成功','data'=>array('good'=>$good,'colors'=>$colors)));
+    }
+    /**
+    *根据商品id查询商品评价信息集合
+    */
+    public function getGoodAppraise(){
+        $model = D('Comment');
+        $goodId = I('gId');
+        if($goodId==""){
+            $this->ajaxReturn(array('code'=>-2001,'msg'=>'参数错误'));
+        }
+        $map['goodsId'] = array('eq',$goodId);
+        $appraises = $model->where($map)->select();
+        if(!$appraises){
+            $this->ajaxReturn(array('code'=>-3000,'msg'=>'获取评价列表失败'));
+        }
+        $this->ajaxReturn(array('code'=>2000,'msg'=>'获取评价列表成功','data'=>array('list'=>$appraises)));
+    }
+    /**
+    *加入购物车(要在提交参数的时候判断是普通会员，还是VIP，团体等信息--根据session中保存的typeId判断即可)
+    */
+    public function addBuyCar(){
+        $model = D('Buycar');
+        $name = I('gname');
+        $gId = I('gId');
+        $gNum = I('gNum');
+        $buyTime = time(0);
+        $pNum = I('pNum');
+        $pImg = I('img');
+        $price = I('price');
+        if(isset($_SESSION['memberId'])){
+            $memberId = $_SESSION['memberId'];
+        }else{
+            $memberId = I('mId');
+        }
+        $commodity = I('commodity'); //商品模式
+        $taxrate = I('taxrate');      //税率
+        $goodColor = I('gColor');
+        $score = I('score');
+        $payStatus = 0;
+        $createtime = time(0);
+        if($name==""||$gId==""||$gNum==""||$pNum==""||$pImg==""||$price==""||$memberId==""||$taxrate==""){
+            $this->ajaxReturn(array('code'=>-2001,'msg'=>'参数错误'));
+        }
+        $map['goodsId'] = array('eq',$gId);
+        $map['memberId'] = array('eq',$memberId);
+        $res = $model->where($map)->field('id,pNum,goodsScore,subTotal')->find();
+//        $debug = $model->getLastSql();
+        if(!$res){  //没有该商品
+//             $this->ajaxReturn(array('code'=>-2,'msg'=>$res,'aa'=>$debug));
+            $data['name'] = $name;
+            $data['goodsId'] = $gId;
+            $data['goodsNum'] = $gNum;
+            $data['buyTime'] = $buyTime;
+            $data['pNum'] = $pNum;
+            $data['pImg'] = $pImg;
+            $data['price'] = $price;
+            $data['subTotal'] = ($price + $taxrate)*$pNum;  //小计
+            $data['memberId'] = $memberId;
+            $data['payStatus'] = $payStatus;
+            $data['createtime'] = $createtime;
+            $data['commodity'] = $commodity;
+            $data['taxrate'] = $taxrate;
+            $data['goodsColor'] = $goodColor;
+            $data['goodsScore'] = $score;
+            $res = $model->add($data);
+//            var_dump("$res");
+            if(!$res){
+                $this->ajaxReturn(array('code'=>-3000,'msg'=>'加入失败'));
+            }
+            $this->ajaxReturn(array('code'=>2000,'msg'=>'加入成功'));  
+        }else{ //有该商品
+//            $this->ajaxReturn(array('code'=>1,'msg'=>$res,'aa'=>$debug));
+            $bId = $res['id'];
+            $num = $res['pNum'];
+            $jifen = $res['goodsScore'];
+            $total = $res['subTotal'];
+            $total = $total+$pNum*$price;
+            $xscore = $jifen + $score;
+            $xnum = $num + $pNum;
+//            var_dump("$bId $num $xnum");
+            $map1['id'] = array('eq',$bId);
+            $data['pNum'] = $xnum;
+            $data['goodsScore'] = $xscore;
+            $data['subTotal'] = $total;
+            $res = $model->where($map1)->save($data);
+//            var_dump("$res");
+            if(!$res){
+                $this->ajaxReturn(array('code'=>-3001,'msg'=>'更新失败'));
+            }
+            $this->ajaxReturn(array('code'=>2000,'msg'=>'更新成功'));  
+        }
+    }
+    /**
+    *更新购物车里的商品信息（购物车里点击数量发生改变时）
+    */
+    public function updateBuyCars(){
+        $model = D('Buycar');
+        $bId = I('bId');
+        $buyTime = time(0);
+        $pNum = I('pNum');
+        $price = I('price');
+        $subTotal = I('total');
+        if($bId==""||$buyTime==""||$pNum==""||$price==""||$subTotal==""){
+            $this->ajaxReturn(array('code'=>-2001,'msg'=>'参数错误'));
+        }
+        $map['id'] = $bId;
+        $data['buyTime'] = $buyTime;
+        $data['pNum'] = $pNum;
+        $data['price'] = $price;
+        $data['subTotal'] = $subTotal;
+        $res = $model->where($map)->save($data);
+        if(!$res){
+            $this->ajaxReturn(array('code'=>-3000,'msg'=>'修改失败'));
+        }
+        $this->ajaxReturn(array('code'=>2000,'msg'=>'修改成功')); 
+    }
+    /**
+    *移除购物车里的商品(根据购物车里每条信息的id)
+    */
+    public function deleteBuyCarsByBid(){
+        $model = D('Buycar');
+        $bId = I('bId');
+        if($bId==""){
+            $this->ajaxReturn(array('code'=>-2001,'msg'=>'参数错误'));
+        }
+        $map['id'] = $bId;
+        $res = $model->where($map)->delete();
+        if(!$res){
+            $this->ajaxReturn(array('code'=>-3000,'msg'=>'删除失败，没有该商品信息或已被删除'));
+        }
+        $this->ajaxReturn(array('code'=>2000,'msg'=>'删除成功')); 
+    }
+    /**
+    *收藏购物车里的商品
+    */
+    public function collBuyCarByGid(){
+        $model = D('Favorites');
+        $gId = I('gId');  //商品id
+//        var_dump($_SESSION['memberId']);exit;
+        if (isset($_SESSION['memberId'])){
+            $this->assign("isLogin",1);
+            $mId = $_SESSION['memberId'];  //登录的用户id
+        }
+        else{
+            $this->assign("isLogin",0);
+            $this->redirect("Login/index");
+            return;
+        }
+        $createtime = time(0);  //时间
+        if($gId==""||$mId==""||$createtime==""){
+            $this->ajaxReturn(array('code'=>-2001,'msg'=>'参数错误'));
+        }
+        $data['memberId'] = $mId;
+        $data['goodsId'] = $gId;
+        $data['createtime'] = $createtime;
+        $map['memberId'] = array('eq',$mId);
+        $map['goodsId'] = array('eq',$gId);
+        $res = $model->where($map)->find();
+        if($res){
+            $this->ajaxReturn(array('code'=>2002,'msg'=>'已收藏'));
+        }
+        $res = $model->add($data);
+        if(!$res){
+            $this->ajaxReturn(array('code'=>-3000,'msg'=>'收藏失败'));
+        }
+        $this->ajaxReturn(array('code'=>2000,'msg'=>'收藏成功')); 
+    }
+    
+    /**
+    *立即结算(插入一条订单)--一次性插入
+    */
+    public function immeditBuy(){
+        $model = D('Order');
+        /*$carIdArr = I('cargoodId');  //购物车id
+        $buycarId = implode(',',$carIdArr); //要提交的$buycarId字符串
+        $buycarId = rtrim($buycarId,',');  
+        $goodsIdArr = I('goodsId');
+        if (isset($_SESSION['memberId'])){
+            $mId = $_SESSION['memberId'];
+        }else{
+            $mId = I('mId');
+        }
+        $pNumArr = I('pNum');
+        $goodArr = array();
+        foreach($goodsIdArr as $k=>$v){
+            $goodArr[$k]['goodsId'] =  $goodsIdArr[$k];
+            $goodArr[$k]['goodsNum'] = $pNumArr[$k];
+        }
+        $buycarInfo = json_encode($goodArr);  //购物车里的商品信息*/
+        
+        $No = date('YmdHis').$uId.rand(1000,9999);  //生成随机数-系统生成的订单编号
+        $_SESSION['orderNum'] = $No;  //将订单编号保存到sessin中，下一个页面"提交订单"时要用
+        $_SESSION['shopScore'] = I('score',0);  //购物积分
+        if (isset($_SESSION['memberId'])){
+            $mId = $_SESSION['memberId'];
+        }else{
+            $mId = I('mId');
+        }
+        $money = I('money');  //总金额
+        $payment = I('payment'); //实收金额
+        $freight = I('frei');  //运费
+        $voucherId = I('vId'); //代金券Id
+
+        if($mId==""||$money==""||$payment==""){
+            $this->ajaxReturn(array('code'=>-2001,'msg'=>'参数错误'));
+        }
+
+        $data['orderNum'] = $No;
+        $data['memberId'] = $mId;
+//        $data['buycarInfo'] = $buycarInfo;
+//        $data['buycarId'] = $buycarId;
+//        $data['voucherId'] = $vId;   //1张还是多张--代金券？--不确定
+        $data['money'] = $money;
+        $data['payment'] = $payment;
+        $data['freight'] = $freight;
+        $data['status'] = 0;
+        $data['createtime'] = time(0);
+
+        $res = $model->add($data);
+        if(!$res){
+            $this->ajaxReturn(array('code'=>-3000,'msg'=>'结算成功'));
+        }
+        $_SESSION['orderId'] = $res;
+        $this->ajaxReturn(array('code'=>2000,'msg'=>'结算成功','res'=>$res)); 
+    } 
+    /**
+    *立即结算(插入多条订单详情信息)--插入多条
+    */
+    public function immeditBuyInfo(){ 
+        $dataArr = $_POST['name'];
+        $tmp = json_decode($dataArr,true);
+        $model = D('Orderinfo');
+        if (isset($_SESSION['memberId'])){
+            $uId = $_SESSION['memberId'];
+        }else{
+            $uId = I('mId');
+        }
+        foreach($dataArr as $key=>$val){
+            $dataArr[$key]['memberId'] = $uId;
+            $dataArr[$key]['orderId'] = $_SESSION['orderId'];
+            $dataArr[$key]['createtime'] = time(0);
+        }
+        
+//        if($orderNum==""||$uId==""||$goodsPrice==""||$gId==""||$goodsNum==""||$goodsTax==""||$goodsScore==""){
+//            $this->ajaxReturn(array('code'=>-2001,'msg'=>'参数错误'));
+//        }
+//        $goodsPrice = I('price');  //金额
+//        $gId = I('gId');
+//        $goodsNum = I('num'); 
+//        $goodsTax = I('tax');
+//        $goodsScore = I('score');
+//        $createtime = time(0);
+//        $data['orderId'] = $orderNum;
+//        $data['memberId'] = $uId;
+//        $data['goodsId'] = $gId;
+//        $data['goodsNum'] = $goodsNum;
+//        $data['goodsPrice'] = $goodsPrice;
+//        $data['goodsTax'] = $goodsTax;
+//        $data['createtime'] = $createtime;
+//        $data['getScore'] = $goodsScore;
+//        $res = $model->add($data);
+//        var_dump($dataArr);
+        $res = $model->addAll($dataArr);
+        if(!$res){
+            $this->ajaxReturn(array('code'=>-3000,'msg'=>'结算成功'));
+        }
+        $this->ajaxReturn(array('code'=>2000,'msg'=>'结算成功','orderId'=>$_SESSION['orderId'])); 
+    }
+    
+    /**
+    *根据当前登录用户id查询该用户购物车里的所有商品
+    *根据当前登录用户id查询该用户是否拥有购物车里的商品对应的的优惠券，若没有，则显示：“使用优惠券：0.00”,若有，计算优惠券总和，显示：例如：“使用优惠券：-10.00”
+    */
+    public function getAllBuyCars(){
+        $model = D('Buycar');
+        if (isset($_SESSION['memberId'])){
+            $memberId = $_SESSION['memberId'];
+        }else{
+            $memberId = I('mId');
+        }
+        if($memberId==""){
+            $this->ajaxReturn(array('code'=>-2001,'msg'=>'参数错误'));
+        }
+        $map['memberId'] = array('in',$memberId);
+        $map['payStatus'] = array('in','0');
+        $goods = $model->where($map)->select();
+        if(!$goods){
+            $this->ajaxReturn(array('code'=>-3000,'msg'=>'购物车为空'));
+        }
+        foreach($goods as $k=>$v){
+            $hotimgStr = $goods[$k]['pImg'];
+            $hotimgArr = explode(',',$hotimgStr);
+//                var_dump($hotimgArr);exit;
+            $goods[$k]['imgsArr'] = $hotimgArr;
+        }
+        
+        //查找该用户是有拥有代金券
+        $model = D('Membervoucher');
+        $map1['m_membervoucher.mId'] = array('eq',$memberId);
+        $map1['m_voucherinfo.startTime'] = array('elt',time(0));
+        $map1['m_voucherinfo.endTime'] = array('egt',time(0));
+        $vouInfos = $model->where($map1)->join('m_voucherinfo ON m_voucherinfo.id=m_membervoucher.vId')->distinct(true)->select();
+        $voucher = 0;  //用户的代金券价格
+        
+        if(!$vouInfos){
+            $voucher = '0.00';
+            $this->ajaxReturn(array('code'=>2000,'msg'=>'该用户没有优惠券','data'=>array('goods'=>$goods,'voucher'=>$voucher)));
+        }
+//        $debug['b'] = var_exp$goods." ".$voucher;
+//        $this->ajaxReturn(array('code'=>2000,'msg'=>'该用户有优惠券','data'=>array('goods'=>$goods,'vouchers'=>$vouInfos)));
+        
+        //如果有，判断代金券的适用商品里是否有购物车里的商品id
+        foreach($goods as $k=>$v){
+            $gId = $goods[$k]['goodsId'];
+            $tmp = explode(',',$goods[$k]['pImg']);
+            $goods[$k]['pImg'] = $tmp[0];
+            foreach($vouInfos as $q=>$w){
+                $arr = explode(',',$vouInfos[$q]['suitId']);  //分割成数组
+                if(in_array($gId,$arr)){
+                    $voucher += $vouInfos[$q]['money'];
+                }
+            }
+        }
+        $this->ajaxReturn(array('code'=>2000,'msg'=>'该用户有优惠券','data'=>array('goods'=>$goods,'voucher'=>$voucher)));
+         
+    }
+    
+    //查询订单详情
+    public function getOrderInfo(){
+        $model = D('Order');
+        if (isset($_SESSION['orderId'])){
+            $oId = $_SESSION['orderId'];
+        }else{
+            $oId = I('orderId');
+        }
+        if (isset($_SESSION['memberId'])){
+            $memberId = $_SESSION['memberId'];
+        }else{
+            $memberId = I('mId');
+        }
+        if($oId==""||$memberId==""){
+            $this->ajaxReturn(array('code'=>-2001,'msg'=>'参数错误'));
+        }
+        $status = I('status','0');
+        $map['m_order.status'] = array('eq',$status);
+        $map['m_order.id'] = array('eq',$oId);
+        $goods = $model->where($map)->join('m_orderinfo ON m_orderinfo.orderId = m_order.id')->join('m_goods ON m_goods.id = m_orderinfo.goodsId')->field('m_goods.id,m_orderinfo.goodsNum,m_orderinfo.goodsPrice,m_orderinfo.sumTotal,m_orderinfo.goodsColor,m_orderinfo.goodsTax,m_orderinfo.getScore,m_goods.name,m_goods.commodity,m_goods.imgs,m_order.money,m_order.freight,m_order.payment,m_order.taxrate as sumtaxrate,m_order.voucherId')->select();
+        if(!$goods){
+            $this->ajaxReturn(array('code'=>-3000,'msg'=>'订单详情为空'));
+        }
+        foreach($goods as $k=>$v){
+            $hotimgStr = $goods[$k]['imgs'];
+            $hotimgArr = explode(',',$hotimgStr);
+//                var_dump($hotimgArr);exit;
+            $goods[$k]['imgsArr'] = $hotimgArr;
+        }
+        
+        //查找该用户是有拥有代金券
+        $model = D('Membervoucher');
+        $map1['m_membervoucher.mId'] = array('eq',$memberId);
+        $vouInfos = $model->where($map1)->join('m_voucherinfo ON m_voucherinfo.id=m_membervoucher.vId')->select();
+        $voucher = 0;  //用户的代金券价格
+
+        if(!$vouInfos){
+            $voucher = '0.00';
+            $this->ajaxReturn(array('code'=>2000,'msg'=>'该用户没有优惠券','data'=>array('goods'=>$goods,'voucher'=>$voucher)));
+        }
+        //如果有，判断代金券的适用商品里是否有购物车里的商品id
+        foreach($goods as $k=>$v){
+            $gId = $goods[$k]['goodsId'];
+            $tmp = explode(',',$goods[$k]['pImg']);
+            $goods[$k]['pImg'] = $tmp[0];
+            foreach($vouInfos as $q=>$w){
+                $arr = explode(',',$vouInfos[$q]['suitId']);  //分割成数组
+                if(in_array($gId,$arr)){
+                    $voucher += $vouInfos[$q]['money'];
+                }
+            }
+        }
+        $this->ajaxReturn(array('code'=>2000,'msg'=>'该用户有优惠券','data'=>array('goods'=>$goods,'voucher'=>$voucher))); 
+    }
+    //更新订单收获地址
+    public function updateOrderAddr(){
+        $model = D('Order');
+        if (isset($_SESSION['orderId'])){
+            $oId = $_SESSION['orderId'];
+        }else{
+            $oId = I('orderId');
+        }
+        $addrId = I('addr');
+        $map['id'] = array('eq',$oId);
+        $data['addressId'] = $addrId;
+        $data['updatetime'] = time(0);
+        $res = $model->where($map)->save($data);
+        if(!$res){
+            $this->ajaxReturn(array('code'=>-3000,'msg'=>'更新地址失败'));
+        }
+        $this->ajaxReturn(array('code'=>2000,'msg'=>'更新地址成功'));
+    }
+    
+    
+    /**
+    *团体认证（申请团体认证）
+    */
+    public function upGradeVIP(){
+        $model = D('Membergroup');
+
+        $nameArr = I('name');
+        $telArr = I('tel');
+        $memArr = array();  // array(''=>'',''=>'');
+        foreach($nameArr as $k=>$v){
+            $memArr[$k]['name'] = $nameArr[$k];
+            $memArr[$k]['tel'] = $telArr[$k];
+        }
+        $membergroup = json_encode($memArr);
+        $memberId = I('mId');
+        $organ = I('organi');
+        $contacts = I('contacts');
+        $phone = I('phone');
+        $remark = I('remark');
+        $createtime = time(0);
+        if($memberId==""||$organ==""||$contacts==""||$phone==""||$remark==""||$createtime==""){
+            $this->ajaxReturn(array('code'=>-2001,'msg'=>'参数错误'));
+        }
+        $data['memberId'] = $memberId;
+//        $data['membergroup'] = $membergroup;
+        $data['organization'] = $organ;
+        $data['contacts'] = $contacts;
+        $data['phone'] = $phone;
+        $data['remark'] = $remark;
+        $data['createtime'] = $createtime;
+        $res = $model->add($data);
+        if(!$res){
+            $this->ajaxReturn(array('code'=>-3000,'msg'=>'申请失败'));
+        }
+        $this->ajaxReturn(array('code'=>2000,'msg'=>'您的申请已成功提交，等待系统审核！')); 
+    }
+    /**
+    *点击团体认证时，根据当前登录的用户id判断该用户是否已经提交过团体认证申请
+    */
+    public function isOrNoSubmitApp(){
+        $memberId = I('mId');
+        if($memberId==""){
+            $this->ajaxReturn(array('code'=>-2001,'msg'=>'参数错误'));
+        }
+        $model = D('Membergroup');
+        $map['memberId'] = array('eq',$memberId);
+        $res = $model->where($map)->find();
+        if(!$res){
+            $this->ajaxReturn(array('code'=>-3000,'msg'=>'没有提交过申请'));
+        }
+        $this->ajaxReturn(array('code'=>2000,'msg'=>'已经提交过申请')); 
+    }
+    
+    
+}
+?>

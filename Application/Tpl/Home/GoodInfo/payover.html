@@ -1,0 +1,76 @@
+<include file="Public:header" />
+<div class="container">
+    <div class="goodInfo-head">
+        <ul>
+            <li class="goodInfo-mg">
+                <a href="{:U("Index/index")}"><img class="person-img" src="/Public/Image/logo.png" /></a>
+            </li>
+            <li class="goodInfo-mg-two"><img src="/Public/Image/sampImg/buycar_head.png" /></li>
+            <li class="goodInfo-mg">支付成功</li>
+            <img src="/Public/Image/sampImg/payment.png" style="margin:30px 0px 0px 230px;" />
+        </ul>
+    </div>
+    <div class="payover-content">
+        <div class="payover-left">
+            <ul class="ft24 ftbold payover-ul-first">
+                <li>
+                    <img src="__PUBLIC__/Image/sampImg/payover.png" />
+                </li>
+                <li class="payover-mar-l">
+                    您的订单支付成功<if condition="$Think.session.from eq 'cart'">，本次购物获得
+                    <span>{$Think.session.shopScore}</span>积分</if>
+                </li>
+            </ul>
+            <div class="payover-div">
+                <ul>
+                    <li>订单号：</li>
+                    <li>{$Think.session.orderNum}</li>
+                </ul>
+                <ul style="">
+                    <li>在线支付：</li>
+                    <li>￥{$Think.session.shijiMoney}元</li>
+                </ul>
+                <ul class="payover-div-cont">
+                    <li>
+                        <a href="{:U('Index/index')}">继续逛逛</a>
+                    </li>
+                    <li class="payover-sg">|</li>
+                    <li>
+                        <a href="{:U('Member/myorder',array('id'=>$orderId))}">查看订单详情</a>
+                    </li>
+                </ul>
+            </div>
+            
+        </div>
+        <div class="payover-right payover-mg">
+            <div class="good-Info-good">
+                <img id="hot-img" src="__PUBLIC__/Image/hot_recom.png" />
+                <volist name="goods" id="go">
+                    <a href="javascript:;">
+                    <dl id="{$go.id}" class="search-right-dl">
+                        <dt>
+                            <img src="{$go.imgsArr.0}" />
+                        </dt>
+                        <dd>{$go.name}</dd>
+                        <dd class='search-right-dl-price'>
+                            <img src='__PUBLIC__/Image/price.png' />{$go.marketPrice}
+                        </dd>
+                    </dl>
+                    </a>
+                </volist>
+            </div>
+        </div>
+    </div>
+    
+</div>
+<include file="Public:footer" />
+<script type="text/javascript" src="__PUBLIC__/Js/buycar.js"></script>
+<script>
+    $(function(){
+        $(".payover-right .good-Info-good a .search-right-dl").click(function(){
+            var gId = $(this).attr("id");
+            window.location.href = "__APP__/GoodInfo/goodInfo/gId/"+gId;
+        });
+    });
+</script>
+

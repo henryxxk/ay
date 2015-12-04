@@ -1,0 +1,308 @@
+<include file="Public:header" />
+
+    <!--dynamic table-->
+    <link href="__PUBLIC__/Template/assets/advanced-datatable/media/css/demo_page.css" rel="stylesheet" />
+    <link href="__PUBLIC__/Template/assets/advanced-datatable/media/css/demo_table.css" rel="stylesheet" />
+    <link rel="stylesheet" href="__PUBLIC__/Template/assets/data-tables/DT_bootstrap.css" />
+
+ <include file="Public:menu" />
+
+    <!--main content start-->
+    <section id="main-content" >
+        <section class="wrapper">
+            <div class="row">
+                <div class="col-md-12">
+                    <!--breadcrumbs start -->
+                    <ul class="breadcrumb">
+                        <li><a href="#"><i class="fa fa-home"></i> 首页</a></li>
+                        <li><a href="#"> 商品管理</a></li>
+                        <li class="active"> 商品参数管理</li>
+                    </ul>
+                    <!--breadcrumbs end -->
+                </div>
+            </div>
+ 
+
+            <div class="row"> 
+            <div class="col-lg-12">
+            <!--tab nav start-->
+            <section class="panel">
+                <header class="panel-heading tab-bg-dark-navy-blue ">
+                    <ul class="nav nav-tabs">
+                        <li class="">
+                            <a data-toggle="tab" href="#type"> 商品分类</a>
+                        </li>
+                        <li class="active">
+                            <a data-toggle="tab" href="#brand"> 商品品牌</a>
+                        </li>
+                        <li class="">
+                            <a data-toggle="tab" href="#color"> 商品颜色</a>
+                        </li>
+                        <li class="">
+                            <a data-toggle="tab" href="#size"> 商品尺码</a>
+                        </li>
+                    </ul>
+                </header>
+                <div class="panel-body">
+                    <div class="tab-content">
+                        <div id="type" class="tab-pane">
+                             <!--type-->
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <section class="panel">
+                                        <header class="panel-heading">
+                                            <button type="button" onclick="javascript:btnJump('Goods/goodsTypeAdd','')" class="btn btn-primary"><i class="fa fa-plus"></i> 新增商品分类</button>
+                                        </header>
+                                        <div class="panel-body">
+                                        <div class="adv-table">
+                                        <table cellpadding="0" cellspacing="0" border="0" class="display table table-bordered" id="typeTable">
+                                        <thead>
+                                        <tr>
+                                            <th>编号</th>
+                                            <th>父级分类</th>
+                                            <th>分类名称</th>
+                                            <th>操作</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <volist name="goodsType" id="vo">
+                                        <tr class="gradeX">
+                                            <td>{$vo.id}</td>
+                                            <td>
+                                                <if condition="$vo.parentId neq 0 ">{$vo.treePathName}</if>
+                                            </td>
+                                            <td>{$vo.name}</td>
+                                            <td>
+                                            <button type="button" onclick="javascript:btnJump('Goods/goodsTypeEdit',{$vo.id})" class="btn btn-primary"><i class="fa fa-pencil"></i> 编辑</button>
+                                            <!-- <button type="button" class="btn btn-primary"><i class="fa  fa-mail-reply"></i> 返回</button> -->
+                                            <button type="button" onclick="javascript:beforeDel('你确定要删除吗','Type','Goods/goodsDelete',{$vo.id})" class="btn btn-danger"><i class="fa fa-trash-o"></i> 删除</button>
+                                            </td>
+                                        </tr>
+                                        </volist> 
+                                        </tbody>
+                                        </table>
+
+                                        </div>
+                                        </div>
+                                    </section>
+                                </div>
+                            </div>
+                            <!-- row end-->
+                        </div>
+
+                        <div id="brand" class="tab-pane active">
+                                <!--brand-->
+                                 <div class="row">
+                                <div class="col-sm-12">
+                                    <section class="panel">
+                                        <header class="panel-heading">
+                                            <button type="button" onclick="javascript:btnJump('Goods/goodsBrandAdd','')" class="btn btn-primary"><i class="fa fa-plus"></i> 新增商品品牌</button>
+                                        </header>
+                                        <div class="panel-body">
+                                        <div class="adv-table">
+                                        <table cellpadding="0" cellspacing="0" border="0" class="display table table-bordered" id="brandTable">
+                                        <thead>
+                                        <tr>
+                                            <th>编号</th>
+                                            <th>品牌分类</th>
+                                            <th>品牌名称</th>
+                                            <th>品牌图片</th>
+                                            <th>状态</th>
+                                            <th>操作</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <volist name="goodsBrand" id="vo">
+                                        <tr class="gradeX">
+                                            <td>{$vo.id}</td>
+                                            <td>{$vo.treePathName}</td>
+                                            <td>{$vo.name}</td>
+                                            <td><img src="{$vo.imgs}" style="width:50px;height:50px;"></td>
+                                            <td>
+                                                <if condition="$vo.status eq 1 ">
+                                                    正常
+                                                <elseif condition="$vo.status eq 0 "/>
+                                                    已禁用
+                                                </if>
+                                            </td>
+                                            <td>
+                                            <button type="button" onclick="javascript:btnJump('Goods/goodsBrandEdit',{$vo.id})" class="btn btn-primary"><i class="fa fa-pencil"></i> 编辑</button>
+                                            <!-- <button type="button" class="btn btn-primary"><i class="fa  fa-mail-reply"></i> 返回</button> -->
+                                            <button type="button" onclick="javascript:beforeDel('你确定要删除吗','Goodsbrand','Goods/goodsDelete',{$vo.id})" class="btn btn-danger"><i class="fa fa-trash-o"></i> 删除</button>
+                                            </td>
+                                        </tr>
+                                        </volist> 
+                                        </tbody>
+                                        </table>
+
+                                        </div>
+                                        </div>
+                                    </section>
+                                </div>
+                            </div><!-- row end-->
+                        </div>
+
+                        <div id="color" class="tab-pane">
+                                <!--color-->
+                                 <div class="row">
+                                <div class="col-sm-12">
+                                    <section class="panel">
+                                        <header class="panel-heading">
+                                            <button type="button" onclick="javascript:btnJump('Goods/goodsColorAdd','')" class="btn btn-primary"><i class="fa fa-plus"></i> 新增商品颜色</button>
+                                        </header>
+                                        <div class="panel-body">
+                                        <div class="adv-table">
+                                        <table cellpadding="0" cellspacing="0" border="0" class="display table table-bordered" id="colorTable">
+                                        <thead>
+                                        <tr>
+                                            <th>编号</th>
+                                            <th>所属商品分类</th>
+                                            <th>颜色名称</th>
+                                            <th>状态</th>
+                                            <th>操作</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <volist name="goodsColor" id="vo">
+                                        <tr class="gradeX">
+                                            <td>{$vo.id}</td>
+                                            <td>{$vo.treePathName}</td>
+                                            <td>{$vo.name}</td>
+                                            <td>
+                                                <if condition="$vo.status eq 1 ">
+                                                    正常
+                                                <elseif condition="$vo.status eq 0 "/>
+                                                    已禁用
+                                                </if>
+                                            </td>
+                                            <td>
+                                            <button type="button" onclick="javascript:btnJump('Goods/goodscolorEdit',{$vo.id})" class="btn btn-primary"><i class="fa fa-pencil"></i> 编辑</button>
+                                            <!-- <button type="button" class="btn btn-primary"><i class="fa  fa-mail-reply"></i> 返回</button> -->
+                                            <button type="button" onclick="javascript:beforeDel('你确定要删除吗','Goodscolor','Goods/goodsDelete',{$vo.id})" class="btn btn-danger"><i class="fa fa-trash-o"></i> 删除</button>
+                                            </td>
+                                        </tr>
+                                        </volist> 
+                                        </tbody>
+                                        </table>
+
+                                        </div>
+                                        </div>
+                                    </section>
+                                </div>
+                            </div><!-- row end-->
+                        </div>
+
+                        <div id="size" class="tab-pane">
+                                <!--size-->
+                                 <div class="row">
+                                <div class="col-sm-12">
+                                    <section class="panel">
+                                        <header class="panel-heading">
+                                            <button type="button" onclick="javascript:btnJump('Goods/goodsSizeAdd','')" class="btn btn-primary"><i class="fa fa-plus"></i> 新增商品尺寸</button>
+                                        </header>
+                                        <div class="panel-body">
+                                        <div class="adv-table">
+                                        <table cellpadding="0" cellspacing="0" border="0" class="display table table-bordered" id="sizeTable">
+                                        <thead>
+                                        <tr>
+                                            <th>编号</th>
+                                            <th>所属商品分类</th>
+                                            <th>尺寸名称</th>
+                                            <th>状态</th>
+                                            <th>操作</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <volist name="goodsSzie" id="vo">
+                                        <tr class="gradeX">
+                                            <td>{$vo.id}</td>
+                                            <td>{$vo.treePathName}</td>
+                                            <td>{$vo.name}</td>
+                                            <td>
+                                                <if condition="$vo.status eq 1 ">
+                                                    正常
+                                                <elseif condition="$vo.status eq 0 "/>
+                                                    已禁用
+                                                </if>
+                                            </td>
+                                            <td>
+                                            <button type="button" onclick="javascript:btnJump('Goods/goodsSizeEdit',{$vo.id})" class="btn btn-primary"><i class="fa fa-pencil"></i> 编辑</button>
+                                            <!-- <button type="button" class="btn btn-primary"><i class="fa  fa-mail-reply"></i> 返回</button> -->
+                                            <button type="button" onclick="javascript:beforeDel('你确定要删除吗','Goodssize','Goods/goodsDelete',{$vo.id})" class="btn btn-danger"><i class="fa fa-trash-o"></i> 删除</button>
+                                            </td>
+                                        </tr>
+                                        </volist> 
+                                        </tbody>
+                                        </table>
+
+                                        </div>
+                                        </div>
+                                    </section>
+                                </div>
+                            </div><!-- row end-->
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!--tab nav start-->
+  
+                </div> 
+            </div>
+
+
+        </section>
+    </section>
+    <!--main content end-->
+  
+</section>
+
+
+<include file="Public:footer" />
+
+<!--common script init for all pages-->
+<script src="__PUBLIC__/Template/js/scripts.js"></script>  
+<script>
+//表格
+$(function(){ 
+    dTable('#typeTable'); 
+    dTable('#brandTable'); 
+    dTable('#colorTable'); 
+    dTable('#sizeTable'); 
+});
+//btnJump
+function btnJump(method,id){
+    if(id != ''){
+        //alert("Auth/"+ method + "/id/" + id);
+        window.location.href = "/Admin/"+ method + "/id/" + id;
+    }else{
+        //alert("Auth/"+ method + "/");
+       window.location.href = "/Admin/"+ method + "/";
+    }
+}
+//del
+function del(table,method,id){
+    var url = "/Admin/" + method + "/";
+    var postData = {
+        'table':table,
+        'id':id
+    }
+    console.log(postData);
+    console.log(url);
+    $.post(url,postData,function(data){
+        console.log(data);
+        if(data.code == 2000){
+            window.location.href = "{:U('Goods/goodsBrand')}";
+        }else{
+            alert(data.msg);
+        }
+    });
+}
+//before
+function beforeDel(msg,table,method,id){
+    if(confirm(msg)){ 
+        del(table,method,id);
+    }  
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,81 @@
+<include file="Public:header" />
+<include file="Public:menu" />
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/Css/newcommon.css">
+<div class="user">
+	<div class="container">
+		<div class="user-content">
+			
+			<include file="Public:user_menu" />
+			<div class="user-right">
+				<div class="header">
+					投诉建议
+				</div>
+				<div class="content">
+					<p style="padding:20px;color:#9d9d9d">&nbsp&nbsp&nbsp&nbsp&nbsp亲爱的顾客，您在购物过程中遇到任何问题或者对我们的服务有不满，可直接留言。我们会在收到您的建议或投诉的1-2个工作日内为您解决，谢谢您对我们的支持，有您的监督和信任，我们会做得更好。</p>
+					<div class="pub" style="margin-top:20px;">
+						<label class="" >主题：</label>
+						<input type="text" id="title">
+						<p class="tip" style="color:#d92921">*请填写主题</p>
+					</div>
+					<div class="pub" style="margin-top:20px;">
+						<label class="" >姓名：</label>
+						<input type="text" id="name">
+						<p class="tip" style="color:#d92921">*请填写姓名</p>
+					</div>
+					<div class="pub" style="margin-top:20px;">
+						<label class="" >联系电话：</label>
+						<input type="text" id="tel">
+
+						<p class="tip" style="color:#d92921">*请正确填写电话</p>
+					</div>
+					<div class="pub" style="margin-top:20px;">
+						<label class="" >详细描述：</label>
+						<textarea id="desc"></textarea>
+					</div>
+					<a href="javascript:;" class="login-btn p-l" style="width:150px;display:inline-block;margin-bottom:60px;margin-left:175px;margin-top:140px;" id="sub">提交</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+	$(function(){
+		$("#sub").click(function(){
+
+			var title = $("#title").val();
+			var name = $("#name").val();
+			var desc = $("#desc").val();
+			var tel = $("#tel").val();
+			if(title == ""
+				|| name == ""
+				|| desc == ""
+				|| tel == ""){
+
+				alert("请将信息填写完整！");
+				return;
+			}
+			var postData = {
+				title:title,
+				name:name,
+				desc:desc,
+				tel:tel,
+			}
+			$.post("{:U("Member/addSuggess")}",postData,function(data){
+				switch(data["code"]){
+
+					case 2000:{
+						$("#title").val("");
+						alert("提交成功！");
+						return;
+					}
+					default:{
+						alert("系统繁忙，请稍后再试！");
+						return;
+					}
+				}
+
+			})
+		})
+	})
+</script>
+<include file="Public:footer" />

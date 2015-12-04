@@ -1,0 +1,290 @@
+<include file="Public:header" />
+<include file="Public:menu" />
+<div class="user">
+	<div class="container">
+		<div class="user-content">
+			<include file="Public:user_menu" />
+			<div class="user-right">
+				<div class="header">
+                    我的订单
+                </div>
+                <div class="content">
+                    <div class="orderinfo-content-mr-bo">
+                    <div class="orderinfo-con-head">
+                        <div class="orderinfo-con-head-div">
+                            <ul id="">
+                                <li class="ft18 orderinfo-con-head-ul-text">全部订单</li>
+                            </ul>
+                            <ul id="0">
+                                <li class="ft12">
+                                    待付款(<span>{$countData.all}</span>)
+                                </li>
+                            </ul>
+                            <ul id="1">
+                                <li class="ft12">
+                                    待发货(<span>{$countData.dfahuo}</span>)
+                                </li>
+                            </ul>
+                            <ul id="6">
+                                <li class="ft12">
+                                    待评价(<span>{$countData.dpinglun}</span>)
+                                </li>
+                            </ul>
+                            <ul id="">
+                                <li class="ft12">
+                                    全部订单
+                                </li>
+                            </ul>
+                            <ul id="7">
+                                <li class="ft12">
+                                    已完成(<span>{$countData.wancheng}</span>)
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <form action="{:U(Member/orderinfo)}" id="sForm" method="post" accept-charset="utf-8"> 
+                    <div class="orderinfo-con">
+                        <div class="orderinfo-con-div">
+                            <ul>
+                                <li class="orderinfo-con-div-ul-text">时间：</li>
+                                <li>
+                                    <input class="Wdate" type="text" name="startTime" value="{$startTime}" onClick="WdatePicker()"> 
+                                </li>
+                            </ul>
+                            <ul class="orderinfo-con-div-ul-mr">
+                                <li class="orderinfo-con-div-ul-mg">到</li>
+                                <li>
+                                   <input class="Wdate" type="text" name="endTime" value="{$endTime}"  onClick="WdatePicker()"> 
+                                </li>
+                            </ul>
+                            <ul>
+                                <li class="orderinfo-con-div-ul-text">交易状态：</li>
+                                <li>
+                                <!-- status：表示订单状态，待付款0、待发货1、已发货2、交易成功3、交易关闭4、退款中订单5,待评价6，已完成7 -->
+                                    <select name="status">
+                                        <option value="">全部订单</option>
+                                        <option value="0">待付款</option>
+                                        <option value="1">待发货</option>
+                                        <option value="2">已发货</option>
+                                        <option value="3">交易成功</option>
+                                        <option value="4">交易关闭</option>
+                                        <option value="5">退款中订单</option>
+                                        <option value="6">待评价</option>
+                                        <option value="7">已完成</option>
+                                    </select>
+                                    <input type="hidden" id="status" value="{$status}" />
+                                </li>
+                            </ul>
+                            <ul class="orderinfo-con-div-ul-search">
+                                <li id="searchBtn"> 搜索 </li>
+                            </ul>
+                        </div>
+                    </div>
+                    </form>
+                    <div>
+                        <div class="myperson-con-head myperson-con-div">
+                            <ul>
+                                <li>订单编号：</li>
+                                <li>{$list.0.oNum}</li>
+                            </ul>
+                            <ul>
+                                <li>日期：</li>
+                                <li>
+                                    <if condition="$list['0']['oCreatetime'] neq 0 ">
+                                        {$list.0.oCreatetime|date="Y-m-d H:i:s",###}
+                                    </if>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="myperson-con-head-two goodInfo-con-top myorder-buycar-head">
+                            <ul class="goodInfo-wd-first">
+
+                                <li class="goodInfo-wd-third goodInfo-li-mr-first">商品名称</li>
+                            </ul>
+                            <ul class="myperson-con-head-two-ul goodInfo-wd-two">
+                                <li>单价</li>
+                            </ul>
+                            <ul class="goodInfo-wd-two">
+                                <li>进口税</li>
+                            </ul>
+                            <ul class="goodInfo-wd-two">
+                                <li>数量</li>
+                            </ul>
+                            <ul class="goodInfo-wd-two">
+                                <li>小计</li>
+                            </ul>
+                            <ul class="myperson-con-top-ul">
+                                <li>订单状态</li>
+                            </ul>
+							<!--
+                            <ul class="myperson-con-top-ul">
+                                <li>操作</li>
+                            </ul>
+							-->
+                        </div>
+<volist name="list" id="vo">
+                        <div class="myperson-buycar-goodInfo myorder-buycars-total">
+                            <div class="goodInfo-con-comm">
+                                <p>  
+                                    商家： 
+                                    <if condition="$vo.commodity eq 0 ">
+                                        自营
+                                    <else if condition="$vo.commodity eq 1 " />
+                                        代购
+                                    </if>
+                                </p>
+                            </div>
+                            <div class="myorder-buy-info">
+                                <ul class="myorder-buy-info-first">
+                                    <li>
+                                        <img class="myorder-buy-goodimg" src="{$vo.imgs|getImgUrl}" style="width:50px;" />
+                                    </li>
+                                    <li class="myorder-buy-first-li">
+                                        <a href="{:U('Member/myorder',array('id'=>$vo['id']))}" >{$vo.name} &nbsp;(<strong>{$vo.colorId|getColorNameStr}</strong>)</a>
+                                    </li>
+                                </ul>
+                                <ul class="myorder-buy-info-two">
+                                    <li class="myorder-buy-in-two-li">
+                                        ￥<span class="">{$vo.oinPrice}</span>
+                                    </li>
+                                </ul>
+                                <ul class="myorder-buy-info-two">
+                                    <li class="myorder-buy-in-two-li myorder-buy-thired">
+                                        ￥<span class="">{$vo.oinTax}</span>
+                                    </li>
+                                </ul>
+                                <ul class="myorder-buy-info-two">
+                                    <li class="myperson-buy-in-two-li myorder-buy-in-two-li myorder-buy-thired">
+                                        <span class="myorder-buy-count">{$vo.oinNum}</span>
+                                    </li>
+                                </ul>
+                                <ul class="myorder-buy-info-two">
+                                    <li class="myperson-buy-in-two-li myorder-buy-in-two-li myorder-buy-thired">
+                                        ￥<span class="subtotal">{$vo.subtotal}</span>
+                                    </li>
+                                </ul>
+								<!--
+                                <ul class="myorder-buy-info-two">
+                                    <li class="myperson-buy-in-two-li myorder-buy-in-two-li myorder-buy-thired">
+                                        <a href="{:U('Member/myorder',array('id'=>$vo['id']))}">详情</a>
+                                    </li>
+                                </ul>
+								-->
+                            </div> 
+                            <!--交易成功-->
+                            <div class="myperson-deal-success">
+                                <ul> 
+                                    <if condition="$vo.oStatus eq 0 ">
+                                        <li class="myperson-deal-text" >待付款</li> 
+                                    <elseif condition="$vo.oStatus eq 1" />
+                                        <li class="myperson-deal-text" >待发货</li>    
+                                    <elseif condition="$vo.oStatus eq 2" />
+                                        <li class="myperson-deal-text" >已发货</li>   
+                                    <elseif condition="$vo.oStatus eq 3" />
+                                        <li class="myperson-deal-text" >交易成功</li>   
+                                    <elseif condition="$vo.oStatus eq 4" />
+                                        <li class="myperson-deal-text" >交易关闭</li> 
+                                    <elseif condition="$vo.oStatus eq 5" />
+                                        <li class="myperson-deal-text" >退款中订单</li> 
+                                    <elseif condition="$vo.oStatus eq 7" />
+                                        <li class="myperson-deal-text" >已完成</li>    
+                                    <elseif condition="$vo.oStatus eq 6" />
+                                        <li class="myperson-deal-text" >待评价</li>
+                                        <li class="myperson-appraise" >去评价</li>    
+                                    </if>
+                                </ul>
+                            </div>
+                        </div>
+</volist>                        
+                    </div> 
+                    
+                    <div class="mycoll-page">
+                        <ul>
+                            <li>
+                                <a href="{:U('Member/orderinfo',array('page'=>$curP-1))}">< 上一页</a>
+                            </li>
+                        </ul> 
+                        <for start="0" end="$totalPage">
+                        <ul>
+                            <li>
+                                <a  href="{:U('Member/orderinfo',array('page'=>$i+1))}">{$i+1}</a>
+                            </li>
+                        </ul>
+                        </for>
+                         
+                   <!--      <ul class="mycoll-page-bg">
+                            <li>
+                                <a>...</a>
+                            </li>
+                        </ul> --> 
+                        <ul>
+                            <li>
+                                <a href="{:U('Member/orderinfo',array('page'=>$curP+1))}"> 下一页 > </a>
+                            </li>
+                        </ul>
+                        <ul class="mycoll-page-bg">
+                            <li>
+                                <a>到第</a>
+                            </li>
+                        </ul>
+                        <ul>
+                            <li>
+                                <input type="text" id="jumpPage" style="width: 30px" />
+                            </li>
+                        </ul>
+                        <ul class="mycoll-page-bg">
+                            <li>
+                                <a>页</a>
+                            </li>
+                        </ul>
+                        <ul>
+                            <li>
+                                <a id="jumpBtn" style="cursor: pointer">确定</a>
+                            </li>
+                        </ul>
+                    </div>
+                    </div>
+                </div>
+            </div>
+            
+		</div>
+	</div>
+</div>
+
+<include file="Public:footer" />
+<script type="text/javascript"> 
+$(function(){
+    //分页跳转
+    $("#jumpBtn").click(function(){
+        var p = $("#jumpPage").val();
+        window.location.href = '/Member/orderinfo/page/'+p;
+    });
+    $(".myorder-buy-info").click(function(){
+        window.location.href="{:U('Member/myorder')}";
+    });
+    //搜索
+    $('#searchBtn').click(function(){
+        $('#sForm').submit();
+    });
+    //select
+    $('select[name="status"]').val($('#status').val());  
+    
+    $(".orderinfo-con-head-div ul").click(function(){
+        var status = $(this).attr("id");
+        console.log(status);
+        var url = "{:U('Member/orderinfo')}";
+        var postData = {
+            'status':status
+        }
+        $.post(url,postData,function(data){
+            if(data["code"]==2000){
+            }else{
+                alert("系统繁忙，请售后重试！");
+            }
+        });
+        
+    });
+        
+});
+</script>
+

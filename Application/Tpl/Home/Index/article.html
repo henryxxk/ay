@@ -1,0 +1,42 @@
+<include file="Public:header" />
+<include file="Public:menu" />
+<div class="location">
+	<div class="container">
+		<span class="location-main">首页></span>
+		<span class="location-sub">
+            {$list.title}
+        </span> 
+	</div>
+</div>
+<div class="article-title">
+	<div class="container">
+		{$list.title}
+	</div>
+</div>
+<div class="article-info">
+	<div class="container">
+		发布时间:{$list.createtime|date="Y-m-d H:i:s",###}
+	</div>
+	
+</div>
+<div class="article-content">
+		<div class="container">
+            {$list.content}
+            <!--
+			     为做好跨境贸易电子商务(以下简称电子商务)进出境货物、物品监管工作，促进电子商务健康发展，现就电子商务进出境货物、物品监管问题公告如下：<br>
+			     <span style="font-weight: bold">一、监管要求</span>
+			     <pre>
+	(一)电子商务企业或个人通过经海关认可并且与海关联网的电子商务交易平台实现跨境交易进出境货物、物品的，按照本公告接受海关监管。
+
+　　(二)电子商务企业应提交《中华人民共和国海关跨境贸易电子商务进出境货物申报清单》(以下简称《货物清单》，式样见附件1)，采取“清单核放、汇总申报”方式办理电子商务进出境货物报关手续;个人应提交《中华人民共和国海关跨境贸易电子商务进出境物品申报清单》(以下简称《物品清单》，式样见附件2)，采取“清单核放”方式办理电子商务进出境物品报关手续。
+　　《货物清单》、《物品清单》与《进出口货物报关单》等具有同等法律效力。
+
+　　(三)存放电子商务进出境货物、物品的海关监管场所的经营人，应向海关办理开展电子商务业务的备案手续，并接受海关监管。未办理备案手续的，不得开展电子商务业务。
+
+　　(四)电子商务企业或个人、支付企业、海关监管场所经营人、物流企业等，应按照规定通过电子商务通关服务平台适时向电子商务通关管理平台传送交易、支付、仓储和物流等数据。
+ 
+			     </pre>-->
+		</div>
+</div>
+<include file="Public:footer" />
+

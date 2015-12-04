@@ -1,0 +1,186 @@
+<include file="Public:header" />
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/Css/newcommon.css">
+<include file="Public:menu" />
+<style type="text/css">
+	.width3select{
+		width: 91px !important;
+	}
+</style>
+<div class="user">
+	<div class="container">
+		<div class="user-content">
+			
+			<include file="Public:user_menu" />
+			<div class="user-right">
+				<div class="header">
+					收货地址
+				</div>
+				<div class="content">
+					<div class="address-title">新增收货地址</div>
+					
+					<div style="margin-left:10px;">
+						<div class="pub" style="margin-top:20px;">
+							<label class="" >收货人：</label>
+							<input type="text" name="username" id="username">
+							<p class="tip" style="color:#d92921">*请填写收货人</p>
+						</div>
+						<div class="pub" >
+							<label class="">所在地区：</label>
+							<select class="width3select" id="province">
+								<option value="">--请选择--</option>
+								<volist name="dProvince" id="vo">
+								<option value="{$vo.code}">{$vo.name}</option>
+								</volist> 
+							</select>
+							<select class="width3select" id="city">
+								<option>--请选择--</option> 
+							</select>
+							<select class="width3select" id="area">
+								<option>--请选择--</option> 
+							</select>
+						</div>
+						
+						<div class="pub" >
+							<label class="" >详细地址：</label>
+							<input type="text" id="addressInfo">
+							<p class="tip" style="color:#d92921">*请正确填写详细收货地址，如街道名、门牌号、房间名等信息</p>
+						</div>
+						<div class="pub" >
+							<label class="" >手机号码：</label>
+							<input type="text" id="tel">
+							<p class="tip" style="color:#d92921">*请正确填写手机号码</p>
+						</div>
+						<div class="pub" >
+							<label class="" >邮政编码：</label>
+							<input type="text" id="youzheng">
+							<p class="tip" style="color:#d92921">*请填写邮政编码</p>
+						</div>
+						<a href="javascript:;" class="login-btn p-l" style="width:300px;display:inline-block;margin-bottom:20px;margin-left:110px;" id="saveBtn">保存收货人信息</a>
+					</div>
+					<div class="address-title clearfix">已保存的收货地址</div>
+					<table class="user-table">
+						<thead>
+							<tr>
+								<th style="width:100px;">收货人姓名</th>
+								<th style="width:300px;">所在地区</th>
+								<th style="width:300px;">街道地址</th>
+								<th style="width:100px;">手机号码</th>
+								<th style="width:100px;">邮政编码</th>
+								<th style="width:100px;">操作</th>
+							</tr>
+						</thead>
+						<tbody id="tb">
+							<volist name="aAddress" id="vo">
+							<tr>
+								<td>{$vo.name}</td>
+								<td>{$vo.specificAddr}</td>
+								<td>{$vo.addr}</td>
+								<td>{$vo.tel}</td>
+								<td>{$vo.postcode}</td>
+								<td>
+									<a href="javascript:del({$vo.id});">删除</a>
+								<!-- 	<a href="javascript:void(0);">下架</a>
+									|
+									<a href="javascript:void(0);" class="danger">编辑</a> -->
+								</td>
+							</tr>
+							</volist>
+						</tbody>
+
+					</table>
+					
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<include file="Public:footer" />
+<script>
+//联动
+$(function(){
+	$('#province').change(function(){
+		var url = "/Base/getProvinceCityName";
+		var postData = {
+			'id':$('#province').val()
+		} 
+		$.post(url,postData,function(data){  
+				$('#city').html('<option value="">请选择</option>');
+			$.each(data.data,function(k,v){
+				$('#city').append('<option value="'+v.code+'">'+v.name+'</option>');
+			});
+		}); 
+	});
+	$('#city').change(function(){
+		var url = "/Base/getCityAreaName";
+		var postData = {
+			'id':$('#city').val()
+		} 
+		$.post(url,postData,function(data){  
+				$('#area').html('<option value="">请选择</option>');
+			$.each(data.data,function(k,v){
+				$('#area').append('<option value="'+v.code+'">'+v.name+'</option>');
+			});
+		}); 
+	});
+});
+//添加新地址
+$(function(){ 
+	$('#saveBtn').click(function(){
+		var address = $('#addressInfo').val();
+		if(address == ''){
+			$('#addressInfo').css({ "border-color": "#ff0000"});
+			alert('请输入详细地址');return;
+		}else{
+			$('#addressInfo').css({ "border-color": ""});
+		}
+		var url = "/User/insertAddress";
+		var postData = {
+			'username':$('#username').val(),
+			'province':$('#province').val(),
+			'city':$('#city').val(),
+			'area':$('#area').val(),
+			'addressInfo':$('#addressInfo').val(),
+			'tel':$('#tel').val(),
+			'youzheng':$('#youzheng').val(),
+		}  
+		$.post(url,postData,function(data){  
+				 console.log(data);
+			if(data.code == 2000){
+				//$.each(data.data,function(k,v){ 
+					var str = '<tr>'+
+								'<td>'+data.data.name+'</td>'+
+								'<td>'+data.data.specificAddr+'</td>'+
+								'<td>'+data.data.addr+'</td>'+
+								'<td>'+data.data.tel+'</td>'+
+								'<td>'+data.data.postcode+'</td>'+
+								'<td>'+
+									'<a href="javascript:del('+data.data.id+');">删除</a>'+ 
+								'</td>'+
+							'</tr>';
+					$('#tb').prepend(str);
+				//});
+			}else{
+				alert(data.msg);
+			}	 
+		}); 
+	});
+});
+//删除
+function del(id){
+  if (!confirm("确定要删除此收货地址吗？")) {
+      return;
+  }
+	var url = "/User/delete";
+	var postData = {
+		'id':id
+	}
+	$.post(url,postData,function(data){
+		if(data.code == 2000){
+			window.location.reload();
+		}else{
+			alert(data.msg);
+		}
+	});
+}	 
+</script>

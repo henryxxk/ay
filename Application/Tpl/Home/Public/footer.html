@@ -1,0 +1,151 @@
+        <if condition="$isLoginPage eq 1">
+        <div class="footer-login">
+            <div class="container">
+               <ul class="login-bottom">
+                    <li>
+                        <a>关于商城</a>
+                    </li>
+                    <li>
+                        <a>联系我们</a>
+                    </li>
+                    <li>
+                        <a>购物流程</a>
+                    </li>
+                    <li>
+                        <a>常见问题</a>
+                    </li>
+                    <li>
+                        <a>服务协议</a>
+                    </li>
+                    <li>
+                        <a>代购入驻</a>
+                    </li>
+                    <li>
+                        <a>在线申请</a>
+                    </li>
+                    <li>
+                        <a>政策条款</a>
+                    </li>
+                    <li>
+                        <a>法律声明</a>
+                    </li>
+                </ul> 
+            </div>
+            <div class="login-copyright">
+                京ICP备13009877号 版权所有Copyright 2015 西安比熊网络科技有限公司 All Rights Reserved.
+            </div>
+        </div>
+        <else />
+        <div class="footer">
+            <div class="top-ensure">
+                <div class="container">
+                    <ul>
+                        <li>
+                            <img src="__PUBLIC__/Image/footer-zhengpin.png">
+                        </li>
+                        <li>
+                            <img src="__PUBLIC__/Image/footer-international.png">
+                        </li>
+                        <li>
+                            <img src="__PUBLIC__/Image/footer-tax.png">
+                        </li>
+                        <li>
+                            <img src="__PUBLIC__/Image/footer-safepay.png">
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="bottom-info">
+                <div class="container">
+                    <div class="info-left">
+                        
+                    </div>
+                    <div class="info-right" style="width:610px; margin:0px auto;">
+                        <ul class="cate">
+                            <li class="cateli">
+                                <div class="head">关于我们</div>
+                                <ul>
+                                    <li>
+                                        <a>关于商城</a>
+                                    </li>
+                                    <li>
+                                        <a>联系我们</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="cateli">
+                                <div class="head">购物指南</div>
+                                <ul>
+                                    <li>
+                                        <a>购物流程</a>
+                                    </li>
+                                    <li>
+                                        <a>常见问题</a>
+                                    </li>
+                                    <li>
+                                        <a>服务协议</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="cateli">
+                                <div class="head">商务合作</div>
+                                <ul>
+                                    <li>
+                                        <a>代购入驻</a>
+                                    </li>
+                                    <li>
+                                        <a>在线申请</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="cateli">
+                                <div class="head">政策条款</div>
+                                <ul>
+                                    <li>
+                                        <a>法律声明</a>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="copyright">
+                <div class="container">
+                    京ICP备13009877号  版权所有Copyright 2015 陕西铂奥金一带贸易有限公司 All Rights Reserved.
+                </div>
+            </div>
+        </div>
+        </if> 
+
+<!-- 客服 用的第三方  -->
+<a id="ibangkf" href="#"></a>
+<!--<script language="javascript" src="http://c.ibangkf.com/i/c-anyooh.js"></script>-->
+<script language="javascript" src="/Public/Js/c-anyooh.js"></script>
+<!---->	
+    </body>
+</html>
+
+<script>
+    $(function(){
+        $(".login-bottom li a").click(function(){
+            var url = "{:U('Member/getArticleInfo')}";
+            var name = $(this).html();
+            if($.trim(name)=="在线申请"){
+                window.location.href = "__APP__/Index/applic";
+                return;
+            }
+            window.location.href = "__APP__/Index/article/name/"+name;
+        });
+        $(".cateli a").click(function(){
+            var url = "{:U('Member/getArticleInfo')}";
+            var name = $(this).html();
+            if($.trim(name)=="在线申请"){
+                window.location.href = "__APP__/Index/applic";
+                return;
+            }
+            window.location.href = "__APP__/Index/article/name/"+name;
+        });
+    });
+</script>
+

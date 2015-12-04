@@ -1,0 +1,59 @@
+<include file="Public:header" />
+<include file="Public:menu" />
+<style type="text/css">
+    .width3select{
+        width: 91px !important;
+    }
+.container{font-family: "微软雅黑";font-size: 14px;}
+.container h2{width: 100%;text-align: center;margin-bottom: 20px;}  
+.container h4{width: 100%;height:30px;line-height: 30px;background-color: #ddd;text-indent: 1em;}
+.container .text{width:20em;height:2em;}
+.container p{margin: 15px;}
+.container .myBtn{width: 200px;height:30px;line-height:30px;text-align:center;background-color: #d30909;display: inline-block;overflow: hidden;color:#fff;font-size: 14px;cursor: pointer;}
+.container textarea{width:100%;height:200px;margin-top: 20px;}
+</style>
+<div>
+	<div id="banner">
+	</div>
+</div>
+  
+<!-- <form action="/User/insertGroupVerify" method="post" id="myForm"> -->
+<div class="container"> 
+    <h4>VIP费用</h4>
+    <p> 开通账号：
+    {$Think.session.memberId|getUserField}
+    </p>
+    <p>
+        付费模式：<input class="text" type="text" id="moshi">
+    </p>
+    <p>
+        开通时长：<input class="text" type="text" id="shichang" value="0"> 月
+    </p>
+    <p>
+        应付金额：<span id="price"></span>  元
+    </p>
+    <input type="hidden" id="feiyong" value="{$feiyong}" />
+    <p><span class="myBtn" id="addBtn">确认升级</span></p>
+    <div style="clear:both;height:80px;">
+        <div style="float:left;width:49%;height:50px;">
+            <h4>VIP政策</h4>
+            <p>会员生日手动赠送 100 积分;收藏宝贝赚取 15 积分;1id限1个宝贝</p>
+        </div>
+        <div style="float:right;width:49%;height:50px;">
+            <h4>享受政策</h4>
+            <p>会员生日手动赠送 100 积分;收藏宝贝赚取 15 积分;1id限1个宝贝</p>
+        </div>
+    </div>
+</div>
+<!-- </form>  -->
+<script type="text/javascript" src="__PUBLIC__/Js/logic/index.js"></script>
+<include file="Public:footer" />
+<script type="text/javascript">
+$(function(){ 
+    $('#addBtn').click(function(){
+       var feiyong = $('#feiyong').val();
+       var shichang = $('#shichang').val();
+       $('#price').text(parseInt(feiyong) * parseInt(shichang));
+    });
+}); 
+</script>

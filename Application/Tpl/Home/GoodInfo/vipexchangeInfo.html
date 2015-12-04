@@ -1,0 +1,485 @@
+<include file="Public:header" />
+
+
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/jqzoom/css/jqzoom.css">
+<include file="Public:menu" />
+<div class="good-Info-container">
+    <div class="good-Info-main-container">
+        <input type="hidden" id="{$Think.session.sumGrade}" class="memGrade" />
+        <div class="good-Info-top">
+            <if condition="$parentName != ''">
+                <ul>
+                    <li><a href="{:U('Index/search',array('tid'=>$parentName["id"]))}">{$parentName.name} ></a></li>
+                </ul>
+            </if>
+            <ul id="taxrate" class="{$goods[0].taxrate}">
+                <li><a href="{:U('Index/search',array('sid'=>$goods[0]["typeId"]))}">{$goods[0].typename} ></a></li>
+            </ul>
+            <ul id="goodName">
+                <li style="padding-right:200px;"><a href="{:U('GoodInfo/vipexchangeInfo',array('gId'=>$goods[0]["id"]))}">{$goods[0].name}</a></li>
+                <input id="typeId" type="hidden" value="{$Think.session.typeId}">
+            </ul>
+        </div>
+        <div class="good-Info-middle">
+            <div class="good-Info-middle-left">
+                <div class="good-Info-m-left-left">
+                    <div class="good-Info-l-top">
+                        <dl>
+                            <dt class="good-Info-main">
+                                <a href="{$imgArr[0]}" class="cloud-zoom" title="Thumbnail 1" rel="useZoom: 'zoom2', smallImage: '{$imgArr[0]}', adjustX:10, adjustY:10,zoomWidth:100,zoomHeight:100">
+                                <img id="gImg" src="{$imgArr[0]}" />
+                                </a>
+                            </dt>
+                            <dd class="good-Info-m-l-l-l">
+                                <img src="__PUBLIC__/Image/sampImg/goodinfo_left.png" />
+                            </dd>
+                            <volist name="imgArr" id="img">
+                                <dd class="good-border">
+                                    <img src="{$img}" alt="{$img}" />
+                                </dd>
+                            </volist>
+                            <dd class="good-Info-m-l-l-r">
+                                <img src="__PUBLIC__/Image/sampImg/goodinfo_right.png" />
+                            </dd>
+                        </dl>
+                    </div>
+                    <div class="good-Info-l-bottom">
+                        <dl class="mr-r">
+                            <dt>
+                                <img class="mr-l" src="__PUBLIC__/Image/sampImg/goodinfo_share.png" />
+                            </dt>
+                            <dd><a href="javascript:void(0);">分享</a></dd>
+                        </dl>
+                        <dl>
+                            <dt>
+                                <img class="mr-l" src="__PUBLIC__/Image/sampImg/goodinfo_coll.png" />
+                            </dt>
+                            <dd><a id="collGood" href="javascript:void(0);">收藏商品</a></dd>
+                        </dl>
+                    </div>
+                </div>
+                <div class="good-Info-m-left-right">
+                    <div>
+                        <p id="gName" class="ft18">{$goods[0].name}</p>
+                    </div>
+                    <!--<div class="good-Info-m-left-right-divtwo">
+                        <ul>
+                            <li class="good-Info-m-l-vip">VIP&nbsp;价：</li>
+                            <li>
+                                ￥<span id="vipPrice" class="good-Info-m-l-price">{$goods[0].vipPrice}</span>
+                            </li>
+                            <li class="good-Info-m-l-vip">
+                                <a href="{:U('GoodInfo/shenjivip')}">升级VIP</a>
+                            </li>
+                        </ul>
+                        <ul class="goodInfo-sc-mg">
+                            <li class="goodInfo-sc-text-co">市场价：</li>
+                            <li>￥<span id="marketPrice">{$goods[0].marketPrice}</span></li>
+                        </ul>
+                        <ul>
+                            <li class="goodInfo-sc-text-co">团购价：</li>
+                            <li>￥<span id="groupPrice">{$goods[0].groupPrice}</span></li>
+                            <li><a class="goodInfo-group-text" href="{:U('User/addGroupVerify')}">团体认证</a></li>
+                        </ul>
+                    </div>-->
+                    <div class="good-Info-m-left-r-divthird">
+                        <div class="good-Ifo-m-left-d-top">
+                            <ul>
+                                <li class="goodInfo-sc-text-co">运&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;费：</li>
+                                <li>￥15.00<span style="color:#9bdbee;margin-left:20px">具体运费以收货地址为准</span></li>
+                            </ul>
+                            <ul>
+                                <li class="goodInfo-sc-text-co">海关关税：</li>
+                                <if condition="$goods[0].taxrate eq 0.00">
+                                    <li id="taxInfo">免税</li>
+                                <else/>
+                                    <li id="taxInfo">{$goods[0].taxrate}</li>
+                                </if>
+                                
+                            </ul>
+                        </div>
+                        <div class="good-Info-m-left-d-mid">
+                            <ul id="colortp" class="good-Info-m-left-d-top" onmouseover="isOut=false" onmouseoout="isOut=true">
+                                <if condition="$colors != null">
+                                    <li class="good-Info-m-d-color goodInfo-sc-text-co">颜色分类：</li>
+                                    <volist name="colors" id="co" key="k">
+                                        <li class="colortype <eq name='k' value='1'>active</eq>" data-id="{$co.id}">{$co.name}</li>
+                                    </volist> 
+                                </if>
+                            </ul>
+                            <ul id="colortp" class="good-Info-m-left-d-top" onmouseover="isOut=false" onmouseoout="isOut=true">
+                                <if condition="$colors != null">
+                                    <li class="good-Info-m-d-color goodInfo-sc-text-co">兑换等级：</li>
+                                    <li style="margin-top:18px;" id="dhGrade" class="{$goods[0]['viplevelId']}">
+                                        <if condition="$goods[0]['viplevelId'] eq 1">
+                                            初级VIP
+                                        <elseif condition="$goods[0]['viplevelId'] eq 2"/>
+                                            中级VIP
+                                        <else />
+                                            高级VIP
+                                        </if>
+                                    </li>
+                                </if>
+                            </ul>
+                            <ul id="colortp" class="good-Info-m-left-d-top" onmouseover="isOut=false" onmouseoout="isOut=true">
+                                <if condition="$colors != null">
+                                    <li class="good-Info-m-d-color goodInfo-sc-text-co">兑换积分：</li>
+                                    <li style="margin-top:18px;" id="dhGrade" class="{$goods[0]['viplevelId']}">
+                                        {$goods[0].score} 积分
+                                    </li>
+                                </if>
+                            </ul>
+                            <ul class="good-Info-m-left-d-top">
+                                <li class="goodInfo-sc-text-co">数&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;量：</li>
+                                <li><input id="count" type="text" value="1" style="width:28px;height:17px;" /></li>
+                                <li>件（库存{$goods[0].stock}件）</li>
+                            </ul>
+                        </div>
+                        <ul id="immedi" class="good-Info-m-left-r-btn ft18">
+                            <li>
+                                <a href="javascript:void(0);" class="fc-wh" alt="{$goods[0].id}">立即兑换</a>
+                            </li>
+                        </ul>
+                        <ul id="addBuyCar" class="good-Info-m-left-r-btn ft18" style="display: none;">
+                            <li>
+                                <a class="fc-wh" alt="{$goods[0].id}">加入购物车</a>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                </div>
+
+            </div>
+            <!--代购，自营-->
+            <div id="{$goods[0].commodity}" class="good-Info-middle-right">
+                <if condition="$goods[0]['commodity'] eq '1' ">
+                <div class="good-Info-mid-ri-top">
+                    <div class="good-Info-mid-ri-div">
+                        
+                    </div>
+                    <p class="good-Info-store-text">
+                        一抹橙色海外专营店
+                    </p>
+                    
+                    <div class="good-Info-store">
+                        <a href="javascript:;">
+                        <ul>
+                            <li>进入店铺</li>
+                        </ul>
+                        </a>
+                        <a href="javascript:;">
+                        <ul>
+                            <li>收藏店铺</li>
+                        </ul>
+                        </a>
+                    </div>
+                    
+                </div>
+                <else/>
+                <div class="good-Info-mid-ri-bottom">
+                    <div class="good-Info-mid-ri-div good-Info-mid-zy">
+                        <ul>
+                            <li class="yx-img"><img src="__PUBLIC__/Image/sampImg/yximg.png" /></li>
+                            <li>自营</li>
+                        </ul>
+                    </div>
+                    
+                </div>
+                </if>
+            </div>
+        </div>
+        <div class="good-Info-bottom">
+            <div class="good-Info-bottom-left">
+                <div class="good-Info-bo-le-top">
+                    <div class="good-Info-bo-le-le">
+                        <ul id="goodInfo">
+                            <li>商品详情 </li>
+                        </ul>
+                        <ul id="goodAppr">
+                            <li>商品评价（{$apprSum}）</li>
+                        </ul>
+                    </div>
+                    <ul class="good-Info-bo-le-rig">
+                    </ul>
+                </div>
+                <div class="good-Info-bo-le-bottom">
+                    <div class="good-Info-bo-le-bo-top">
+                        <ul class="good-Info-bo-le-bo-top-one">
+                            <li>商品名称：{$goods[0].name}</li>
+                            <li>商品分类：{$goods[0].typename}</li>
+                        </ul>
+                        <ul class="good-Info-bo-le-bo-top-two">
+                            <li>商品编号：{$goods[0].goodsNum}</li>
+                            <li>商品产地：{$goods[0].place}</li>
+                        </ul>
+                        <ul class="good-Info-bo-le-bo-top-two">
+                            <li>商品规格：{$goods[0].guige|default="暂无规格"}</li>
+                            <li>{$goods[0].custguige|}</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="good-Info-bo-le-bo-bottom">
+                        {$goods[0].desc}   
+                    </div>
+                </div>
+                <div class="good-Info-bo-le-appraise">
+                    <div class="good-Info-first">
+                        <ul id="gScore" class="{$goods[0]['score']}">
+                            <li>商品满意度评分</li>
+                            <li>5.0</li>
+                        </ul>
+                        <ul class="good_Info-star">
+                            <li><img src="__PUBLIC__/Image/sampImg/star.png" /></li>
+                            <li><img src="__PUBLIC__/Image/sampImg/star.png" /></li>
+                            <li><img src="__PUBLIC__/Image/sampImg/star.png" /></li>
+                            <li><img src="__PUBLIC__/Image/sampImg/star.png" /></li>
+                            <li><img src="__PUBLIC__/Image/sampImg/star.png" /></li>
+                        </ul>
+                    </div>
+                    <div class="good-Info-two good-Info-no-border myorder-con-person">
+                        <p class="ft14">评价：</p>
+                        <ul>
+                            <li>商品质量：</li>
+                            <if condition="$loginstains == NULL">
+                            	尚无评价
+                            </if>
+                            <for start="1" end="$loginstains">
+                                <li><img src="__PUBLIC__/Image/sampImg/star.png" /></li>
+                            </for>
+                            <li>{$loginstains}</li>
+                        </ul>
+                        <ul>
+                            <li>描述相符：</li>
+                            <if condition="$desc == NULL">
+                            	尚无评价
+                            </if>
+                            <for start="1" end="$desc">
+                                <li><img src="__PUBLIC__/Image/sampImg/star.png" /></li>
+                            </for>
+                            <li>{$desc}</li>
+                        </ul>
+                        <ul>
+                            <li>配送速度：</li>
+                            <if condition="$service == NULL">
+                            	尚无评价
+                            </if>
+                            <for start="1" end="$service">
+                                <li><img src="__PUBLIC__/Image/sampImg/star.png" /></li>
+                            </for>
+                            <li>{$service}</li>
+                        </ul>
+                    </div>
+                     
+                    <volist name="appraises" id="ap">
+                        <ul class="good-Info-apraise-content">
+                            <li class="good-Info-li-first">{$ap.memName}</li>
+                            <li class="good-Info-li-two">
+                               <for start="1" end="$ap['apprscore']">
+                                   <img src="__PUBLIC__/Image/sampImg/star.png" />
+                                </for>
+                              
+                            </li>
+                            <li>评价时间：</li>
+                            <li>{$ap.createtime|date="Y-m-d H:i:s",###}</li>
+                            <li class="good-Info-li-third">{$ap.content}</li>
+                        </ul>
+                    </volist>
+                </div>
+            </div>
+            <div class="good-Info-bottom-right">
+                <div class="good-Info-good">
+                    <img id="hot-img" src="__PUBLIC__/Image/hot_recom.png" />
+                    <volist name="hotGoods" id="hot">
+                        <dl id="{$hot.id}" class="search-right-dl">
+                            <input type="hidden" id="{$hot.isOrNoExchange}" class="isOrExchange" />
+                            <dt>
+                                <img src="{$hot.imgsArr.0}" />
+                            </dt>
+                            <dd>{$hot.name}</dd>
+                            <dd class='search-right-dl-price'>
+                                <img src='__PUBLIC__/Image/price.png' />{$hot.marketPrice}
+                            </dd>
+                        </dl>
+                    </volist>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<include file="Public:footer" />
+<script type="text/javascript" src="__PUBLIC__/Js/search.js"></script>
+<script type="text/javascript" src="__PUBLIC__/Js/goodInfo.js"></script>
+
+<script type="text/javascript" src="__PUBLIC__/jqzoom/js/jqzoom.pack.1.0.1.js"></script>
+<script type="text/javascript">
+    $(function(){
+        var typeName = "";
+        $(".good-border img").click(function(){
+            var src = $(this).attr("src");
+            $(".good-Info-main img").attr("src",src);
+            $(".good-Info-main a").attr("href",src);
+            $(".good-Info-main a").attr("rel","useZoom: 'zoom2', smallImage: '"+src+"', adjustX:10, adjustY:10,zoomWidth:100,zoomHeight:100");
+            $('.cloud-zoom, .cloud-zoom-gallery').CloudZoom();
+        });
+        $(".good-Info-m-d-color").css({"border":"1px solid white"});
+        $(".colortype:eq(0)").css({"border":"1px solid #c00000"});
+        $(".colortype").click(function(){
+            //typeName = $(this).text();
+            typeName = $(this).data("id");
+//            $(this).css({"background-image":"url(__PUBLIC__/Image/sampImg/goodinfo_border.png)","border":"1px solid #c00000"});
+            $(this).css({"border":"1px solid #c00000"});
+            $(this).siblings().css({"background-image":"none","border":"1px solid #efefef"});
+            $(".good-Info-m-d-color").css({"border":"1px solid white"});
+        });
+        
+        $("#goodInfo").click(function(){
+            $(".good-Info-bo-le-bottom").show();
+            $(".good-Info-bo-le-appraise").hide();
+        });
+        $("#goodAppr").click(function(){
+            $(".good-Info-bo-le-appraise").show();
+            $(".good-Info-bo-le-bottom").hide();
+        });
+        
+		$("#colortp li").click(function(){
+			$("#colortp li").each(function(){
+				$(this).removeClass("active");
+			});
+			$(this).addClass("active");
+		});
+        $(":input[id='count']").bind({
+            focus:function(){},
+            blur:function(){
+                if(isNaN($(this).val())){
+                    $(this).val(1);
+                }
+            }
+        });
+        //立即兑换
+        $("#immedi").click(function(){
+            var typeId = $("#typeId").val();
+            var colordefault = $("#colortp li.active").data("id");
+			console.log("typeName="+typeName);
+            if(typeName==""){
+                typeName = colordefault;
+            }
+            var gId = $(this).children().children().attr("alt");
+            var pNum = $("#count").val();
+            var score = $("#gScore").attr("class");
+            score = score*pNum;
+            var comm = $(".good-Info-middle-right").attr("id");
+
+            if(typeId==""){
+                var url = "{:U('Login/index')}";
+                window.location.href=url;
+                return;
+            }
+            if(typeId!=43){
+                alert("你还不是VIP,快去升级吧!");
+                return;
+            }
+            var memGrade = $(".memGrade").attr("id");
+            var duGrade = $("#dhGrade").attr("class");
+            if(memGrade<=1000){
+                memGrade = 1;
+            }else if(memGrade>1000&&memGrade<=5000){
+                memGrade = 2;
+            }else{
+                memGrade = 3;
+            }
+            if(memGrade < duGrade){
+                alert("你的VIP等级不足,无法兑换!");
+                return;
+            }
+            var url="{:U('GoodInfo/buy2')}";
+            var postData = {
+                'gId':gId,
+                'num':pNum,
+                'commodity':comm,
+                'color':typeName,
+                'score':score
+            }
+            console.log(postData);
+            $.post(url,postData,function(data){
+				console.log(data);
+                if(data["code"]==2000){
+                    window.location.href="__APP__/GoodInfo/cashindex2/";
+                }else if(data["code"]==-3000){
+                    alert("兑换失败");
+                }else{
+                    alert("系统繁忙，请稍后再试！");
+                }
+            });
+        });
+		
+        $("#collGood").click(function(){
+            var url = "{:U('GoodInfo/collBuyCarByGid')}"
+            var gId = $("#addBuyCar").children().children().attr("alt");
+            var postData = {
+                'gId':gId
+            };
+            var typeId = $("#typeId").val();
+            if(typeId==""){
+                var url = "{:U('Login/index')}";
+                window.location.href=url;
+                return;
+            }
+            $.post(url,postData,function(data){
+                if(data["code"]==2000){
+                    alert("收藏成功！");
+                }else if(data["code"]==2002){
+                    alert("已收藏！");
+                }
+                else{
+                    alert("系统繁忙，请稍后再试！");
+                }
+            });
+        });
+        $(".good-Info-good dl").bind({
+            mouseover:function(){
+                $(this).css({"cursor":"pointer"});
+            },
+            mouseout:function(){
+                $(this).css({"cursor":"default"});
+            }
+        });
+        $(".good-Info-m-left-d-top .colortype").bind({
+            mouseover:function(){
+                $(this).css({"cursor":"pointer"});
+            },
+            mouseout:function(){
+                $(this).css({"cursor":"default"});
+            }
+        });
+        
+        $(".good-Info-good dl").click(function(){
+            var isOr = $(this).children(".isOrExchange").attr("id");
+            console.log(isOr+",");
+            var gId = $(this).attr("id");
+            if(isOr==0){
+                window.location.href = "__APP__/GoodInfo/goodInfo/gId/"+gId;
+            }else if(isOr==1){
+                window.location.href = "__APP__/GoodInfo/exchangeInfo/gId/"+gId;
+            }else if(isOr==2){
+                window.location.href = "__APP__/GoodInfo/vipexchangeInfo/gId/"+gId;
+            }else{
+                window.location.href = "__APP__/GoodInfo/goodInfo/gId/"+gId;
+            }
+        });
+        
+    });
+</script>
+<script type="text/javascript">
+$(function() {
+    var options =
+    {
+        zoomWidth: 250, //放大镜的宽度
+        zoomHeight: 250,//放大镜的高度
+        zoomType:'reverse',
+        title:false
+    };
+    
+    $(".jqzoom").jqzoom(options);
+});
+</script>
+

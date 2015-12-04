@@ -1,0 +1,246 @@
+<include file="Public:header" />
+
+    <!--dynamic table-->
+    <link href="__PUBLIC__/Template/assets/advanced-datatable/media/css/demo_page.css" rel="stylesheet" />
+    <link href="__PUBLIC__/Template/assets/advanced-datatable/media/css/demo_table.css" rel="stylesheet" />
+    <link rel="stylesheet" href="__PUBLIC__/Template/assets/data-tables/DT_bootstrap.css" />
+
+ <include file="Public:menu" />
+
+    <!--main content start-->
+    <section id="main-content">
+        <section class="wrapper">
+        <!-- page start--> 
+        <div class="row">
+            <div class="col-md-12">
+                <!--breadcrumbs start -->
+                <ul class="breadcrumb">
+                    <li><a href="#"><i class="fa fa-home"></i> 首页</a></li>
+                    <li><a href="#"> 用户管理</a></li>
+                    <li class="active"> 用户详情</li>
+                </ul>
+                <!--breadcrumbs end -->
+            </div>
+        </div>
+
+        
+            <div class="row">
+                <div class="col-lg-12">
+                    <section class="panel">
+                        <header class="panel-heading">
+                            用户 {$list.name} 详情
+                        </header>
+                        <div class="panel-body">
+                            
+                             <div class="form">
+                                <form class="cmxform form-horizontal " id="myForm" method="post" action="#"> 
+                                    <div class="form-group ">
+                                        <label for="nickname" class="control-label col-lg-3">会员昵称</label>
+                                        <div class="col-lg-6" style="padding-top:7px;">
+                                            {$list.nickname}
+                                        </div> 
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="imgUrl" class="control-label col-lg-3">会员头像</label>
+                                        <div class="col-lg-6" style="padding-top:7px;">
+                                            <img src="{$list.imgUrl}"  style="width: 70px; height: 70px;"/>
+                                        </div>
+                                    </div>
+                                    <div class="form-group ">
+                                        <label for="name" class="control-label col-lg-3">会员姓名</label>
+                                        <div class="col-lg-6" style="padding-top:7px;">
+                                            {$list.name}
+                                        </div>
+                                    </div> 
+                                    <div class="form-group ">
+                                        <label for="tel" class="control-label col-lg-3">会员手机</label>
+                                        <div class="col-lg-6" style="padding-top:7px;">
+                                            {$list.tel}
+                                        </div>
+                                    </div> 
+                                    <div class="form-group">
+                                        <label for="email" class="control-label col-lg-3">会员邮箱</label>
+                                        <div class="col-lg-6" style="padding-top:7px;">
+                                            {$list.email}
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="sex" class="control-label col-lg-3">性别</label>
+                                        <div class="col-lg-6" style="padding-top:7px;">
+                                            {$list.sex}
+                                        </div>
+                                    </div>
+                                   <!--  <div class="form-group">
+                                        <label for="bathtime" class="control-label col-lg-3">会员生日</label>
+                                        <div class="col-lg-6" style="padding-top:7px;">
+                                            {$list.bathtime|date="Y-m-d",###}
+                                        </div>
+                                    </div> -->
+                                    <div class="form-group">
+                                        <label for="typeId" class="control-label col-lg-3">会员类别</label>
+                                        <div class="col-lg-6" style="padding-top:7px;">
+                                            {$list.typeId|getTypeName}
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="score" class="control-label col-lg-3">会员积分</label>
+                                        <div class="col-lg-6" style="padding-top:7px;">
+                                            共: {$list.score} 积分 
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="status" class="control-label col-lg-3">会员状态</label>
+                                        <div class="col-lg-6" style="padding-top:7px;">
+                                            <if condition="$list.status eq 1 ">
+                                                正常
+                                            <elseif condition="$list.status eq 0 " />
+                                                已屏蔽
+                                            </if>
+                                        </div>
+                                    </div>
+                                   <!--  <div class="form-group">
+                                        <label for="hobby" class="control-label col-lg-3">会员爱好</label>
+                                        <div class="col-lg-6" style="padding-top:7px;">
+                                            {$list.hobby} 
+                                        </div>
+                                    </div> --> 
+                                    <!--vip sub info-->
+                                    <if condition="$list.typeId eq 43 ">
+                                        <div id="vipSubInfo">
+                                    <else />
+                                        <div id="vipSubInfo" style="display: none">
+                                    </if>
+                                        <div class="form-group">
+                                            <label for="grade" class="control-label col-lg-3">VIP等级</label>
+                                            <div class="col-lg-6" style="padding-top:7px;">
+                                                {$list.grade|getViplevelNameCode} 
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="balance" class="control-label col-lg-3">VIP可用余额</label>
+                                            <div class="col-lg-6" style="padding-top:7px;">
+                                                ￥ {$list.balance} 元 
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="time" class="control-label col-lg-3">VIP有效时间段</label>
+                                            <div class="col-lg-6" style="padding-top:7px;">
+                                                {$list.startTime|date="Y-m-d H:i:s",###} ~  {$list.endTime|date="Y-m-d H:i:s",###}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!--团体 sub info-->
+                                    <if condition="($list.isAttestation eq 1) or ($list.isAttestation eq 2) or ($list.isAttestation eq 3) ">
+                                        <div id="groupSubInfo">
+                                    <else />
+                                        <div id="groupSubInfo" style="display: none">
+                                    </if> 
+                                        <div class="form-group">
+                                            <label for="isAttestation" class="control-label col-lg-3">团体状态</label>
+                                            <div class="col-lg-6" style="padding-top:7px;">
+                                                <!-- 审核，是否成为团体 默认0没有认证 1已经认证 2认证失败 -->
+                                                <if condition="$list.isAttestation eq 0 ">
+                                                    不是团体
+                                                <elseif condition="$list.isAttestation eq 1 "/>
+                                                    团体
+                                                <elseif condition="$list.isAttestation eq 2 "/>
+                                                    团体认证失败
+                                                <elseif condition="$list.isAttestation eq 3 "/>
+                                                    团体认证中
+                                                </if>         
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="organization" class="control-label col-lg-3">团体机构</label>
+                                            <div class="col-lg-6" style="padding-top:7px;">
+                                                {$list.organization} 
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="contacts" class="control-label col-lg-3">团体负责人</label>
+                                            <div class="col-lg-6" style="padding-top:7px;">
+                                                {$list.contacts}
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="phone" class="control-label col-lg-3">团体负责人电话</label>
+                                            <div class="col-lg-6" style="padding-top:7px;">
+                                                {$list.phone}
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="remark" class="control-label col-lg-3">团体留言</label>
+                                            <div class="col-lg-6" style="padding-top:7px;">
+                                                {$list.remark}
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="groupMem" class="control-label col-lg-3">团体人员</label>
+                                            <div class="col-lg-6" style="padding-top:7px;">
+                                                <volist name="list.groupMem" id="sub">
+                                                        姓名:{$sub.memName}&nbsp;&nbsp;身份证:{$sub.memCode}<br>
+                                                </volist>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!--代购 sub info-->
+                                    <if condition="$list.typeId eq 45 ">
+                                        <div id="behalfSubInfo">
+                                    <else />
+                                        <div id="behalfSubInfo" style="display: none">
+                                    </if>  
+                                        <div class="form-group">
+                                            <label for="isReplaceBuy" class="control-label col-lg-3">代购状态</label>
+                                            <div class="col-lg-6" style="padding-top:7px;">
+                                                <!-- 审核，是否已成功成为代购 默认0不是 1申请代购 2申请驳回 3申请成功(成为代购) -->
+                                                <if condition="$list.isReplaceBuy eq 0 ">
+                                                    不是代购
+                                                <elseif condition="$list.isReplaceBuy eq 1 "/>
+                                                    申请代购中
+                                                <elseif condition="$list.isReplaceBuy eq 2 "/>
+                                                    申请代购被驳回
+                                                <elseif condition="$list.isReplaceBuy eq 3 "/>
+                                                    代购
+                                                </if>         
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="idenCode" class="control-label col-lg-3">代购身份证</label>
+                                            <div class="col-lg-6" style="padding-top:7px;">
+                                                {$list.idenCode} 
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="buyProve" class="control-label col-lg-3">代购证明</label>
+                                            <div class="col-lg-6" style="padding-top:7px;">
+                                                {$list.buyProve}
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <div class="col-lg-offset-3 col-lg-6">
+                                            <button class="btn btn-default cancelBtn" dataurl="/Admin/Member/groupIndex/menu/member" type="button"> 取消</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div><!-- end form -->
+                    </section>
+                </div>
+            </div>
+            <!-- page end-->
+        <!-- page end-->
+        </section>
+    </section>
+    <!--main content end-->
+ 
+
+</section>
+
+<include file="Public:footer" />
+
+<!--common script init for all pages-->
+<script type="text/javascript" src="__PUBLIC__/Template/js/scripts.js"></script> 
+</body>
+</html>

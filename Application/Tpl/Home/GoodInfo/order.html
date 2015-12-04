@@ -1,0 +1,739 @@
+<?php
+/**
+　* 功能:  支付发送
+　* 版权:  西安融联网络科技有限公司,Copyright (c) 2012
+　* 版本:  1.0.2 2013-04-17
+　*/
+
+class send {
+
+    var $parameter;       //参数数组
+    var $signkey;
+    var $url;
+
+    //构造函数
+    function send($parameter) {
+        $this->parameter = $parameter;
+        
+        //支付密钥(必填): 需在支付平台进行设置,可登录商户管理系统进行维护,用于上送商户支付及下传支付结果加密
+        $this->signkey = $parameter['signkey'];
+        
+        //支付请求URL(必填)
+        $this->url = $parameter['payUrl'];
+    }
+
+    function getSign() {
+        $sign_src = "version=".$this->parameter['version']."&charset=".$this->parameter['charset']
+            ."&signMethod=".$this->parameter['signMethod']."&payType=".$this->parameter['payType']
+            ."&transType=".$this->parameter['transType']."&merId=".$this->parameter['merId']
+            ."&backEndUrl=".$this->parameter['backEndUrl']."&frontEndUrl=".$this->parameter['frontEndUrl']
+            ."&orderTime=".$this->parameter['orderTime']."&orderNumber=".$this->parameter['orderNumber']
+            ."&orderAmount=".$this->parameter['orderAmount']."&orderCurrency=".$this->parameter['orderCurrency']
+            ."&defaultBankNumber=".$this->parameter['defaultBankNumber']."&customerIp=".$this->parameter['customerIp']
+            ."&merReserved1=".$this->parameter['merReserved1']."&merReserved2=".$this->parameter['merReserved2']
+            ."&merReserved3=".$this->parameter['merReserved3']."&merSiteIP=".$this->parameter['merSiteIP']
+            ."&gateWay=".$this->parameter['gateWay']."&".md5($this->signkey);
+
+        $sign = $this->sign($sign_src);
+        return $sign;
+    }
+
+    function sign($src) {
+        return md5($src);
+    }
+}
+
+$parameter = array(
+    "payUrl" => $_POST["payUrl"],                             //支付地址
+    "version" =>"1.0.1",                           //版本号
+    "charset" => $_POST["charset"],                           //字符编码
+    "signMethod" => $_POST["signMethod"],                     //签名方法
+    "payType" => $_POST["payType"],                           //支付类型
+    "transType" => $_POST["transType"],                       //交易类型
+    "merId" => $_POST["merId"],                               //商户编号
+    "backEndUrl" => $_POST["backEndUrl"],                     //通知URL
+    "frontEndUrl" => $_POST["frontEndUrl"],                   //返回URL
+    "orderTime" => $_SESSION['jyTime'],                 //交易时间
+    "orderNumber" => $_POST["orderNumber"],                   //商户订单号
+    "orderAmount" => $_SESSION['zhifuMoney'],                   //交易金额
+    "orderCurrency" => $_POST["orderCurrency"],               //交易币种    
+    "defaultBankNumber" => $_POST["defaultBankNumber"],       //银行编码
+    "customerIp" => $_POST["customerIp"],                     //持卡人IP
+    "merReserved1" => $_POST["merReserved1"],                 //商户保留域1
+    "merReserved2" => $_POST["merReserved2"],                 //商户保留域2
+    "merReserved3" => $_POST["merReserved3"],                 //商户保留域3
+    "merSiteIP" => $_POST["merSiteIP"],                       //商户网站IP
+    "gateWay" => $_POST["gateWay"],                           //网关类型
+    "signkey" => "PQPNTWQDDMD8QK2FT4A1NT8Z9GFYKPL8AURM3QX465MBEA7D5M167JTQ9W7E"
+);
+
+$send = new send($parameter);
+$sign=$send->getSign();
+$action = $send->url;
+
+/*foreach($parameter as $k=>$v){
+    dump($v);
+}
+var_dump($sign); */
+?>
+<include file="Public:header" />
+
+<div class="container">
+    <div class="goodInfo-head">
+        <input type="hidden" id="mId" value="{$Think.session.memberId}" class="{$Think.session.typeId}" />
+        <ul>
+            <li class="goodInfo-mg" style="margin:0;width:100%;">
+                <a href="{:U("Index/index")}">
+                    <img class="person-img" style="margin:0 auto;width:800px;display:block" src="/Public/Image/logo.png" />
+                </a>
+            </li>
+            <li class="goodInfo-mg-two"><img src="/Public/Image/sampImg/buycar_head.png" /></li>
+            <li class="goodInfo-mg">购物车</li>
+            <img src="/Public/Image/02.jpg" style="margin:50px 0px 0px 244px;" />
+        </ul>
+    </div>
+    <div class="order-address">
+        <div class="fl-l">
+            <ul class="order-first">
+                <li>收货地址</li>
+            </ul>
+            <div class="order-div">
+                <ul>
+                    <li class="order-div-li"><input class="xadd" type="radio" name="address" checked="checked" /></li>
+                    <li>使用新收货地址</li>
+                </ul>
+                <ul>
+                    <li class="order-div-li"><input class="sadd" type="radio" name="address" /></li>
+                    <li>使用保存的地址</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div id="addShouHuo" class="order-address-content" >
+        <ul>
+            <li>收&nbsp;&nbsp;货&nbsp;人：</li>
+            <li><input id="shouhuo" type="text" name="name" /></li>
+        </ul>
+        <ul>
+            <li>详细地址：</li>
+            <li>
+                <select id="provinces">
+                        <option value="0">请选择</option>    
+                    <volist name="pros" id="p">
+                        <option value="{$p.code}">{$p.name}</option>
+                    </volist>
+                </select>
+            </li>
+            <li>
+                <select id="citys">
+                    <option value="0">请选择</option>
+                </select>
+            </li>
+            <li>
+                <select id="areas">
+                    <option value="0">请选择</option>
+                </select>
+            </li>
+        </ul>
+        <ul>
+            <li>所在地区：</li>
+            <li><input id="addrDiqu" type="text" name="addrDiqu" /></li>
+            <li class="hint">*请正确填写详细收货地址，如街道名，房间号，门牌号等信息</li>
+        </ul>
+        <ul>
+            <li>手机号码：</li>
+            <li><input id="tel" type="text" name="tel"  /></li>
+        </ul>
+        <ul>
+            <li>邮政编号：</li>
+            <li><input id="postcode" type="text" name="postal" /></li>
+        </ul>
+        <ul id="savePerson">
+            <li class="order-saveinfo">
+                <a href="javascript:;">保存收货人信息</a>
+            </li>
+        </ul>
+    </div>
+    <div class="order-address-saveAddr" style="display:none;">
+        <!--<ul>
+            <li><input type="radio" name="selectAddr" /></li>
+            <li class="">晓红</li>
+            <li>陕西省西安市高新区</li>
+            <li>科技5路8号</li>
+            <li>1298789</li>
+            <li>0908878</li>
+        </ul>-->
+    </div>
+
+    <div class="order-address">
+        <div class="fl-l">
+            <ul class="order-first order-true-first">
+                <li>实名信息备案</li>
+            </ul>
+            <div class="order-true-div">
+                <ul>
+                    <li>*温馨提示：因涉及国家监管部门规定,需要对购买人信息实名备案,网站不会保留相关个人隐私信息,请放心填写。</li>
+                </ul>
+
+            </div>
+        </div>
+    </div>
+    <div id="memberContent" class="order-address-content order-realinfo order-true-content">
+        <ul>
+            <li>姓&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;名：</li>
+            <li><input type="text" name="mName" /></li>
+        </ul>
+        <ul>
+            <li>身份证号：</li>
+            <li><input type="text" name="iden" /></li>
+            <li class="hint">*请正确填写身份证信息</li>
+        </ul>
+    </div>
+    
+    
+    <div class="goodInfo-content">
+        <div class="goodInfo-top">
+            <ul class="goodInfo-wd-first">
+                <li class="goodInfo-wd-third goodInfo-li-mr-first">商品名称</li>
+            </ul>
+            <ul class="goodInfo-wd-two">
+                <li>单价</li>
+            </ul>
+            <ul class="goodInfo-wd-two">
+                <li>进口税</li>
+            </ul>
+            <ul class="goodInfo-wd-two">
+                <li>数量</li>
+            </ul>
+            <ul class="goodInfo-wd-two">
+                <li>小计</li>
+            </ul>
+            <ul class="goodInfo-wd-third">
+                <li>操作</li>
+            </ul>
+        </div>
+        <div id="mybuycar-zy" class="buycar-update" style="display:none;">
+                <p> 
+                    商家：自营
+                </p>
+            <div class="goodInfo-con-bottom">
+                <div id="mybuycar" class="goodInfo-con-bottom-one goodInfo-con-top">
+                    
+                </div>
+            </div>
+        </div>
+        <div id="daiigou-yx" class="buycar-update" style="display:none;">
+                <p>
+                    商家：优选代购
+                </p>
+            <div class="goodInfo-con-bottom">
+                <div id="daigou" class="goodInfo-con-bottom-one goodInfo-con-top">
+
+                </div>
+            </div>
+        </div>
+        
+        
+        <div class="goodInfo-bottom-price">
+            <div class="fl-r">
+                <ul>
+                    <li>本单税费：</li>
+                    <li>
+                        ￥<span id="sumDuty"></span>
+                    </li>
+                </ul>
+                <ul>
+                    <li>运费：</li>
+                    <li>
+                        ￥<span id="carri">0.00</span>
+                    </li>
+                </ul>
+                <ul>
+                    <li>货款：</li>
+                    <li>
+                        ￥<span id="money"></span>
+                    </li>
+                    </li>
+                </ul>
+                <ul>
+                    <li>合计：</li>
+                    <li>
+                        ￥<span id="total"></span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="goodInfo-bottom-voucher">
+            <div class="fl-r">
+                <ul>
+                    <li>使用优惠券：</li>
+                    <li>-<span id="voucherMoney"></span></li>
+                </ul>
+                
+            </div>
+        </div>
+        <div class="goodInfo-bottom-totalMoney">
+            <div class="fl-r">
+                <ul>
+                    <li>实际付款金额：</li>
+                    <li>￥<span id="shijiMoney"></span></li>
+                </ul>
+            </div>
+        </div>
+        <div class="goodInfo-bottom-submit">
+            <ul id="submitOrder">
+                <li>
+                    <a href="javascript:;">提交订单</a>
+                </li>
+            </ul>
+        </div>
+        
+    </div>
+</div>
+<form name="payform" id="payform" method="post"  action="{$action}" style="display:none;" >
+        <input id="payUrl" name="payUrl" type="text" style="width: 500px;" value="{$param.payUrl}" />
+        <input id="version" name="version" type="text" style="width: 500px;" value="{$param.version}" />
+        <input id="charset" name="charset" type="text" style="width: 500px;" value="{$param.charset}" />
+        <input id="signMethod" name="signMethod" type="text" style="width: 500px;" value="{$param.signMethod}" />
+        <input id="payType" name="payType" type="text" style="width: 500px;" value="{$param.payType}" />
+        <input id="transType" name="transType" type="text" style="width: 500px;" value="{$param.transType}" />
+        <input id="merId" name="merId" type="text" style="width: 500px;" value="{$param.merId}" />
+        <input id="backEndUrl" name="backEndUrl" type="text" style="width: 500px;" value="{$param.backEndUrl}" />
+        <input id="frontEndUrl" name="frontEndUrl" type="text" style="width: 500px;" value="{$param.frontEndUrl}" />
+        <input id="orderTime" name="orderTime" type="text" style="width: 500px;" value="{$Think.session.jyTime}" />
+        <input id="orderNumber" name="orderNumber" type="text" style="width: 500px;" value="{$param.orderNumber}"/>
+        <input id="orderAmount" name="orderAmount" type="text" style="width: 500px;" value="{$Think.session.zhifuMoney}" />
+        <input id="orderCurrency" name="orderCurrency" type="text" style="width: 500px;" value="{$param.orderCurrency}" />
+        <input id="defaultBankNumber" name="defaultBankNumber" type="text" style="width: 500px;" value="{$param.defaultBankNumber}" />
+        <input id="customerIp" name="customerIp" type="text" style="width: 500px;" value="{$param.customerIp}" />
+        <input id="merReserved1" name="merReserved1" type="text" style="width: 500px;" value="{$param.merReserved1}" />
+        <input id="merReserved2" name="merReserved2" type="text" style="width: 500px;" value="{$param.merReserved2}" />
+        <input id="merReserved3" name="merReserved3" type="text" style="width: 500px;" value="{$param.merReserved3}" />
+        <input id="merSiteIP" name="merSiteIP" type="text" style="width: 500px;" value="" />
+        <input id="gateWay" name="gateWay" type="text" style="width: 500px;" value="" />
+        <input id="sign" name="sign" type="text" style="width: 500px;" value="<?php echo $sign; ?>" />
+        <input id="feight" name="feight" type="text" value="{$Think.session.zhifuMoney}"  />
+        <input type="submit" />
+</form>
+<input type="hidden" id="orderPost" value="{$action}"   />
+
+<include file="Public:footer" />
+<script type="text/javascript" src="__PUBLIC__/Js/buycar.js"></script>
+<script>
+    if($("#orderPost").val()!=""){
+            $("#payform").submit();
+    }
+    //计算运费
+    var feight = 0; 
+    function countYunFei(p,c){
+        if(p=="陕西省"&&c=="西安市"){
+                    if(feight<1000){
+                            $("#carri").text(6.00);
+                    }else{
+                            var chaochu = (feight - 1000)/1000;
+                            if(chaochu==0){
+                                    $("#carri").text(parseFloat(6+chaochu).toFixed(2));
+                            }else{
+                                    $("#carri").text(parseFloat(6+chaochu+1).toFixed(2));
+                            }
+                    }
+            }else if(p=="陕西省"&&c!="西安市"){
+                    if(feight<1000){
+                            $("#carri").text(7.00);
+                    }else{
+                            var chaochu = (feight - 1000)/1000;
+                            if(chaochu==0){
+                                    $("#carri").text(parseFloat(7+chaochu).toFixed(2));
+                            }else{
+                                    $("#carri").text(parseFloat(7+chaochu+1).toFixed(2));
+                            }
+                    }
+            }else{
+                    if(feight<1000){
+                            $("#carri").text(7.00);
+                    }else{
+                            var chaochu = (feight - 1000)/1000;
+                            if(chaochu==0){
+                                    $("#carri").text(parseFloat(7+chaochu).toFixed(2));
+                            }else{
+                                    $("#carri").text(parseFloat(7+chaochu+1).toFixed(2));
+                            }
+                    }
+            }
+            $("#total").text((parseFloat($("#money").text())+parseFloat($("#carri").text())+parseFloat($("#sumDuty").text())).toFixed(2));
+            $("#shijiMoney").text((parseFloat($("#money").text())+parseFloat($("#carri").text())+parseFloat($("#sumDuty").text())).toFixed(2));
+           
+    }
+
+
+    //保存的地址
+    function getAddInfo(){
+        var url = "{:U('Order/getAddrInfoBymId')}";
+        $.post(url,null,function(data){
+            if(data["code"]==2000){
+                var adds = data["data"]["list"];
+                var ad = "";
+                for(var i = 0;i<adds.length;i++){
+                    ad +="<ul>"+
+                                "<li><input id='"+adds[i].id+"' type='radio' name='selectAddr' /></li>"+
+                                "<li>"+adds[i].name+"</li>"+
+                                "<li>"+adds[i].specificAddr+"</li>"+
+                                "<li>"+adds[i].addr+"</li>"+
+                                "<li>"+adds[i].tel+"</li>"+
+                                "<li>"+adds[i].postcode+"</li>"+
+                            "</ul>";
+                }
+                $(".order-address-saveAddr").append(ad);
+                $("input[name='selectAddr']").change(function(){
+                        console.log($(this).parent().siblings().eq(1).html());
+                        var kdAddr = $(this).parent().siblings().eq(1).html();
+                        if(kdAddr.indexOf("陕西省西安市")>0){
+                                countYunFei("陕西省","西安市");
+                        }else if(kdAddr.indexOf("陕西省")>0&&kdAddr.indexOf("西安市")<0){
+                                countYunFei("陕西省","no");
+                        }else{
+                                countYunFei("no","no");
+                        }
+                });
+                $("input[name='selectAddr']:eq(0)").prop("checked",true);
+            }else if(data["code"]==-3000){
+                alert("没有保存的收货地址！");
+                $("input[class='xadd']").get(0).checked=true;
+                $("input[class='sadd']").get(0).checked=false;
+                $("#addShouHuo").show();
+                $("#addShouHuo").next().hide();
+            }else{
+                alert("系统繁忙，请稍后再试！");
+            }
+        });
+    }
+    $(function(){
+        var sumMoney = 0;
+        var url = "{:U('GoodInfo/getOrderInfo')}";
+        $.post(url,null,function(data){
+            console.log(data);
+            var  taxrate = 0; 
+            var sumTax = 0;
+            if(data["code"]==2000){
+                var goods = data["data"].goods;
+                var sumMoney = 0;
+                var $div = "";
+                for(var i=0;i<goods.length;i++){
+                        $div += "<div id='"+goods[i].id+"' class='goodInfo-buycar'>"+
+                                    "<ul class='goodInfo-wd-first'>"+
+                                        "<li><img src='"+goods[i].imgsArr[0]+"' style='width:80px;height:80px;' /></li>"+
+                                        "<li class='goodInfo-con-bottom-goodName'>"+
+                                            goods[i].name;
+                                        if(goods[i].goodsColor!=""){
+                                            $div += "<p>颜色："+goods[i].goodsColor+"</p>";
+                                        }
+                                $div += "</li>"+
+                                    "</ul>"+
+                                    "<ul class='goodInfo-wd-two'>"+
+                                        "<li class='goodInfo-two-li'>"+
+                                            "￥<span class='price'>"+goods[i].goodsPrice+"</span>"+
+                                        "</li>"+
+                                    "</ul>"+
+                                    "<ul class='goodInfo-wd-two'>"+
+                                        "<li>";
+                                        var tax = (parseFloat(goods[i].goodsTax)*parseFloat(goods[i].goodsPrice)).toFixed(2);
+                                        if(tax<50){
+                                            $div += "<span class='duty'>免税</span>";
+                                        }else{
+                                            $div += "￥<span class='duty'>"+goods[i].goodsTax+"</span>";
+                                             sumTax += parseFloat(goods[i].goodsTax)*parseInt(goods[i].goodsNum);
+                                        }
+                                        taxrate +=  parseFloat(goods[i].goodsTax);
+                                $div += "</li>"+
+                                    "</ul>"+
+                                    "<ul class='goodInfo-wd-two goodInfo-buycar-count'>"+
+                                        "<li>"+
+                                            "<span id='"+goods[i].id+"' class='' >"+
+                                            goods[i].goodsNum+"</span>"+
+                                        "</li>"+
+                                   "</ul>"+
+                                    "<ul class='goodInfo-wd-two'>"+
+                                        "<li>"+
+                                            "￥<span class='subtotal'>"+goods[i].sumTotal+"</span>"+
+                                        "</li>"+
+                                    "</ul>"+
+                                    "<ul class='goodInfo-wd-third goodInfo-buycar-opera'>"+
+                                        "<li>"+
+                                            "<a href='javascript:;' class='mycoll'>收藏</a>"+
+                                        "</li>"+
+                                    "</ul>"+
+                                "</div>";
+                                sumMoney += parseFloat(goods[i].goodsPrice)*parseInt(goods[i].goodsNum);
+                                feight += parseFloat(goods[i].weight);
+                        if(goods[i].commodity==0){
+                            $("#mybuycar-zy").show();
+                            $("#mybuycar").append($div);
+                        }else{
+                            $("#daiigou-yx").show();
+                            $("#daigou").append($div);
+                        }
+                        $div="";
+                    }
+                $("#voucherMoney").html(data["data"].voucher);
+                $("#sumDuty").text(sumTax.toFixed(2));
+                $("#money").text(sumMoney.toFixed(2));
+                // $("#carri").text(goods[0]["freight"]);
+                var total = (parseFloat($("#carri").text())+parseFloat(sumMoney) + parseFloat(goods[0]["sumtaxrate"]) +parseFloat($("#sumDuty").text())).toFixed(2); 
+                $("#total").text(total);
+                if(data["data"].voucher==0){
+                    $("#shijiMoney").text(total);
+                }else{
+                    $("#shijiMoney").text(goods[0]["payment"]);
+                }
+                /*$("#orderAmount").val((parseFloat($("#carri").text())+parseFloat(sumMoney) + parseFloat(goods[0]["sumtaxrate"]) +parseFloat($("#sumDuty").text()))*100);*/
+                // getSummer($(".goodInfo-buycar"));  //计算总价
+                console.log("feight="+feight);
+                $(".mycoll").click(function(){
+                    var url = "{:U('GoodInfo/collBuyCarByGid')}"
+                    var gId = $(this).parent().parent().parent().attr("id");
+                    var postData = {
+                        'gId':gId
+                    };
+                    $.post(url,postData,function(data){
+                        if(data["code"]==2000){
+                            alert("收藏成功！");
+                        }else if(data["code"]==2002){
+                            alert("已收藏！");
+                        }
+                        else{
+                            alert("系统繁忙，请稍后再试！");
+                        }
+                    });
+                });
+                $(".mydelete").click(function(){
+                    if(confirm("确定要移除吗？")){
+                        var url = "{:U('GoodInfo/deleteBuyCarsByBid')}"
+                        var bId = $(this).parent().parent().siblings().children().children(".goodInfo-buycar-input").attr("id");
+                        var postData = {
+                            'bId':bId
+                        };
+                        $.post(url,postData,function(data){
+                            if(data["code"]==2000){
+                                window.location.href="__APP__/GoodInfo/index";
+                            }else{
+                                alert("系统繁忙，请稍后再试！");
+                            }
+                        });
+                    }
+                });
+                
+            }
+        });
+        var p = "";
+        var c = "";
+        var a = "";
+        var pv = "";
+        var cv = "";
+        var av = "";
+        $("#provinces").change(function(){
+            p = $(this).find("option:selected").text();
+            pv = $(this).val();
+        });
+        $("#citys").change(function(){
+            c = $(this).find("option:selected").text();
+            cv = $(this).val();
+        });
+        $("#areas").change(function(){
+            a = $(this).find("option:selected").text();
+            av = $(this).val();
+        });
+        $("#provinces").change(function(){
+            var v = $(this).val();
+            var url = "{:U('Order/getAllCityByPid')}";
+            var postData = {
+                'pId':v
+            };
+            $.post(url,postData,function(data){
+                console.log(data);
+                var list = data["data"]["list"];
+                var opt = "";
+                if(data["code"]==2000){
+                    for(var i=0;i<list.length;i++){
+                        opt += "<option value='"+list[i].code+"'>"+list[i].name+"</option>";
+                    }
+                    $("#citys option:gt(0)").remove();
+                    $("#areas option:gt(0)").remove();
+                    $("#citys").append(opt);
+                }
+            });
+        });
+        $("#citys").change(function(){
+            var v = $(this).val();
+            var url = "{:U('Order/getAllAreaByCid')}";
+            var postData = {
+                'cId':v
+            };
+            $.post(url,postData,function(data){
+                var list = data["data"]["list"];
+                var opt = "";
+                console.log(list);
+                if(data["code"]==2000){
+                    for(var i=0;i<list.length;i++){
+                        opt += "<option value='"+list[i].code+"'>"+list[i].name+"</option>";
+                    }
+                    $("#areas option:gt(0)").remove();
+                    $("#areas").append(opt);
+                }
+            });
+        });
+        var result = 0;
+        $("#savePerson").click(function(){
+            countYunFei(p,c);
+            var url = "{:U('Order/addConsignee')}"; 
+            if(pv==""||cv==""||av==""||(p+c+a)==""||$('#addrDiqu').val()==""||$('#tel').val()==""||$("#postcode").val()==""){
+                alert("请将信息填写完整");
+                return;
+            }
+            var postData = {
+                'name':$('#shouhuo').val(),
+                'proId':pv,
+                'cityId':cv,
+                'areaId':av,
+                'specAddr':p+c+a,
+                'addr':$('#addrDiqu').val(),
+                'tel':$('#tel').val(),
+                'postcode':$("#postcode").val()
+            }
+            $.post(url,postData,function(data){
+    	       console.log(data);
+                if(data["code"]==2000){
+                    var result = data["res"];
+                    //更新地址
+                    url = "{:U('GoodInfo/updateOrderAddr')}";
+                    var postDt = {
+                        'addr':result
+                    }
+                    $.post(url,postDt,function(data){
+                        if(data["code"]==2000){
+                            
+                        }else{
+                            alert("系统繁忙，请稍后再试！");
+                        }
+                    });
+                    $('#shouhuo').val("");
+                    $('#addrDiqu').val("");
+                    $('#tel').val("");
+                    $("#postcode").val("");
+                    $("#provinces option:first").attr("selected","selected");
+                    $("#citys option:gt(0)").remove();
+                    $("#areas option:gt(0)").remove();
+                    
+                    $("#addShouHuo").hide();
+                    $("#addShouHuo").next().show();
+                    getAddInfo();
+                    $("input[class='xadd']").prop("checked",false);
+                    $("input[class='sadd']").prop("checked",true);
+                    
+                }else{
+                    alert("系统繁忙，请稍后再试！");
+                }
+            });  
+        });
+        $("input[name='address']").change(function(){
+            $(".order-address-saveAddr ul").remove();
+            var add = $(this).parent().next().text();
+            console.log(add);
+            if(add=="使用新收货地址"){
+                $("#addShouHuo").show();
+                $("#addShouHuo").next().hide();
+            }else{
+                $("#addShouHuo").hide();
+                $("#addShouHuo").next().show();
+                getAddInfo();
+            }
+        });
+        $("#submitOrder").click(function(){
+            if($.trim($("#shijiMoney").text())==""){
+                alert("该订单没有商品，不能提交！");
+                return;
+            }
+            var addr = 0;
+            if($("input[class='xadd']").get(0).checked==true){
+                if(pv==""||cv==""||av==""||(p+c+a)==""||$('#addrDiqu').val()==""||$('#tel').val()==""||$("#postcode").val()==""){
+                    alert("请先保存收货人信息！");
+                    return;
+                }
+            }else{
+                var sele = $("input[name='selectAddr']");
+                for(var i=0;i<sele.length;i++){
+                    if(sele[i].checked==true){
+                        addr = $(sele[i]).attr("id");
+                    }
+                }
+            }
+            //更新地址
+            var url = "{:U('GoodInfo/updateOrderAddr')}";
+            var postDt = {
+                'addr':addr
+            }
+            $.post(url,postDt,function(data){
+                // alert(data);
+                if(data["code"]==2000){
+                }else{
+                    alert("系统繁忙，请稍后再试！");
+                }
+            });
+            var ul="";
+            url = "{:U('Order/submitOrder')}";
+            var typeId = $("#mId").attr("class");
+                    console.log("typeId = "+typeId);
+            /*if(typeId==42){
+
+            }else{
+                ul += "<ul>"+
+                            "<li>姓&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;名：</li>"+
+                            "<li><input type='text' name='mName' /></li>"+
+                        "</ul>"+
+                        "<ul>"+
+                            "<li>身份证号：</li>"+
+                            "<li><input type='text' name='iden' /></li>"+
+                            "<li class='hint'>*请正确填写身份证信息</li>"+
+                        "</ul>";
+            }*/
+            $("#memberContent").append(ul);
+            var mName = new Array();
+            var iden = new Array();
+            var k=0;
+            $(":input[name='mName']").each(function(){
+                if($.trim($(this).val())!=""){
+                    k++;
+                    mName[k-1]= $(this).val();
+                }
+            });
+            var m=0;
+            $(":input[name='iden']").each(function(){
+                if($.trim($(this).val())!=""){
+                    m++;
+                    iden[m-1] = $(this).val();
+                }
+            });
+            if(k==0||m==0||k!=m){
+                alert("请将信息填写完整！");
+                return;
+            }
+            var postData = {
+                'mName':mName,
+                'iden':iden,
+                'money':$("#shijiMoney").text(),
+                'freight':$("#carri").text()
+            }
+            // console.log(postData.mName+"  "+postData.iden+"  "+postData.money);
+            $.post(url,postData,function(data){
+                console.log(data);   
+                if(data["code"]==2000){
+                    $("#payform").submit();
+                }else{
+                    alert("系统繁忙，请稍后再试！");
+                }
+            });
+        });
+
+        
+    });
+</script>
+

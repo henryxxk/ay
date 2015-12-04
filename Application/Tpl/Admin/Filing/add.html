@@ -1,0 +1,684 @@
+<include file="Public:header" />
+
+    <!--dynamic table-->
+    <link href="__PUBLIC__/Template/assets/advanced-datatable/media/css/demo_page.css" rel="stylesheet" />
+    <link href="__PUBLIC__/Template/assets/advanced-datatable/media/css/demo_table.css" rel="stylesheet" />
+    <link rel="stylesheet" href="__PUBLIC__/Template/assets/data-tables/DT_bootstrap.css" />
+
+ <include file="Public:menu" />
+
+    <!--main content start-->
+    <section id="main-content">
+        <section class="wrapper">
+        <!-- page start--> 
+        <div class="row">
+            <div class="col-md-12">
+                <!--breadcrumbs start -->
+                <ul class="breadcrumb">
+                    <li><a href="#"><i class="fa fa-home"></i> 首页</a></li>
+                    <li><a href="#"> 商品管理</a></li>
+                    <li class="active"> 发布商品</li>
+                </ul>
+                <!--breadcrumbs end -->
+            </div>
+        </div>
+
+        
+            <div class="row">
+                <div class="col-lg-12">
+                    <section class="panel">
+                        <header class="panel-heading">
+                            发布新商品
+                        </header>
+                        <div class="panel-body">
+                            
+                             <div class="form">
+                                <form class="cmxform form-horizontal " id="AddForm" method="post" action="{:U('Goods/insert')}"> 
+                                    <div class="form-group ">
+                                        <label for="typeId" class="control-label col-lg-3">选择所属分类</label>
+                                        <div class="col-lg-6">
+                                            <select id="typeId" name="typeId" class="form-control form-inline  m-bot15" style="width:200px;float:left;color:#000">
+                                                <option value="0">[无分类]</option>
+                                                <volist name="goodsType" id="vo"> 
+                                                    <option value="{$vo.id}">{$vo.name}</option> 
+                                                </volist> 
+                                            </select>  
+                                            <select id="typeId2" name="typeId2" class="form-control form-inline  m-bot15" style="width:200px;margin-left: 215px;color:#000">
+                                                <option value="">[选择子分类]</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group ">
+                                        <label for="brandId" class="control-label col-lg-3">选择商品品牌</label>
+                                        <div class="col-lg-6">
+                                            <select id="brandId" name="brandId" class="form-control form-inline  m-bot15" style="width:200px;float:left;color:#000">
+                                                <option value="0">[无品牌]</option>
+                                            </select>  
+                                        </div>
+                                    </div> 
+                                    <div class="form-group ">
+                                        <label for="taxrateId" class="control-label col-lg-3">选择税率</label>
+                                        <div class="col-lg-6">
+                                            <input type="button" onclick="taxrateShow()" value="展开税率表>>" />
+                                            <input type="button" onclick="taxrateHide()" value="合上税率表<<" />
+                                            <div id="taxrateShow" style="border:1px solid #bbb;padding:10px;display:none;">
+                                            <volist name="taxratelist" id="vo">
+                                                <p><input type="radio" name="taxrateId" value="{$vo.id}">&nbsp;<b>{$vo.classify} (税率:<span style="color:red">{$vo.revenue}</span>)</b><br>
+                                                {$vo.scope}</p>
+                                            </volist> 
+                                            <input type="button" onclick="taxrateHide()" value="合上税率表<<" />
+                                            </div>
+                                           <!--  <select id="taxrateId" name="taxrateId" class="form-control form-inline  m-bot15" style="width:200px;float:left;color:#000">
+                                                <option value="0">[请选择]</option>
+                                                <volist name="taxratelist" id="vo">
+                                                    <option value="{$vo.id}">{$vo.scope}</option>
+                                                </volist>
+                                            </select>   -->
+                                        </div>
+                                    </div> 
+                                    <div class="form-group ">
+                                        <label for="isOrNoExchange" class="control-label col-lg-3" for="inputSuccess">商品所属</label>
+                                        <div class="col-lg-6">
+                                            <label class="radio-inline">
+                                                <input type="radio" name="isOrNoExchange" value="0" checked="checked"> 普通商品
+                                            </label>
+                                            <label class="radio-inline">
+                                                <input type="radio" name="isOrNoExchange" value="1"> 积分兑换商品
+                                            </label>
+                                            <label class="radio-inline">
+                                                <input type="radio" name="isOrNoExchange" value="2"> VIP兑换商品
+                                            </label>
+                                            <label class="radio-inline">
+                                                <!-- <input type="radio" name="isOrNoExchange" value="3"> 可使用代金券商品 -->
+                                            </label>
+                                        </div>
+                                    </div> 
+                                    <div class="form-group" id="subExchange" style="display:none">
+                                        <label for="score" class="control-label col-lg-3">换购需要的积分</label>
+                                        <div class="col-lg-6">
+                                            <input class=" form-control" id="score" name="score" type="text" />
+                                        </div>
+                                    </div> 
+                                    <div class="form-group" id="vipSubSelect" style="display:none">
+                                        <label for="viplevelId" class="control-label col-lg-3">指定可换购的VIP级别</label>
+                                        <div class="col-lg-6">
+                                            <select id="viplevelId" name="viplevelId" class="form-control form-inline  m-bot15" style="width:200px;float:left;color:#000">
+                                                <option value="0">[无级别]</option>
+                                                <volist name="listViplevel" id="vo"> 
+                                                    <option value="{$vo.id}">{$vo.name}</option> 
+                                                </volist> 
+                                            </select>  
+                                        </div>
+                                    </div>
+                                    <div class="form-group ">
+                                        <label for="name" class="control-label col-lg-3">商品名称</label>
+                                        <div class="col-lg-6">
+                                            <input class=" form-control" id="name" name="name" type="text" />
+                                        </div>
+                                    </div> 
+                                    <div class="form-group ">
+                                        <label for="goodsNum" class="control-label col-lg-3">商品货号</label>
+                                        <div class="col-lg-6">
+                                            <input class=" form-control" id="goodsNum" name="goodsNum" type="text" />
+                                        </div>
+                                    </div> 
+                                    <div class="form-group ">
+                                        <label for="marketPrice" class="control-label col-lg-3">市场价</label>
+                                        <div class="col-lg-6">
+                                            <input class=" form-control" id="marketPrice" name="marketPrice" type="text" value="0.00" />
+                                        </div>
+                                    </div> 
+                                    <div class="form-group " id="prGroupPrice">
+                                        <label for="groupPrice" class="control-label col-lg-3">团购价</label>
+                                        <div class="col-lg-6">
+                                            <input class=" form-control" id="groupPrice" name="groupPrice" type="text"  value="0.00"/>
+                                        </div>
+                                    </div> 
+                                    <div class="form-group " id="prVipPrice">
+                                        <label for="vipPrice" class="control-label col-lg-3">VIP价</label>
+                                        <div class="col-lg-6">
+                                            <input class=" form-control" id="vipPrice" name="vipPrice" type="text"  value="0.00"/>
+                                        </div>
+                                    </div> 
+
+                                    <!-- img 01 -->
+                                    <div class="form-group "> 
+                                        <div class="form-group last">
+                                            <label class="control-label col-md-3">商品图片</label>
+                                            <div class="col-md-2" id="imgUp01">
+                                                <div class="fileupload fileupload-new" data-provides="fileupload">
+                                                    <div class="fileupload-new thumbnail" style="width: 200px; height: 150px;">
+                                                        <img id="imgView" src="http://www.placehold.it/200x150/EFEFEF/AAAAAA&amp;text=no+image" alt="" />
+                                                    </div>
+                                                    <div class="fileupload-preview fileupload-exists thumbnail" style="max-width: 200px; max-height: 150px; line-height: 20px;"></div>
+                                                    <div>
+                                                               <span class="btn btn-white btn-file">
+                                                               <span class="fileupload-new fuBtn1"><i class="fa fa-paper-clip"></i> 选择图片</span>
+                                                               <span class="fileupload-exists fuBtn2"><i class="fa fa-undo"></i> 更换</span>
+                                                               <input type="file" id="uploadIcon" class="default" />
+                                                               </span>
+                                                                <a href="javascript:delImg()" class="btn btn-danger fileupload-exists fuBtn3" data-dismiss="fileupload"><i class="fa fa-trash"></i> 删除</a>
+                                                    </div>
+                                                </div>  
+                                                <input type="hidden" name="imgs" id="imgs" value="" />
+                                            </div> 
+                                            <!-- 02 --> 
+                                            <div class="col-md-2" id="imgUp02">
+                                                <div class="fileupload fileupload-new" data-provides="fileupload">
+                                                    <div class="fileupload-new thumbnail" style="width: 200px; height: 150px;">
+                                                        <img id="imgView" src="http://www.placehold.it/200x150/EFEFEF/AAAAAA&amp;text=no+image" alt="" />
+                                                    </div>
+                                                    <div class="fileupload-preview fileupload-exists thumbnail" style="max-width: 200px; max-height: 150px; line-height: 20px;"></div>
+                                                    <div>
+                                                               <span class="btn btn-white btn-file">
+                                                               <span class="fileupload-new fuBtn1"><i class="fa fa-paper-clip"></i> 选择图片</span>
+                                                               <span class="fileupload-exists fuBtn2"><i class="fa fa-undo"></i> 更换</span>
+                                                               <input type="file" id="uploadIcon" class="default" />
+                                                               </span>
+                                                                <a href="javascript:delImg22()" class="btn btn-danger fileupload-exists fuBtn3" data-dismiss="fileupload"><i class="fa fa-trash"></i> 删除</a>
+                                                    </div>
+                                                </div> 
+                                                <input type="hidden" name="imgs22" id="imgs" value="" />
+                                            </div>
+                                        </div>
+                                    </div> <!-- end img 01 -->
+                                    <div class="form-group "> 
+                                        <div class="form-group last">
+                                            <label class="control-label col-md-3">&nbsp;</label>
+                                            <!-- 03 -->
+                                            <div class="col-md-2" id="imgUp03">
+                                                <div class="fileupload fileupload-new" data-provides="fileupload">
+                                                    <div class="fileupload-new thumbnail" style="width: 200px; height: 150px;">
+                                                        <img id="imgView" src="http://www.placehold.it/200x150/EFEFEF/AAAAAA&amp;text=no+image" alt="" />
+                                                    </div>
+                                                    <div class="fileupload-preview fileupload-exists thumbnail" style="max-width: 200px; max-height: 150px; line-height: 20px;"></div>
+                                                    <div>
+                                                               <span class="btn btn-white btn-file">
+                                                               <span class="fileupload-new fuBtn1"><i class="fa fa-paper-clip"></i> 选择图片</span>
+                                                               <span class="fileupload-exists fuBtn2"><i class="fa fa-undo"></i> 更换</span>
+                                                               <input type="file" id="uploadIcon" class="default" />
+                                                               </span>
+                                                                <a href="javascript:delImg33()" class="btn btn-danger fileupload-exists fuBtn3" data-dismiss="fileupload"><i class="fa fa-trash"></i> 删除</a>
+                                                    </div>
+                                                </div> 
+                                                <input type="hidden" name="imgs33" id="imgs" value="" />
+                                            </div> 
+                                            <!-- 04 -->
+                                            <div class="col-md-2" id="imgUp04">
+                                                <div class="fileupload fileupload-new" data-provides="fileupload">
+                                                    <div class="fileupload-new thumbnail" style="width: 200px; height: 150px;">
+                                                        <img id="imgView" src="http://www.placehold.it/200x150/EFEFEF/AAAAAA&amp;text=no+image" alt="" />
+                                                    </div>
+                                                    <div class="fileupload-preview fileupload-exists thumbnail" style="max-width: 200px; max-height: 150px; line-height: 20px;"></div>
+                                                    <div>
+                                                               <span class="btn btn-white btn-file">
+                                                               <span class="fileupload-new fuBtn1"><i class="fa fa-paper-clip"></i> 选择图片</span>
+                                                               <span class="fileupload-exists fuBtn2"><i class="fa fa-undo"></i> 更换</span>
+                                                               <input type="file" id="uploadIcon" class="default" />
+                                                               </span>
+                                                                <a href="javascript:delImg44()" class="btn btn-danger fileupload-exists fuBtn3" data-dismiss="fileupload"><i class="fa fa-trash"></i> 删除</a>
+                                                    </div>
+                                                </div> 
+                                                <input type="hidden" name="imgs44" id="imgs" value="" />
+                                            </div> 
+                                        </div>
+                                    </div> <!-- end img 01 -->
+                                     <!-- img 02 -->
+                                   <!--  <div class="form-group "> 
+                                        <div class="form-group last">
+                                            <label class="control-label col-md-3">商品图片02</label>
+                                            <div class="col-md-9" id="imgUp02">
+                                                <div class="fileupload fileupload-new" data-provides="fileupload">
+                                                    <div class="fileupload-new thumbnail" style="width: 200px; height: 150px;">
+                                                        <img id="imgView" src="http://www.placehold.it/200x150/EFEFEF/AAAAAA&amp;text=no+image" alt="" />
+                                                    </div>
+                                                    <div class="fileupload-preview fileupload-exists thumbnail" style="max-width: 200px; max-height: 150px; line-height: 20px;"></div>
+                                                    <div>
+                                                               <span class="btn btn-white btn-file">
+                                                               <span class="fileupload-new fuBtn1"><i class="fa fa-paper-clip"></i> 选择图片</span>
+                                                               <span class="fileupload-exists fuBtn2"><i class="fa fa-undo"></i> 更换</span>
+                                                               <input type="file" id="uploadIcon" class="default" />
+                                                               </span>
+                                                                <a href="javascript:delImg22()" class="btn btn-danger fileupload-exists fuBtn3" data-dismiss="fileupload"><i class="fa fa-trash"></i> 删除</a>
+                                                    </div>
+                                                </div> 
+                                                <input type="hidden" name="imgs22" id="imgs" value="" />
+                                            </div> 
+                                        </div>
+                                    </div>  --> <!-- end img 02--> 
+                                     <!-- img 03 -->
+                                    <!-- <div class="form-group "> 
+                                        <div class="form-group last">
+                                            <label class="control-label col-md-3">商品图片03</label>
+                                            <div class="col-md-9" id="imgUp03">
+                                                <div class="fileupload fileupload-new" data-provides="fileupload">
+                                                    <div class="fileupload-new thumbnail" style="width: 200px; height: 150px;">
+                                                        <img id="imgView" src="http://www.placehold.it/200x150/EFEFEF/AAAAAA&amp;text=no+image" alt="" />
+                                                    </div>
+                                                    <div class="fileupload-preview fileupload-exists thumbnail" style="max-width: 200px; max-height: 150px; line-height: 20px;"></div>
+                                                    <div>
+                                                               <span class="btn btn-white btn-file">
+                                                               <span class="fileupload-new fuBtn1"><i class="fa fa-paper-clip"></i> 选择图片</span>
+                                                               <span class="fileupload-exists fuBtn2"><i class="fa fa-undo"></i> 更换</span>
+                                                               <input type="file" id="uploadIcon" class="default" />
+                                                               </span>
+                                                                <a href="javascript:delImg33()" class="btn btn-danger fileupload-exists fuBtn3" data-dismiss="fileupload"><i class="fa fa-trash"></i> 删除</a>
+                                                    </div>
+                                                </div> 
+                                                <input type="hidden" name="imgs33" id="imgs" value="" />
+                                            </div> 
+                                        </div>
+                                    </div> -->  <!-- end img 03-->
+
+                                     <!-- img 04 -->
+                                    <!-- <div class="form-group "> 
+                                        <div class="form-group last">
+                                            <label class="control-label col-md-3">商品图片04</label>
+                                            <div class="col-md-9" id="imgUp04">
+                                                <div class="fileupload fileupload-new" data-provides="fileupload">
+                                                    <div class="fileupload-new thumbnail" style="width: 200px; height: 150px;">
+                                                        <img id="imgView" src="http://www.placehold.it/200x150/EFEFEF/AAAAAA&amp;text=no+image" alt="" />
+                                                    </div>
+                                                    <div class="fileupload-preview fileupload-exists thumbnail" style="max-width: 200px; max-height: 150px; line-height: 20px;"></div>
+                                                    <div>
+                                                               <span class="btn btn-white btn-file">
+                                                               <span class="fileupload-new fuBtn1"><i class="fa fa-paper-clip"></i> 选择图片</span>
+                                                               <span class="fileupload-exists fuBtn2"><i class="fa fa-undo"></i> 更换</span>
+                                                               <input type="file" id="uploadIcon" class="default" />
+                                                               </span>
+                                                                <a href="javascript:delImg44()" class="btn btn-danger fileupload-exists fuBtn3" data-dismiss="fileupload"><i class="fa fa-trash"></i> 删除</a>
+                                                    </div>
+                                                </div> 
+                                                <input type="hidden" name="imgs44" id="imgs" value="" />
+                                            </div> 
+                                        </div>
+                                    </div>  --> <!-- end img 04-->
+                                    <div class="form-group ">
+                                        <label for="colorId" class="control-label col-lg-3">选择商品颜色</label>
+                                        <div class="col-lg-6">
+                                            <select id="colorId" multiple="multiple" class="form-control form-inline  m-bot15" style="width:200px;float:left;color:#000">
+                                                <option value="0">[无颜色]</option>
+                                                <volist name="goodsColor" id="vo"> 
+                                                    <option value="{$vo.id}">{$vo.name}</option> 
+                                                </volist> 
+                                            </select>  
+                                            <input type="hidden" name="colorId" id="colorIds" value="" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group ">
+                                        <label for="sizeId" class="control-label col-lg-3">选择商品尺寸</label>
+                                        <div class="col-lg-6">
+                                            <select id="sizeId"  multiple="multiple" class="form-control form-inline  m-bot15" style="width:200px;float:left;color:#000">
+                                                <option value="0">[无尺寸]</option>
+                                                <volist name="goodsSize" id="vo"> 
+                                                    <option value="{$vo.id}">{$vo.name}</option> 
+                                                </volist> 
+                                            </select>  
+                                            <input type="hidden" name="sizeId" id="sizeIds" value="" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group ">
+                                        <label for="weight" class="control-label col-lg-3">重量</label>
+                                        <div class="col-lg-6">
+                                            <input class=" form-control" id="weight" name="weight" type="text" />
+                                        </div>
+                                    </div> 
+                                    <div class="form-group ">
+                                        <label for="stock" class="control-label col-lg-3">库存</label>
+                                        <div class="col-lg-6">
+                                            <input class=" form-control" id="stock" name="stock" type="text" />
+                                        </div>
+                                    </div> 
+                                    <!-- <div class="form-group ">
+                                        <label for="sales" class="control-label col-lg-3">销量</label>
+                                        <div class="col-lg-6">
+                                            <input class=" form-control" id="sales" name="sales" type="text" />
+                                        </div>
+                                    </div> --> 
+                                    <div class="form-group ">
+                                        <label for="place" class="control-label col-lg-3">产地</label>
+                                        <div class="col-lg-6">
+                                            <input class=" form-control" id="place" name="place" type="text" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group ">
+                                        <label for="commodity" class="control-label col-lg-3" for="inputSuccess">商品模式</label>
+                                        <div class="col-lg-6"> 
+                                            <label class="radio-inline">
+                                                <input type="radio" name="commodity" value="1" checked="checked"> 自营
+                                            </label>
+                                            <label class="radio-inline">
+                                                <input type="radio" name="commodity" value="2"> 代购
+                                            </label>
+                                        </div>
+                                    </div> 
+                                    <div class="form-group " style="display:none" id="commodityDiv">
+                                        <label for="commodityUser" class="control-label col-lg-3">选择商品所属代购</label>
+                                        <div class="col-lg-6">
+                                            <select id="commodityUser" name="commodityUser" class="form-control form-inline  m-bot15" style="width:200px;float:left;color:#000">
+                                                <option value="0">[无代购]</option>
+                                                <volist name="userlist" id="vo">
+                                                    <option value="{$vo.id}">{$vo.nickname}({$vo.name})</option>
+                                                </volist>
+                                            </select>  
+                                        </div>
+                                    </div>
+                                   
+                                    <div class="form-group">
+                                        <label for="desc" class="control-label col-lg-3">描述</label>
+                                        <div class="col-lg-6">
+                                            <script type="text/javascript" charset="utf-8" src="__PUBLIC__/Plugin/ueditor/ueditor.config.js"></script>
+                                            <script type="text/javascript" charset="utf-8" src="__PUBLIC__/Plugin/ueditor/ueditor.all.min.js"> </script>
+                                            <script type="text/javascript" charset="utf-8" src="__PUBLIC__/Plugin/ueditor/lang/zh-cn/zh-cn.js"></script>
+                                            <script id="editor" name="content" type="text/plain" style="width:auto;height:500px;">{$list.content}</script>
+                                            <script type="text/javascript">
+                                               var ue = UE.getEditor('editor');
+                                            </script>
+                                            <!-- 百度编辑器 -->
+                                        </div>
+                                    </div>
+ 
+                                    <input type="hidden" name="status" value="1" />
+
+                                    <div class="form-group">
+                                        <div class="col-lg-offset-3 col-lg-6">
+                                            <button class="btn btn-primary" type="submit"> 新增</button>
+                                            <button class="btn btn-default cancelBtn" dataurl="/Admin/Goods/index" type="button"> 取消</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div><!-- end form -->
+                    </section>
+                </div>
+            </div>
+            <!-- page end-->
+        <!-- page end-->
+        </section>
+    </section>
+    <!--main content end-->
+ 
+
+</section>
+
+<include file="Public:footer" />
+
+<!--common script init for all pages-->
+<script type="text/javascript" src="__PUBLIC__/Template/js/scripts.js"></script> 
+<script type="text/javascript" src="__PUBLIC__/Template/js/jquery-validate/jquery.validate.min.js"></script>
+<script> 
+//图片删除
+function delImg(){
+    console.log($('#imgs').val());
+    $.post("{:U('/Admin/Base/delUploadImage')}",{'imgs':'.'+$('#imgUp01 #imgs').val()},function(data){
+        console.log(data);
+        // eval("var data=" + data);
+        if(data["code"] == 2000){
+          $("#imgUp01 #imgView").attr('src','http://www.placehold.it/200x150/EFEFEF/AAAAAA&amp;text=no+image');
+          $("#imgUp01 #imgs").val('');
+          $("#imgUp01 .fuBtn3").hide();
+        } 
+        console.log(data.msg);
+    }) 
+}
+function delImg22(){
+    console.log($('#imgUp02 #imgs22').val());
+    $.post("{:U('/Admin/Base/delUploadImage')}",{'imgs':'.'+$('#imgUp02 #imgs').val()},function(data){
+        console.log(data);
+        // eval("var data=" + data);
+        if(data["code"] == 2000){
+          $("#imgUp02 #imgView").attr('src','http://www.placehold.it/200x150/EFEFEF/AAAAAA&amp;text=no+image');
+          $("#imgUp02 #imgs").val('');
+          $("#imgUp02 .fuBtn3").hide();
+        } 
+        console.log(data.msg);
+    }) 
+}
+function delImg33(){
+    console.log($('#imgUp03 #imgs').val());
+    $.post("{:U('/Admin/Base/delUploadImage')}",{'imgs':'.'+$('#imgUp03 #imgs').val()},function(data){
+        console.log(data);
+        // eval("var data=" + data);
+        if(data["code"] == 2000){
+          $("#imgUp03 #imgView").attr('src','http://www.placehold.it/200x150/EFEFEF/AAAAAA&amp;text=no+image');
+          $("#imgUp03 #imgs").val('');
+          $("#imgUp03 .fuBtn3").hide();
+        } 
+        console.log(data.msg);
+    }) 
+}
+function delImg44(){
+    console.log($('#imgUp04 #imgs').val());
+    $.post("{:U('/Admin/Base/delUploadImage')}",{'imgs':'.'+$('#imgUp04 #imgs').val()},function(data){
+        console.log(data);
+        // eval("var data=" + data);
+        if(data["code"] == 2000){
+          $("#imgUp04 #imgView").attr('src','http://www.placehold.it/200x150/EFEFEF/AAAAAA&amp;text=no+image');
+          $("#imgUp04 #imgs").val('');
+          $("#imgUp04 .fuBtn3").hide();
+        } 
+        console.log(data.msg);
+    }) 
+}
+
+$(function(){ 
+     //图片上传
+      $("#imgUp01 #uploadIcon").localResizeIMG({
+          width: 1,
+          quality: 1,
+          success: function (result) {
+            var postData = 
+            {
+              "data":result.clearBase64,
+              "path":'./Public/Uploads/'
+            };
+            $.post("{:U('/Base/uploadImage')}",postData,function(data){
+                // console.log(data);
+                // eval("var data=" + data);
+                if(data["code"] == 2000){
+                  $("#imgUp01 #imgView").attr('src',data["data"]);
+                  $("#imgUp01 #imgs").val(data["data"]);
+                  $("#imgUp01 .fuBtn3").show();
+                } 
+            }) 
+           }
+       });
+      $("#imgUp02 #uploadIcon").localResizeIMG({
+          width: 1,
+          quality: 1,
+          success: function (result) {
+            var postData = 
+            {
+              "data":result.clearBase64,
+              "path":'./Public/Uploads/'
+            };
+            $.post("{:U('/Base/uploadImage')}",postData,function(data){
+                // console.log(data);
+                // eval("var data=" + data);
+                if(data["code"] == 2000){
+                  $("#imgUp02 #imgView").attr('src',data["data"]);
+                  $("#imgUp02 #imgs").val(data["data"]);
+                  $("#imgUp02 .fuBtn3").show();
+                } 
+            }) 
+           }
+       });
+      $("#imgUp03 #uploadIcon").localResizeIMG({
+          width: 1,
+          quality: 1,
+          success: function (result) {
+            var postData = 
+            {
+              "data":result.clearBase64,
+              "path":'./Public/Uploads/'
+            };
+            $.post("{:U('/Base/uploadImage')}",postData,function(data){
+                // console.log(data);
+                // eval("var data=" + data);
+                if(data["code"] == 2000){
+                  $("#imgUp03 #imgView").attr('src',data["data"]);
+                  $("#imgUp03 #imgs").val(data["data"]);
+                  $("#imgUp03 .fuBtn3").show();
+                } 
+            }) 
+           }
+       });
+      $("#imgUp04 #uploadIcon").localResizeIMG({
+          width: 1,
+          quality: 1,
+          success: function (result) {
+            var postData = 
+            {
+              "data":result.clearBase64,
+              "path":'./Public/Uploads/'
+            };
+            $.post("{:U('/Base/uploadImage')}",postData,function(data){
+                // console.log(data);
+                // eval("var data=" + data);
+                if(data["code"] == 2000){
+                  $("#imgUp04 #imgView").attr('src',data["data"]);
+                  $("#imgUp04 #imgs").val(data["data"]);
+                  $("#imgUp04 .fuBtn3").show();
+                } 
+            }) 
+           }
+       });
+
+    $('input[name="commodity"]').click(function(){
+        var checkedRadio = $('input[name="commodity"]:checked').val();
+        if(checkedRadio == 2){
+            $('#commodityDiv').show(); 
+        }else if(checkedRadio == 1){
+            $('#commodityDiv').hide();
+        }
+    });
+    $('input[name="isOrNoExchange"]').click(function(){
+        var checkedRadio = $('input[name="isOrNoExchange"]:checked').val();
+        if(checkedRadio == 1 || checkedRadio == 2){
+            $('#prGroupPrice').hide(); 
+            $('#prVipPrice').hide();
+        }else{ 
+            $('#prGroupPrice').show();
+            $('#prVipPrice').show();
+        }
+        if(checkedRadio == 2){
+            $('#subExchange').show();
+            $('#vipSubSelect').show();
+        }else if(checkedRadio == 1 || checkedRadio == 3){
+            $('#subExchange').show();
+            $('#vipSubSelect').hide();
+        }else{
+            $('#subExchange').hide();
+            $('#vipSubSelect').hide();
+        }
+    });
+
+    $("#AddForm").validate({
+        rules: {
+            typeId: "required",
+            name: "required",
+            weight: "required",
+            stock: "required",
+            marketPrice: "required",
+            // groupPrice: "required",
+            // vipPrice: "required",
+        },
+        messages: {
+            typeId: "请选择分类",
+            name: "商品名称不可为空",
+            weight: "商品重量不可为空",
+            stock: "商品库存不可为空",
+            marketPrice: "商品市场价不可为空",
+            // groupPrice: "商品团购价不可为空",
+            // vipPrice: "商品VIP价格不可为空",
+        }
+    });
+    //多选颜色
+    $('#colorId').click(function(){
+        $('#colorIds').val('');
+        $('#colorIds').val($(this).val());
+    });  
+    //多选尺寸
+    $('#sizeId').click(function(){
+        $('#sizeIds').val('');
+        $('#sizeIds').val($(this).val());
+    });  
+});
+</script>
+<script> 
+//联动分类
+$(function(){
+    $('#typeId').change(function(){
+        var url = "/Admin/Base/getSubTypeName";
+        var postData = {
+            'pid':$('#typeId').val(),
+        };
+        console.log(postData);
+        $.post(url,postData,function(data){
+                console.log(data);
+            if(data.code == 2000){
+                $('#typeId2').html('<option value="">[选择子分类]</option>');
+                $.each(data.data,function(k,v){
+                    $('#typeId2').append('<option value="'+v.id+'">'+v.name+'</option>');
+                });
+            }
+        });
+    });
+    $('#typeId2').change(function(){ 
+        var postData = {
+            'typeid':$('#typeId2').val(),
+        }; 
+        //品牌
+        $.post("/Admin/Base/getBrandName",postData,function(data){
+                console.log(data);
+            if(data.code == 2000){
+                $('#brandId').html('<option value="">[选择品牌]</option>');
+                $.each(data.data,function(k,v){
+                    $('#brandId').append('<option value="'+v.id+'">'+v.name+'</option>');
+                });
+            }
+        });
+        //颜色
+        $.post("/Admin/Base/getColorName",postData,function(data){
+                console.log(data);
+            if(data.code == 2000){
+                $('#colorId').html('<option value="">[选择颜色]</option>');
+                $.each(data.data,function(k,v){
+                    $('#colorId').append('<option value="'+v.id+'">'+v.name+'</option>');
+                });
+            }
+        });
+        //尺寸
+        $.post("/Admin/Base/getSizeName",postData,function(data){
+                console.log(data);
+            if(data.code == 2000){
+                $('#sizeId').html('<option value="">[选择尺寸]</option>');
+                $.each(data.data,function(k,v){
+                    $('#sizeId').append('<option value="'+v.id+'">'+v.name+'</option>');
+                });
+            }
+        });
+    });
+});
+//btnJump
+function btnJump(method,id){
+    if(id != ''){
+        //alert("Auth/"+ method + "/id/" + id);
+        window.location.href = "/Admin/Goods/"+ method + "/id/" + id;
+    }else{
+        //alert("Auth/"+ method + "/");
+       window.location.href = "/Admin/Goods/"+ method + "/";
+    }
+} 
+</script>
+
+<script>
+function taxrateShow(){  
+     $("#taxrateShow").show("slow"); 
+}
+function taxrateHide(){  
+     $("#taxrateShow").hide("slow"); 
+}
+</script>
+</body>
+</html>

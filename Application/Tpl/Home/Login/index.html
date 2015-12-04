@@ -1,0 +1,88 @@
+<include file="Public:header" />
+
+	<div class="login-logo">
+		<div class="container">
+			
+			<a href="{:U("Index/index")}">
+				<img src="__PUBLIC__/Image/login-logo.png" class="p-l">
+			</a>
+			<span class="p-l title">用户登录</span>
+		</div>
+	</div>
+	<div class="login">
+		<div class="container">
+			<div class="login-left">
+				<img src="__PUBLIC__/Image/login-image.png">
+			</div>
+			<div class="login-right">
+				<div class="login-title">
+					<span class="p-l ft18 lh18">用户登录</span>
+					<span class="p-r lh18">
+						<span class="icon-login lh18 p-l"></span>
+						<a href="{:U("/Login/register")}" class="lh18 ft14 p-l">
+						立即注册
+						</a>
+					</span>
+				</div>
+				<div class="login-input">
+					<span class="icon-user login-image"></span>
+					<input name="name" onkeydown="keydownEvent();" type="text" placeholder="用户名登录" style="width:238px;">
+				</div>
+				<div class="login-input">
+					<span class="icon-lock login-image"></span>
+					<input name="password" onkeydown="keydownEvent();" type="password" placeholder="6-10位数字或字母" style="width:238px;">
+				</div>
+				<div class="login-notice">
+					<div class="p-l">
+						<input type="checkbox"><span style="margin-left: 5px;">下次自动登录</span>
+					</div>
+					<div class="p-r">
+						<a href="{:U("/Login/forgetPass")}">忘记密码？</a>
+					</div>
+					
+				</div>
+				<a id="login" class="login-btn clearfix" href="javascript:;">登录</a>
+			</div>
+		</div>
+	</div>
+<script>
+    function goLogin(){
+    	var name = $("[name=name]").val();
+            var pwd = $("[name=password]").val();
+            if($.trim(name)==""||$.trim(pwd)==""){
+                alert("用户名或密码不能为空！");
+                return;
+            }
+            var postData = {
+                'name':name,
+                'password':pwd
+            }
+            var url = "{:U('Login/loginIn')}";
+            $.post(url,postData,function(data){
+                switch(data["code"]){
+                    case -3000:
+                        alert("账号或密码错误！");
+                        break;
+                    case 2000:   //跳到首页
+                        window.location.href = "{:U('Index/index')}";
+                        break;
+                    default:
+                        alert("系统繁忙，请稍后再试！");
+                        break;
+                }
+            });
+    }
+
+    function keydownEvent() {
+         var e = window.event || arguments.callee.caller.arguments[0];
+         if (e && e.keyCode == 13 ) {
+             goLogin();
+         }
+     }
+    $(function(){
+        $("#login").click(function(){
+            	goLogin();
+        });
+    });
+</script>
+<include file="Public:footer" />

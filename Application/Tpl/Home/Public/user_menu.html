@@ -1,0 +1,118 @@
+<div class="user-menu">
+	<p class="main-title">
+		<a href="{:U("Member/index")}">个人中心</a>
+	</p>
+	<p class="title">交易管理</p>
+	<ul>
+		<li>
+			<a href="{:U("GoodInfo/index")}">
+				<img src="__PUBLIC__/Image/icon-user-menu.png" class="p-l icon">
+				<span class="p-l">我的购物车</span>
+			</a>
+		</li>
+		<li>
+			<a href="{:U("Member/orderinfo")}">
+				<img src="__PUBLIC__/Image/icon-user-menu.png" class="p-l icon">
+				<span class="p-l">我的订单</span>
+			</a>
+		</li>
+		<li>
+			<a href="{:U("Member/mycoll")}">
+				<img src="__PUBLIC__/Image/icon-user-menu.png" class="p-l icon">
+				<span class="p-l">我的收藏</span>
+			</a>
+		</li>
+	</ul>
+	<p class="title">账户管理</p>
+	<ul>
+		<li>
+			<a href="{:U("Member/mycoupon")}">
+				<img src="__PUBLIC__/Image/icon-user-menu.png" class="p-l icon">
+				<span class="p-l">我的代金券</span>
+			</a>
+		</li>
+		<li>
+			<a href="{:U("User/score")}">
+				<img src="__PUBLIC__/Image/icon-user-menu.png" class="p-l icon">
+				<span class="p-l">我的积分</span>
+			</a>
+		</li>
+	</ul>
+	<p class="title">个人信息</p>
+	<ul>
+		<li>
+			<a href="{:U("User/profile")}">
+				<img src="__PUBLIC__/Image/icon-user-menu.png" class="p-l icon">
+				<span class="p-l">我的资料</span>
+			</a>
+		</li>
+		<li>
+			<a href="{:U("User/changePass")}">
+				<img src="__PUBLIC__/Image/icon-user-menu.png" class="p-l icon">
+				<span class="p-l">修改密码</span>
+			</a>
+		</li>
+		<li>
+			<a href="{:U("User/address")}">
+				<img src="__PUBLIC__/Image/icon-user-menu.png" class="p-l icon">
+				<span class="p-l">管理收货地址</span>
+			</a>
+		</li>
+	</ul>
+    <if condition="$Think.session.typeId eq 45">
+	<p class="title">代购管理</p>
+	<ul>
+		<li>
+			<a href="{:U("User/pubGoods")}">
+				<img src="__PUBLIC__/Image/icon-user-menu.png" class="p-l icon">
+				<span class="p-l">发布商品</span>
+			</a>
+		</li>
+		<li>
+			<a href="{:U("User/sell")}">
+				<img src="__PUBLIC__/Image/icon-user-menu.png" class="p-l icon">
+				<span class="p-l">销售情况</span>
+			</a>
+		</li>
+		<li>
+			<a href="{:U("User/goods")}">
+				<img src="__PUBLIC__/Image/icon-user-menu.png" class="p-l icon">
+				<span class="p-l">商品列表</span>
+			</a>
+		</li>
+	</ul>
+    </if>
+	<p class="title">团体认证</p>
+	<input type="hidden" id="isAttestation" value="{$Think.session.isAttestation}" />
+	<ul>
+		<li>
+			<a href="{:U('Index/groupVerify',array('name'=>团体认证))}" onclick="return sqResult();">
+				<img src="__PUBLIC__/Image/icon-user-menu.png" class="p-l icon">
+				<span class="p-l">申请认证</span>
+			</a>
+		</li>
+		<li>
+			<a href="{:U("User/groupVerifyResult")}">
+				<img src="__PUBLIC__/Image/icon-user-menu.png" class="p-l icon">
+				<span class="p-l">认证结果</span>
+			</a>
+		</li>
+	</ul>
+	<p class="title" style="margin-bottom:30px;">
+			<a href="{:U("User/suggest")}">投诉建议</a>
+	</p>
+</div>
+<script>
+	function sqResult(){
+		var isA = $("#isAttestation").val();
+		console.log(isA);
+		if(isA == 1){
+			alert("您的申请已通过！");
+			return false;
+		}else if(isA == 3){
+			alert("您的申请正在审核中，请勿重复申请！");
+			return false;
+		}
+	}
+
+</script>

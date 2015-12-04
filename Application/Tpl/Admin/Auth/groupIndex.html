@@ -1,0 +1,118 @@
+<include file="Public:header" />
+
+    <!--dynamic table-->
+    <link href="__PUBLIC__/Template/assets/advanced-datatable/media/css/demo_page.css" rel="stylesheet" />
+    <link href="__PUBLIC__/Template/assets/advanced-datatable/media/css/demo_table.css" rel="stylesheet" />
+    <link rel="stylesheet" href="__PUBLIC__/Template/assets/data-tables/DT_bootstrap.css" />
+
+ <include file="Public:menu" />
+
+    <!--main content start-->
+    <section id="main-content">
+        <section class="wrapper">
+        <!-- page start--> 
+        <div class="row">
+            <div class="col-md-12">
+                <!--breadcrumbs start -->
+                <ul class="breadcrumb">
+                    <li><a href="#"><i class="fa fa-home"></i> 首页</a></li>
+                    <li><a href="#">权限分配</a></li>
+                    <li class="active">权限分组</li>
+                </ul>
+                <!--breadcrumbs end -->
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-12">
+                <section class="panel">
+                    <header class="panel-heading">
+                        <button type="button" onclick="javascript:btnJump('groupAdd','')" class="btn btn-primary"><i class="fa fa-plus"></i> 新增</button>
+                        <!-- <button type="button" onclick="javascript:btnJump('ruleEdit')" class="btn btn-primary"><i class="fa fa-pencil"></i> 编辑</button> -->
+                        <!-- <button type="button" class="btn btn-primary"><i class="fa  fa-mail-reply"></i> 返回</button> -->
+                        <!-- <button type="button" onclick="javascript:btnJump('ruleDel')" class="btn btn-danger"><i class="fa fa-trash-o"></i> 删除</button> -->
+                    </header>
+                    <div class="panel-body">
+                    <div class="adv-table">
+                    <table cellpadding="0" cellspacing="0" border="0" class="display table table-bordered" id="groupTable">
+                    <thead>
+                    <tr>
+                        <th>编号</th>
+                        <th>权限分组名称</th>
+                        <th class="hidden-phone">状态</th>
+                        <th class="hidden-phone">权限规则</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <volist name="dGroup" id="vo">
+                    <tr class="gradeX">
+                        <td>{$vo.id}</td>
+                        <td>{$vo.title}</td> 
+                        <td class="center hidden-phone">{$vo.status}</td>
+                        <td class="center hidden-phone">{$vo.rules}</td>
+                        <td>
+                        <button type="button" onclick="javascript:btnJump('groupEdit',{$vo.id})" class="btn btn-primary"><i class="fa fa-pencil"></i> 编辑</button>
+                        <!-- <button type="button" class="btn btn-primary"><i class="fa  fa-mail-reply"></i> 返回</button> -->
+                        <button type="button" onclick="javascript:beforeDel('你确定要删除吗','groupDelete',{$vo.id})" class="btn btn-danger"><i class="fa fa-trash-o"></i> 删除</button>
+                        </td>
+                    </tr>
+                    </volist> 
+                    </tbody>
+                    </table>
+
+                    </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+        <!-- page end-->
+        </section>
+    </section>
+    <!--main content end-->
+ 
+
+</section>
+
+<include file="Public:footer" />
+
+<!--common script init for all pages-->
+<script src="__PUBLIC__/Template/js/scripts.js"></script> 
+<script>
+//表格
+$(function(){ 
+    dTable('#groupTable'); 
+});
+//btnJump
+function btnJump(method,id){
+    if(id != ''){
+        //alert("Auth/"+ method + "/id/" + id);
+        window.location.href = "/Admin/Auth/"+ method + "/id/" + id;
+    }else{
+        //alert("Auth/"+ method + "/");
+       window.location.href = "/Admin/Auth/"+ method + "/";
+    }
+}
+//del
+function del(method,id){
+    var url = "/Admin/Auth/" + method + "/";
+    var postData = {
+        'id':id
+    }
+    $.post(url,postData,function(data){
+        if(data.code == 2000){
+            window.location.href = "{:U('Auth/groupIndex')}";
+        }else{
+            alert(data.msg);
+        }
+    });
+}
+//before
+function beforeDel(msg,method,id){
+    if(confirm(msg)){ 
+        del(method,id);
+    }  
+}
+</script>
+</body>
+</html>

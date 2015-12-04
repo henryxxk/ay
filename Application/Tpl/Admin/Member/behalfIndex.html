@@ -1,0 +1,122 @@
+<include file="Public:header" />
+
+    <!--dynamic table-->
+    <link href="__PUBLIC__/Template/assets/advanced-datatable/media/css/demo_page.css" rel="stylesheet" />
+    <link href="__PUBLIC__/Template/assets/advanced-datatable/media/css/demo_table.css" rel="stylesheet" />
+    <link rel="stylesheet" href="__PUBLIC__/Template/assets/data-tables/DT_bootstrap.css" />
+
+ <include file="Public:menu" />
+
+    <!--main content start-->
+    <section id="main-content">
+        <section class="wrapper">
+        <!-- page start--> 
+        <div class="row">
+            <div class="col-md-12">
+                <!--breadcrumbs start -->
+                <ul class="breadcrumb">
+                    <li><a href="#"><i class="fa fa-home"></i> 首页</a></li>
+                    <li><a href="#">用户管理</a></li>
+                    <li class="active">代购用户列表</li>
+                </ul>
+                <!--breadcrumbs end -->
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-12">
+                <section class="panel">
+                    <header class="panel-heading">
+                       <!--  <button type="button" onclick="javascript:btnJump('add','')" class="btn btn-primary"><i class="fa fa-plus"></i> 新增商品</button> -->
+                        <!-- <button type="button" onclick="javascript:btnJump('ruleEdit')" class="btn btn-primary"><i class="fa fa-pencil"></i> 编辑</button> -->
+                        <!-- <button type="button" class="btn btn-primary"><i class="fa  fa-mail-reply"></i> 返回</button> -->
+                        <!-- <button type="button" onclick="javascript:btnJump('ruleDel')" class="btn btn-danger"><i class="fa fa-trash-o"></i> 删除</button> -->
+                    </header>
+                    <div class="panel-body">
+                    <div class="adv-table">
+                    <table cellpadding="0" cellspacing="0" border="0" class="display table table-bordered" id="myTable">
+                    <thead>
+                    <tr>
+                        <th>编号</th>
+                        <th>昵称</th>
+                        <th>手机号</th>
+                        <th>姓名</th>
+                        <th>头像</th>
+                        <th>会员类型</th>
+                        <th>积分</th>
+                        <th class="hidden-phone">状态</th>
+                        <th>注册时间</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <volist name="list" id="vo">
+                    <tr class="gradeX">
+                        <td>{$vo.id}</td>
+                        <td>{$vo.nickname}</td>
+                        <td>{$vo.tel}</td>
+                        <td>{$vo.name}</td>
+                        <td><img src="{$vo.imgUrl}" style="width:50px;" /></td>
+                        <td>{$vo.typeId|getTypeName}</td>
+                        <td>{$vo.score}</td>
+                        <td class="center hidden-phone">
+                            <if condition="($vo.status eq 1 ) and ($vo.isReplaceBuy eq 0 ) ">
+                                正常
+                            <elseif condition="($vo.status eq 1 ) and ($vo.isReplaceBuy eq 1 )" />
+                                申请代购中
+                            <elseif condition="($vo.status eq 1 ) and ($vo.isReplaceBuy eq 2 )" />
+                                申请代购失败
+                            <elseif condition="($vo.status eq 1 ) and ($vo.isReplaceBuy eq 3 )" />
+                                已是代购
+                            <elseif condition="$vo.status eq 0 " />
+                                已屏蔽
+                            </if>    
+                        </td>
+                        <td>{$vo.createtime|date="Y-m-d H:i",###}</td>
+                        <td>
+                            <button type="button" onclick="javascript:btnJump('/Admin/Member/behalfShow',{$vo.id})" class="btn btn-primary"><i class="fa fa-eye"></i> 查看</button>&nbsp;&nbsp;
+                        <!-- <button type="button" class="btn btn-primary"><i class="fa  fa-mail-reply"></i> 返回</button> -->
+                        <if condition="$vo.isReplaceBuy eq 1 ">
+                            <button type="button" onclick="javascript:btnJump('/Admin/Member/behalfShowCheck',{$vo.id})" class="btn btn-primary"> 待审核</button>&nbsp;&nbsp;
+                        </if>
+
+                        <if condition="$vo.status eq 0 ">
+                            <button type="button" onclick="javascript:changStatus('你确定要启用吗','/Admin/Member/statuschange',{$vo.id},1)" class="btn btn-round btn-danger"><i class="fa fa-magic"></i> 激活</button>
+                        <elseif condition="$vo.status eq 1 "/>
+                           <!--  <button type="button" onclick="javascript:btnJump('/Admin/Member/edit',{$vo.id})" class="btn btn-primary"><i class="fa fa-pencil"></i> 编辑</button>&nbsp;&nbsp; -->
+                            <button type="button" onclick="javascript:changStatus('你确定要禁用吗','/Admin/Member/statuschange',{$vo.id},0)" class="btn btn-round btn-danger"><i class="fa fa-exclamation-triangle"></i> 禁用</button>
+                        <elseif condition="$vo.status eq 2 " />
+                           <!--  <button type="button" onclick="javascript:btnJump('/Admin/Member/edit',{$vo.id})" class="btn btn-primary"><i class="fa fa-pencil"></i> 编辑</button>&nbsp;&nbsp; -->
+                            <button type="button" onclick="javascript:changStatus('你确定要禁用吗','/Admin/Member/statuschange',{$vo.id},0)" class="btn btn-round btn-danger"><i class="fa fa-exclamation-triangle"></i> 禁用</button>
+                        </if>   
+                        </td>
+                    </tr>
+                    </volist> 
+                    </tbody>
+                    </table>
+
+                    </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+        <!-- page end-->
+        </section>
+    </section>
+    <!--main content end-->
+ 
+
+</section>
+
+<include file="Public:footer" />
+
+<!--common script init for all pages-->
+<script src="__PUBLIC__/Template/js/scripts.js"></script> 
+<script>
+//表格
+$(function(){ 
+    dTable('#myTable'); 
+});
+</script>
+</body>
+</html>

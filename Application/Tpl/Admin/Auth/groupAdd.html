@@ -1,0 +1,95 @@
+<include file="Public:header" />
+
+    <!--dynamic table-->
+    <link href="__PUBLIC__/Template/assets/advanced-datatable/media/css/demo_page.css" rel="stylesheet" />
+    <link href="__PUBLIC__/Template/assets/advanced-datatable/media/css/demo_table.css" rel="stylesheet" />
+    <link rel="stylesheet" href="__PUBLIC__/Template/assets/data-tables/DT_bootstrap.css" />
+
+ <include file="Public:menu" />
+
+    <!--main content start-->
+    <section id="main-content">
+        <section class="wrapper">
+        <!-- page start--> 
+        <div class="row">
+            <div class="col-md-12">
+                <!--breadcrumbs start -->
+                <ul class="breadcrumb">
+                    <li><a href="#"><i class="fa fa-home"></i> 首页</a></li>
+                    <li><a href="#">权限分配</a></li>
+                    <li class="active">新增权限组</li>
+                </ul>
+                <!--breadcrumbs end -->
+            </div>
+        </div>
+
+        
+            <div class="row">
+                <div class="col-lg-12">
+                    <section class="panel">
+                        <header class="panel-heading">
+                            添加新权限组
+                            <span class="tools pull-right">
+                                <a class="fa fa-chevron-down" href="javascript:;"></a>
+                                <a class="fa fa-cog" href="javascript:;"></a>
+                                <a class="fa fa-times" href="javascript:;"></a>
+                             </span>
+                        </header>
+                        <div class="panel-body">
+                            <div class="form">
+                                <form class="cmxform form-horizontal " id="ruleForm" method="post" action="{:U('Auth/groupInsert')}">
+                                    <div class="form-group ">
+                                        <label for="title" class="control-label col-lg-3">规则名称</label>
+                                        <div class="col-lg-6">
+                                            <input class=" form-control" id="title" name="title" type="text" placeholder="例如: 后台首页" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group ">
+                                        <label for="rules" class="control-label col-lg-3">权限规则</label>
+                                        <div class="col-lg-6">
+                                            <input class="form-control " id="rules" name="rules" type="text" placeholder="权限规则" />
+                                        </div>
+                                    </div>
+                                      
+                                    <div class="form-group">
+                                        <div class="col-lg-offset-3 col-lg-6">
+                                            <button class="btn btn-primary" type="submit">添加</button>
+                                            <button class="btn btn-default" type="button">取消</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+            <!-- page end-->
+        <!-- page end-->
+        </section>
+    </section>
+    <!--main content end-->
+ 
+
+</section>
+
+<include file="Public:footer" />
+
+<!--common script init for all pages-->
+<script type="text/javascript" src="__PUBLIC__/Template/js/scripts.js"></script> 
+<script type="text/javascript" src="__PUBLIC__/Template/js/jquery-validate/jquery.validate.min.js"></script>
+<script>
+$(function(){ 
+    $("#ruleForm").validate({
+        rules: {
+            rules: "required",
+            title: "required"
+        },
+        messages: {
+            rules: "权限规则不可为空",
+            title: "规则名称不可为空"
+        }
+    });
+});
+</script>
+</body>
+</html>

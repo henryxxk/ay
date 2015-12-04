@@ -1,0 +1,364 @@
+<?php
+/**
+　* 功能:  支付发送
+　* 版权:  西安融联网络科技有限公司,Copyright (c) 2012
+　* 版本:  1.0.2 2013-04-17
+　*/
+
+class send {
+
+    var $parameter;       //参数数组
+    var $signkey;
+    var $url;
+
+    //构造函数
+    function send($parameter) {
+        //payUrl                           
+        //version                       (必填) 固定值:1.0.2 
+        //charset                       (必填) GBK或UTF-8
+        //signMethod                    (必填) MD5 
+        //payType                       (必填) B2B或B2C 
+        //transType                     (必填)01—消费交易 
+        //merId                         (必填) 与清算平台签约时 ，由清算平台统一分配。最长30位 
+        //backEndUrl                    (可选)不填写时，将无法 接收清算平台发送回来的支付结果通知数据。
+        //frontEndUrl                   (可选) 
+        //orderTime                     (必填) 格式： yyyyMMddHHmmss 
+        //orderNumber                   (必填) 商户的交易定单号 ,由商户网站生成,最大长度32 
+        //orderAmount                   (必填) 订单金额,金额单 位：分 
+        //orderCurrency                 (必填) 人民币,编码:156 
+        //defaultBankNumber             (必填) 建行：105 他行： 999 
+        //customerIp                    (可选) 
+        //merReserved1                  (可选) 商户自定义字段1 ，如果包含中文，需要按照提供的字符集进行编码转换 
+        //merReserved2                  (可选) 商户自定义字段1 ，如果包含中文，需要按照提供的字符集进行编码转换 
+        //merReserved3                  (可选) 商户自定义字段1 ，如果包含中文，需要按照提供的字符集进行编码转换 
+        //merSiteIP                     (可选) 后台商户防欺诈设 置：IP合法性校验 
+        //gateWay                       (可选) 此参数可以控制银行支付时网银上页面标签的显示
+        //terType                       (必填) 终端类型取值：00—PC机网页 01—自助设备 02—手持终端 03—后台服务端 默认值为00
+        //agentAmount                   (必填) 虚拟账号1=金额1|虚拟账号2=金额2|虚拟账号3=金额3
+        $this->parameter = $parameter;
+        
+        //支付密钥(必填): 需在支付平台进行设置,可登录商户管理系统进行维护,用于上送商户支付及下传支付结果加密
+        $this->signkey = $parameter['signkey'];
+        
+        //支付请求URL(必填)
+        $this->url = $parameter['payUrl'];
+    }
+
+    function getSign() {
+        $sign_src = "version=".$this->parameter['version']."&charset=".$this->parameter['charset']
+            ."&signMethod=".$this->parameter['signMethod']."&payType=".$this->parameter['payType']
+            ."&transType=".$this->parameter['transType']."&merId=".$this->parameter['merId']
+            ."&backEndUrl=".$this->parameter['backEndUrl']."&frontEndUrl=".$this->parameter['frontEndUrl']
+            ."&orderTime=".$this->parameter['orderTime']."&orderNumber=".$this->parameter['orderNumber']
+            ."&orderAmount=".$this->parameter['orderAmount']."&orderCurrency=".$this->parameter['orderCurrency']
+            ."&defaultBankNumber=".$this->parameter['defaultBankNumber']."&customerIp=".$this->parameter['customerIp']
+            ."&merReserved1=".$this->parameter['merReserved1']."&merReserved2=".$this->parameter['merReserved2']
+            ."&merReserved3=".$this->parameter['merReserved3']."&merSiteIP=".$this->parameter['merSiteIP']
+            ."&gateWay=".$this->parameter['gateWay']."&".md5($this->signkey);
+
+            dump($sign_src);
+        $sign = $this->sign($sign_src);
+        return $sign;
+    }
+
+    function sign($src) {
+        return md5($src);
+    }
+}
+
+$parameter = array(
+    "payUrl" => $_POST["payUrl"],                             //支付地址
+    "version" =>"1.0.1",                           //版本号
+    "charset" => $_POST["charset"],                           //字符编码
+    "signMethod" => $_POST["signMethod"],                     //签名方法
+    "payType" => $_POST["payType"],                           //支付类型
+    "transType" => $_POST["transType"],                       //交易类型
+    "merId" => $_POST["merId"],                               //商户编号
+    "backEndUrl" => $_POST["backEndUrl"],                     //通知URL
+    "frontEndUrl" => $_POST["frontEndUrl"],                   //返回URL
+    "orderTime" => "20150810145055",                       //交易时间
+    "orderNumber" => $_POST["orderNumber"],                   //商户订单号
+    "orderAmount" => $_POST["orderAmount"],                   //交易金额
+    "orderCurrency" => $_POST["orderCurrency"],               //交易币种    
+    "defaultBankNumber" => $_POST["defaultBankNumber"],       //银行编码
+    "customerIp" => $_POST["customerIp"],                     //持卡人IP
+    "merReserved1" => $_POST["merReserved1"],                 //商户保留域1
+    "merReserved2" => $_POST["merReserved2"],                 //商户保留域2
+    "merReserved3" => $_POST["merReserved3"],                 //商户保留域3
+    "merSiteIP" => $_POST["merSiteIP"],                       //商户网站IP
+    "gateWay" => $_POST["gateWay"],                           //网关类型
+    "signkey" => "SLZ99ESN1HIB59P6XWKZANQ33G4G6PH8NJJFI5YNXP49IJFG422WYKY1WEUB"
+);
+
+$send = new send($parameter);
+$sign=$send->getSign();
+$action = $send->url;
+
+foreach($parameter as $k=>$v){
+    dump($v);
+}
+var_dump($sign); 
+?>
+
+<html>
+    <head>
+        <script type="text/javascript">
+        function sub(){
+                document.getElementById("payform").submit();
+        }
+        </script>
+    </head>
+<!-- <body onLoad="sub();" style="display:none;"> -->
+<center>
+<h1>商户发送实例</h1>
+
+<form action="<?php echo $action;?>" method="post" name="payform" id="payform">
+    <table border="1" cellSpacing="0" width="60%" style="FONT-SIZE:12px">
+            <table border=1 cellSpacing=0 width="80%" style="FONT-SIZE: 12px">
+                <tr>
+                    <td align="right" width="20%">
+                        支付地址:
+                    </td>
+                    <td width="25%">
+                        <input name="payUrl" type="text"  value="http://test.ezf123.com/jspt/payment/payment.action">
+                    </td>
+                    <td width="55%">&nbsp;
+                        
+                    </td>
+                </tr>
+                <tr>
+                    <td align="right" width="20%">
+                        版本号:
+                    </td>
+                    <td width="25%">
+                        <input name="version" type="text" value="1.0.1">
+                    </td>
+                    <td width="55%">
+                        (必填) 固定值:1.0.2
+                    </td>
+                </tr>
+                <tr>
+                    <td align="right" width="20%">
+                        字符编码:
+                    </td>
+                    <td width="25%">
+                        <input name="charset" type="text" value="UTF-8">
+                    </td>
+                    <td width="55%">
+                        (必填) GBK或UTF-8
+                    </td>
+                </tr>
+                <tr>
+                    <td align="right" width="20%">
+                        签名方法:
+                    </td>
+                    <td width="25%">
+                        <input name="signMethod" type="text" value="MD5">
+                    </td>
+                    <td width="55%">
+                        (必填) MD5
+                    </td>
+                </tr>
+                <tr>
+                    <td align="right" width="20%">
+                        支付类型:
+                    </td>
+                    <td width="25%">
+                        <input name="payType" type="text" value="B2C">
+                    </td>
+                    <td width="55%">
+                        (必填) B2B或B2C
+                    </td>
+                </tr>
+
+                <tr>
+                    <td align="right" width="20%">
+                        交易类型:
+                    </td>
+                    <td width="25%">
+                        <input name="transType" type="text" value="01">
+                    </td>
+                    <td width="55%">
+                        (必填)01—消费交易
+                    </td>
+                </tr>
+                <tr>
+                    <td align="right" width="20%">
+                        商户编号:
+                    </td>
+                    <td width="25%">
+                        <input id="merId" name="merId" type="text" value="10301">
+                    </td>
+                    <td width="55%">
+                        (必填) 与清算平台签约时，由清算平台统一分配。最长30位
+                    </td>
+                </tr>
+                <tr>
+                    <td align="right" width="20%">
+                        通知URL:
+                    </td>
+                    <td width="25%">
+                        <input id="backEndUrl" name="backEndUrl" type="text"
+                            value="<?php echo $parameter['backEndUrl']; ?>">
+                    </td>
+                    <td width="55%">
+                        (可选)不填写时，将无法接收清算平台发送回来的支付结果通知数据。
+                    </td>
+                </tr>
+                <tr>
+                    <td align="right" width="20%">
+                        返回URL:
+                    </td>
+                    <td width="25%">
+                        <input id="frontEndUrl" name="frontEndUrl" type="text"
+                            value="<?php echo $parameter['frontEndUrl']; ?>">
+                    </td>
+                    <td width="55%">
+                        (可选)
+                    </td>
+                </tr>
+                <tr>
+                    <td align="right" width="20%">
+                        交易时间:
+                    </td>
+                    <td width="25%">
+                        <input id="orderTime" name="orderTime" type="text"
+                            value="20150810145055">
+                    </td>
+                    <td width="55%">
+                        (必填) 格式：yyyyMMddHHmmss
+                    </td>
+                </tr>
+                <tr>
+                    <td align="right" width="20%">
+                        商户订单号:
+                    </td>
+                    <td width="25%">
+                        <input name="orderNumber" type="text" value="201508101450291292">
+                    </td>
+                    <td width="55%">
+                        (必填) 商户的交易定单号,由商户网站生成,最大长度32
+                    </td>
+                </tr>
+                <tr>
+                    <td align="right" width="20%">
+                        交易金额:
+                    </td>
+                    <td width="25%">
+                        <input name="orderAmount" type="text" value="2000">
+                    </td>
+                    <td width="55%">
+                        (必填) 订单金额,金额单位：分
+                    </td>
+                </tr>
+                <tr>
+                    <td align="right" width="20%">
+                        交易币种:
+                    </td>
+                    <td width="25%">
+                        <input name="orderCurrency" type="text" value="156">
+                    </td>
+                    <td width="55%">
+                        (必填) 人民币,编码:156
+                    </td>
+                </tr>
+                <tr>
+                    <td align="right" width="20%">
+                        银行编码:
+                    </td>
+                    <td width="25%">
+                        <input name="defaultBankNumber" type="text"value="105">
+                    </td>
+                    <td width="55%">
+                        (必填) 建行：105 他行：999
+                    </td>
+                </tr>
+                <tr>
+                    <td align="right" width="20%">
+                        持卡人IP:
+                    </td>
+                    <td width="25%">
+                        <input name="customerIp" type="text" value="<?php echo $parameter['customerIp']; ?>">
+                    </td>
+                    <td width="55%">
+                        (可选)
+                    </td>
+                </tr>
+                <tr>
+                    <td align="right" width="20%">
+                        商户保留域1:
+                    </td>
+                    <td width="25%">
+                        <input name="merReserved1" type="text" value="<?php echo $parameter['merReserved1']; ?>">
+                    </td>
+                    <td width="55%">
+                        (可选) 商户自定义字段1，如果包含中文，需要按照提供的字符集进行编码转换
+                    </td>
+                </tr>
+                <tr>
+                    <td align="right" width="20%">
+                        商户保留域2:
+                    </td>
+                    <td width="25%">
+                        <input name="merReserved2" type="text" value="<?php echo $parameter['merReserved2']; ?>">
+                    </td>
+                    <td width="55%">
+                        (可选)商户自定义字段2，如果包含中文，需要按照提供的字符集进行编码转换
+                    </td>
+                </tr>
+                <tr>
+                    <td align="right" width="20%">
+                        商户保留域3:
+                    </td>
+                    <td width="25%">
+                        <input name="merReserved3" type="text" value="<?php echo $parameter['merReserved3']; ?>">
+                    </td>
+                    <td width="55%">
+                        (可选)商户自定义字段3，如果包含中文，需要按照提供的字符集进行编码转换
+                    </td>
+                </tr>
+                <tr>
+                    <td align="right" width="20%">
+                        商户网站IP:
+                    </td>
+                    <td width="25%">
+                        <input name="merSiteIP" type="text" value="<?php echo $parameter['merSiteIP']; ?>">
+                    </td>
+                    <td width="55%">
+                        (可选) 后台商户防欺诈设置：IP合法性校验
+                    </td>
+                </tr>
+                <tr>
+                    <td align="right" width="20%">
+                        网关类型:
+                    </td>
+                    <td width="25%">
+                        <input name="gateWay" type="text" value="<?php echo $parameter['gateWay']; ?>">
+                    </td>
+                    <td width="55%">
+                        (可选) 此参数可以控制银行支付时网银上页面标签的显示
+                    </td>
+                </tr>
+                <tr>
+                    <td align="right" width="20%">
+                        <font color="red">*</font>加密数据:
+                    </td>
+                    <td width="25%">
+                        <input name="sign" type="text" value="<?php echo $sign; ?>">
+                    </td>
+                    <td width="55%">
+                        加密数据验证
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3" align="center">
+                        <input name="s" type="submit" value=" 提   交 ">
+                    </td>
+                </tr>
+            </table>        
+    </table>
+</form>
+</center>
+</body>
+
+<html>

@@ -1,0 +1,287 @@
+<include file="Public:header" />
+
+    <!--dynamic table-->
+    <link href="__PUBLIC__/Template/assets/advanced-datatable/media/css/demo_page.css" rel="stylesheet" />
+    <link href="__PUBLIC__/Template/assets/advanced-datatable/media/css/demo_table.css" rel="stylesheet" />
+    <link rel="stylesheet" href="__PUBLIC__/Template/assets/data-tables/DT_bootstrap.css" /> 
+
+ <include file="Public:menu" />
+
+    <!--main content start-->
+    <section id="main-content" >
+        <section class="wrapper">
+            <div class="row">
+                <div class="col-md-12">
+                    <!--breadcrumbs start -->
+                    <ul class="breadcrumb">
+                        <li><a href="#"><i class="fa fa-home"></i> 首页</a></li>
+                        <li><a href="#"> 系统设置</a></li>
+                        <li class="active"> banner设置</li>
+                    </ul>
+                    <!--breadcrumbs end -->
+                </div>
+            </div>
+ 
+
+            <div class="row"> 
+            <div class="col-lg-12">
+            <!--tab nav start-->
+            <section class="panel">
+                <header class="panel-heading tab-bg-dark-navy-blue ">
+                    <ul class="nav nav-tabs">
+                        <li class=" <eq name='Think.get.submenu' value='banner1'>active</eq>">
+                            <a data-toggle="tab" href="#banner1"> 积分兑换banner图片</a>
+                        </li>
+                        <li class="<eq name='Think.get.submenu' value='banner2'>active</eq>">
+                            <a data-toggle="tab" href="#banner2"> VIP兑换banner图片</a>
+                        </li> 
+                    </ul>
+                </header>
+                <div class="panel-body">
+                    <div class="tab-content">
+
+                        <div id="banner1" class="tab-pane <eq name='Think.get.submenu' value='banner1'>active</eq>">
+                             <!--banner1-->
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <section class="panel">
+                                        <header class="panel-heading">
+                                         
+<!-- add  edit -->
+                                    <div class="form"  id="editBanner11">
+
+                                        <input type="hidden" id="id" value="{$list.id}">
+                                        <form class="cmxform form-horizontal " id="AddForm11" method="post" action="#">  
+                                        <!-- 上传图片 -->
+                                        <div class="form-group "> 
+                                        <div class="form-group last">
+                                            <label class="control-label col-md-3">上传图片</label>
+                                            <div class="col-md-9">
+                                                <div class="fileupload fileupload-new" data-provides="fileupload11">
+                                                    <div class="fileupload-new thumbnail" style="width: 200px; height: 150px;">
+                                                        <img id="imgView11" src="{$list.imgs}" alt="" />
+                                                    </div>
+                                                    <div class="fileupload-preview fileupload-exists thumbnail" style="max-width: 200px; max-height: 150px; line-height: 20px;"></div>
+                                                    <div>
+                                                               <span class="btn btn-white btn-file">
+                                                               <span class="fileupload-new fuBtn1"><i class="fa fa-paper-clip"></i> 选择图片</span>
+                                                               <span class="fileupload-exists fuBtn2"><i class="fa fa-undo"></i> 更换</span>
+                                                               <input type="file" id="uploadIcon11" class="default" value="{$list.imgs}" />
+                                                               </span>
+                                                                <!-- <a href="javascript:delImg({$k})" class="btn btn-danger fileupload-exists fuBtn11" data-dismiss="fileupload11"><i class="fa fa-trash"></i> 删除</a> -->
+                                                                <input type="hidden" id="imgs11" name="imgs" value="{$list.imgs}" />
+                                                        </div>
+                                                    </div> 
+                                                </div> 
+                                            </div>
+                                        </div> <!-- end 上传图片 -->
+
+                                        
+                                        <div class="form-group">
+                                            <div class="col-lg-offset-3 col-lg-6">
+                                                <button class="btn btn-primary" id="btnBanner11" type="button"> 修改</button>
+                                                <button class="btn btn-default cancelBtn" dataurl="/Admin/Sysconfig/banner/menu/system" type="button"> 取消</button>
+                                            </div>
+                                        </div>
+
+
+                                     </form>
+                                     </div>
+                                        </header>
+                                        <div class="panel-body"> 
+  
+                                          <div style="position: relative;margin:10px auto">
+                                          <a href="{$list.imgs}" target="_blank"><img src="{$list.imgs}" style="width:20%"></a>&nbsp;&nbsp;
+                                          <!-- <a href="javascript:edit('/Admin/Sysconfig/banneredit',{$vo.id});">修改</a>&nbsp;&nbsp; -->
+                                          <!-- <a href="javascript:del('你确定要删除吗','/Admin/Sysconfig/delete',{$vo.id});" style="color:red">删除</a> -->
+                                          </div> 
+                                     
+
+                                        </div>
+                                    </section>
+                                </div>
+                            </div>
+                            <!-- row end-->
+                        </div>
+<!--  热词 -->
+                        
+                        <div id="banner2" class="tab-pane <eq name='Think.get.submenu' value='banner2'>active</eq>">
+                             <!--banner1-->
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <section class="panel">
+                                        <header class="panel-heading">
+                                      
+<!-- add  edit -->
+                                    <div class="form"  id="editBanner22">
+                                        <form class="cmxform form-horizontal " id="AddForm22" method="post" action="#">  
+                                        <!-- 上传图片 -->
+                                        <div class="form-group "> 
+                                        <div class="form-group last">
+                                            <label class="control-label col-md-3">上传图片</label>
+                                            <div class="col-md-9">
+                                                <div class="fileupload fileupload-new" data-provides="fileupload22">
+                                                    <div class="fileupload-new thumbnail" style="width: 200px; height: 150px;">
+                                                        <img id="imgView22" src="{$list2.imgs}" alt="" />
+                                                    </div>
+                                                    <div class="fileupload-preview fileupload-exists thumbnail" style="max-width: 200px; max-height: 150px; line-height: 20px;"></div>
+                                                    <div>
+                                                               <span class="btn btn-white btn-file">
+                                                               <span class="fileupload-new fuBtn1"><i class="fa fa-paper-clip"></i> 选择图片</span>
+                                                               <span class="fileupload-exists fuBtn2"><i class="fa fa-undo"></i> 更换</span>
+                                                               <input type="file" id="uploadIcon22" class="default" />
+                                                               </span>
+                                                                <!-- <a href="javascript:delImg({$k})" class="btn btn-danger fileupload-exists fuBtn22" data-dismiss="fileupload22"><i class="fa fa-trash"></i> 删除</a>
+ -->                                                                <input type="hidden" id="imgs22" name="imgs" value="{$list2.imgs}" />
+                                                        </div>
+                                                    </div> 
+                                                </div> 
+                                            </div>
+                                        </div> <!-- end 上传图片 -->
+ 
+                                        <input type="hidden" id="id" value="{$list2.id}">
+                                        <div class="form-group">
+                                            <div class="col-lg-offset-3 col-lg-6">
+                                                <button class="btn btn-primary" id="btnBanner22" type="button"> 修改</button>
+                                                <button class="btn btn-default cancelBtn" dataurl="/Admin/Sysconfig/banner/menu/system" type="button"> 取消</button>
+                                            </div>
+                                        </div>
+
+
+                                     </form>
+                                     </div>
+                                        </header>
+                                        <div class="panel-body"> 
+  
+                                          <div style="position: relative;margin:10px auto">
+                                          <a href="{$list2.imgs}" target="_blank"><img src="{$list2.imgs}" style="width:20%"></a>&nbsp;&nbsp;
+                                         <!--  <a href="javascript:edit('/Admin/Sysconfig/banneredit',{$vo.id});">修改</a>&nbsp;&nbsp;
+                                          <a href="javascript:del('你确定要删除吗','/Admin/Sysconfig/delete',{$vo.id});" style="color:red">删除</a> -->
+                                          </div> 
+                                     
+
+                                        </div>
+                                    </section>
+                                </div>
+                            </div>
+                            <!-- row end-->
+                        </div>
+ 
+
+                    </div>
+                </div>
+            </section>
+            <!--tab nav start-->
+  
+                </div> 
+            </div>
+
+
+        </section>
+    </section>
+    <!--main content end-->
+  
+</section>
+
+
+<include file="Public:footer" /> 
+<!--common script init for all pages-->
+<script src="__PUBLIC__/Template/js/scripts.js"></script>  
+<script>
+//轮播图
+$(function(){ 
+//editBanner
+$('#editBanner11 #btnBanner11').click(function(){
+    var url = "__APP__/Admin/Sysconfig/bannerUpdate";
+    var postData = {
+        'id':9,
+        'their':'banner3',
+        'imgs':$('#editBanner11 #imgs11').val(),
+        'title':'',
+        'url':'',
+        'sort':''
+    }
+    console.log(postData);
+    $.post(url,postData,function(data){
+        console.log(data);
+        if(data.code == 2000){
+            window.location.reload();
+            //$('#bannerShow').append('<img src="'+$('#banner #imgs').val()+'" />');
+        }else{
+            alert(data.msg);
+        }
+    }); 
+});
+
+}); 
+//--------------
+ $(function(){
+    //editBanner
+$('#editBanner22 #btnBanner22').click(function(){
+    var url = "__APP__/Admin/Sysconfig/bannerUpdate";
+    var postData = {
+        'id':10,
+        'their':'banner2',
+        'imgs':$('#editBanner22 #imgs22').val(),
+        'title':'',
+        'url':'',
+        'sort':''
+    }
+    console.log(postData);
+    $.post(url,postData,function(data){
+        console.log(data);
+        if(data.code == 2000){
+            window.location.reload();
+            //$('#bannerShow').append('<img src="'+$('#banner #imgs').val()+'" />');
+        }else{
+            alert(data.msg);
+        }
+    }); 
+});
+ });
+
+ $(function(){
+    $("#uploadIcon11").localResizeIMG({
+      width: 1,
+      quality: 1,
+      success: function (result) {
+        var postData = 
+        {
+          "data":result.clearBase64,
+          "path":'./Public/Uploads/'
+        };
+        $.post("/Admin/Base/uploadImage",postData,function(data){
+            // console.log(data);
+            // eval("var data=" + data);
+            if(data["code"] == 2000){
+              $("#imgView11").attr('src',data["data"]);
+              $("#imgs11").val(data["data"]);
+              $(".fuBtn11").show();
+            } 
+        }) 
+       }
+    });
+    $("#uploadIcon22").localResizeIMG({
+      width: 1,
+      quality: 1,
+      success: function (result) {
+        var postData = 
+        {
+          "data":result.clearBase64,
+          "path":'./Public/Uploads/'
+        };
+        $.post("/Admin/Base/uploadImage",postData,function(data){
+            // console.log(data);
+            // eval("var data=" + data);
+            if(data["code"] == 2000){
+              $("#imgView22").attr('src',data["data"]);
+              $("#imgs22").val(data["data"]);
+              $(".fuBtn22").show();
+            } 
+        }) 
+       }
+    });
+});
+</script>
+</body>
+</html>

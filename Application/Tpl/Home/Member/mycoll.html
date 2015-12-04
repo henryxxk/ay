@@ -1,0 +1,139 @@
+<include file="Public:header" />
+<include file="Public:menu" />
+<div class="user">
+	<div class="container">
+		<div class="user-content">
+			<include file="Public:user_menu" />
+			<div class="user-right">
+				<div class="header">
+                    我的收藏
+                </div>
+                <div class="content">
+                    <div class="mycoll-content">
+                        <volist name="list" id="vo">
+                        <dl>
+                            <if condition="$vo['isOrNoExchange'] eq 0">
+                                <a href="{:U("GoodInfo/goodInfo",array("gId"=>$vo['id']))}">
+                            <elseif condition="$vo['isOrNoExchange'] eq 1" />
+                                <a href="{:U("GoodInfo/exchangeInfo",array("gId"=>$vo['id']))}">
+                            <elseif condition="$vo['isOrNoExchange'] eq 2" />
+                                <a href="{:U("GoodInfo/vipexchangeInfo",array("gId"=>$vo['id']))}">
+                            <else />
+                                <a href="{:U("GoodInfo/vipexchangeInfo",array("gId"=>$vo['id']))}"> 
+                            </if>    
+                            <dt>
+                                <img src="{$vo['imgTop']}" />
+                            </dt>
+                            <dd>{$vo.name}</dd>
+                            <dd class="mycoll-good-one-price">
+                                <img src='__PUBLIC__/Image/price.png' />{$vo.marketPrice}
+                            </dd>
+                        </a>
+                            <ul>
+                                <li>
+                                    <img src="__PUBLIC__/Image/sampImg/delete.png" />
+                                </li>
+                                <li class="mycoll-text-li">
+                                    <a href="javascript:cancelBtn()"  data="{$vo.fId}" class="cancelBtn">取消收藏</a>
+                                </li>
+                            </ul>
+                            <ul>
+                                <li>
+                                    <img src="__PUBLIC__/Image/sampImg/addbuycar.png" />
+                                </li>
+                                <li>
+                                    <a href="javascript:addChar({$vo.gId})">加入购物车</a>
+                                </li>
+                            </ul>
+                        </dl>
+                        </volist>
+                    </div>
+                    <div class="mycoll-page">
+                        <ul>
+                            <li>
+                                <a href="{:U('Member/mycoll',array('page'=>$curP-1))}">< 上一页</a>
+                            </li>
+                        </ul>
+                        <for start="0" end="$totalPage"> 
+                            <ul>
+                                <li>
+                                    <a href="{:U('Member/mycoll',array('page'=>$i+1))}">{$i+1}</a>
+                                </li>
+                            </ul>
+                        </for> 
+                        <ul>
+                            <li>
+                                <a href="{:U('Member/mycoll',array('page'=>$curP+1))}"> 下一页 ></a>
+                            </li>
+                        </ul>
+                        <ul class="mycoll-page-bg">
+                            <li>
+                                <a>到第</a>
+                            </li>
+                        </ul>
+                        <ul>
+                            <li>
+                                <input type="text" id="jumpNum" style="width:30px;" />
+                            </li>
+                        </ul>
+                        <ul class="mycoll-page-bg">
+                            <li>
+                                <a>页</a>
+                            </li>
+                        </ul>
+                        <ul>
+                            <li>
+                                <a id="jumpBtn">确定</a>
+                            </li>
+                        </ul>
+                    </div> 
+                </div>
+            </div>
+            
+		</div>
+	</div>
+</div>
+
+<include file="Public:footer" />
+<script type="text/javascript" src="__PUBLIC__/Js/mycoll.js"></script>
+<script> 
+$(function() {
+	$(".cancelBtn").click(function() {
+		if(!confirm('确认要取消收藏吗?')){
+		            return false;
+		       }
+		var url = "{:U('Member/cancelFavorites')}";
+		var postData = {
+		    'id':$(this).attr('data')
+		}
+		$.post(url,postData,function(data){
+		    if(data.code == 2000){
+		        window.location.reload();
+		    }else{
+		        alert(data.msg);
+		    }
+		});
+	});
+})
+$(function(){
+    $('#jumpBtn').click(function(){
+        var p = $('#jumpNum').val();
+        window.location.href = "/Member/mycoll/page/"+p;
+    });
+});  
+function addChar(gId){ 
+        var url = "{:U('Member/addChar')}"; 
+        var postData = {
+            'gId':gId,
+            'gNum':1 
+        }
+        $.post(url,postData,function(data){
+            console.log(data);
+            if(data.code == 2000){
+
+            }
+            alert(data.msg);
+        });
+}
+
+</script>

@@ -1,0 +1,85 @@
+<include file="Public:header" />
+
+    <!--dynamic table-->
+    <link href="__PUBLIC__/Template/assets/advanced-datatable/media/css/demo_page.css" rel="stylesheet" />
+    <link href="__PUBLIC__/Template/assets/advanced-datatable/media/css/demo_table.css" rel="stylesheet" />
+    <link rel="stylesheet" href="__PUBLIC__/Template/assets/data-tables/DT_bootstrap.css" />
+
+ <include file="Public:menu" />
+
+    <!--main content start-->
+    <section id="main-content">
+        <section class="wrapper">
+        <!-- page start--> 
+        <div class="row">
+            <div class="col-md-12">
+                <!--breadcrumbs start -->
+                <ul class="breadcrumb">
+                    <li><a href="#"><i class="fa fa-home"></i> 首页</a></li>
+                    <li><a href="#">VIP兑换管理</a></li>
+                    <li class="active">VIP用户兑换列表</li>
+                </ul>
+                <!--breadcrumbs end -->
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-12">
+                <section class="panel">
+                    <header class="panel-heading">
+                        <h2>VIP兑换专区</h2>
+                        <!-- <button type="button" onclick="javascript:btnJump('/Admin/Score/add/menu/sales','')" class="btn btn-primary"><i class="fa fa-plus"></i> 新增普通兑换商品</button> -->
+                        <!-- <button type="button" onclick="javascript:btnJump('ruleEdit')" class="btn btn-primary"><i class="fa fa-pencil"></i> 编辑</button> -->
+                        <button type="button" class="btn btn-primary"  onclick="javascript:btnJump('/Admin/Vip/index/menu/sales','')"><i class="fa  fa-mail-reply"></i> 返回</button>
+                        <!-- <button type="button" onclick="javascript:btnJump('ruleDel')" class="btn btn-danger"><i class="fa fa-trash-o"></i> 删除</button> -->
+                    </header>
+                    <div class="panel-body">
+                    <div class="adv-table">
+                    <table cellpadding="0" cellspacing="0" border="0" class="display table table-bordered" id="ruleTable">
+                    <thead>
+                    <tr>
+                        <th>编号</th>
+                        <th>VIP兑换用户</th>
+                        <th>Vip兑换单号</th>
+                        <th>Vip兑换邮费</th> 
+                        <th>Vip兑换时间</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <volist name="list" id="vo">
+                    <tr class="gradeX">
+                        <td>{$vo.id}</td>
+                        <td>{$vo.memberId|getUserField}</td>
+                        <td>{$vo.remark}</td>  
+                        <td>￥{$vo.freight}</td>
+                        <td>{$vo.createtime|date="Y-m-d H:i:s",###}</td>
+                    </tr>
+                    </volist> 
+                    </tbody>
+                    </table>
+
+                    </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+        <!-- page end-->
+        </section>
+    </section>
+    <!--main content end-->
+ 
+
+</section>
+
+<include file="Public:footer" />
+
+<!--common script init for all pages-->
+<script src="__PUBLIC__/Template/js/scripts.js"></script> 
+<script>
+//表格
+$(function(){ 
+    dTable('#ruleTable'); 
+});
+</script>
+</body>
+</html>

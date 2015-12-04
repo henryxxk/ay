@@ -1,0 +1,433 @@
+<include file="Public:header" />
+<include file="Public:menu" />
+<div class="location">
+	<div class="container">
+		<span class="location-main">首页></span>
+		<span class="location-sub">您正在搜索"<label id="search-name">{$search}</label>"</span>
+	</div>
+    <div class="container" style="margin-top:10px;"> <!-- height:70px; -->
+        <div style="width:60px;float:left;margin-right:-10px;">品牌搜索：</div>
+        <div style="margin-left:50px; position:relative;">
+            <ul class="location-sub" style="overflow: hidden;height:30px;">
+                <volist name="brands" id="br">
+                    <li style="width:190px;float:left;line-height:30px;"><a style="margin:0px 10px;padding:0px 20px;color:#858585;<if condition="$key%8 eq 0 and $key neq 0"></if>" href="{:U('Index/search',array('brandId'=>$br["id"],'sid'=>$_GET["sid"],'tid'=>$_GET["tid"],'name'=>$_GET["name"],'search'=>''))}">{$br.name}</a></li>
+                    <!-- <if condition="$key%8 eq 0 and $key neq 0">
+                        <br/><br/>
+                    </if> -->
+                </volist>
+            </ul>
+            <span class="show-more">更多<span class="btn-arrow-down"></span></span>
+            <span class="show-less" style="display:none;">收起<span class="btn-arrow-down"></span></span>
+            <script>
+                $(".show-more").click(function(){
+                    $("ul.location-sub").css("height","auto");
+                    $(".show-less").show();
+                    $(this).hide();
+                });
+                $(".show-less").click(function(){
+                    $("ul.location-sub").css("height","30px");
+                    $(".show-more").show();
+                    $(this).hide();
+                });
+            </script>
+        </div>
+
+    </div>
+</div>
+<if condition = "$searchlist eq ''">
+<div class="search-empty">
+	<div class="container">
+		<div class="p-l">
+			<img src="__PUBLIC__/Image/search-empty.png">
+		</div>
+		<div class="p-l">
+			<div class="search-empty-title">
+				十分抱歉，没有找到与"{$search}"相关的商品
+			</div>
+			<div class="search-empty-suggest">
+				<p>1、看看输入的文字是否有误
+</p>
+				<p>2、可尝试对搜索关键词根据其词义来进行拆分，输入多个词语搜索，可以获得更精确的搜索结果。
+例如：搜索<span style="color: #c00">"爱他美奶粉"</span>，可以改为搜索<span style="color: #c00">"爱他美 奶粉"</span>
+</p>
+			</div>
+		</div>
+	</div>
+	
+</div>
+<else/>
+<div class="search-result">
+    <div class="container">
+		<div class="search-left">
+            <div class="search-left-top">
+                <div id="search-con" class="search-left-top-con">
+                    <ul id="default">
+                        <li>
+                            <a>默认排序</a>
+                        </li>
+                    </ul>
+                    <ul id="sort">
+                        <li>
+                            <a>销量</a>
+                            <img src="__PUBLIC__/Image/good_down.png" />
+                        </li>
+                    </ul>
+                    <ul id="price">
+                        <li>
+                            <a>价格</a>
+                            <img src="__PUBLIC__/Image/good_down.png" />
+                        </li>
+                    </ul>
+                    <ul id="time">
+                        <li>
+                            <a>上架时间</a>
+                            <img src="__PUBLIC__/Image/good_down.png" />
+                        </li>
+                    </ul>
+                    <div class="search-left-top-con-page">
+                        <ul class="search-left-top-con-page-ul-first">
+                             <label id="currentPageNo">1</label>/<label id="totalPage">{$totalPage}</label>
+                        </ul>
+                        <ul class="pageUp">
+                            <li><<</li>
+                        </ul>
+                        <ul class="pageDown">
+                            <li>>></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="search-left-bottom">
+                <volist name="searchlist" id="ho" >
+                    <dl id="{$ho.id}" class="search-right-dl">
+                        <a id="{$ho.isOrNoExchange}" class="isOrExchange" href="javascript:;">
+                            <dt>
+                                <img src="__APP__{$ho.imgsArr.0}" style="width:130px;" />
+                            </dt>
+                            <dd>
+                                {$ho.name}
+                            </dd>
+                            <dd class="search-right-dl-price">
+                                <img src="__PUBLIC__/Image/price.png" />{$ho.marketPrice}
+                            </dd>
+                        </a>
+                    </dl>
+                </volist>
+            </div>
+            <div class="search-left-page">
+                <ul class="search-left-page-ul1 pageUp">
+                    <li>
+                        <a>< 上一页</a>
+                    </li>
+                </ul>
+                <if condition="$totalPage gt 3">
+                    <for start="0" end="3">
+                            <ul class="bottom-pageNo">
+                                <li>
+                                    <a>{$i+1}</a>
+                                </li>
+                            </ul>
+                    </for>
+                <ul class="search-left-page-ul2">
+                    <li>
+                        ...
+                    </li>
+                </ul>
+                <ul class="bottom-pageNo">
+                    <li>
+                        <a>{$totalPage}</a>
+                    </li>
+                </ul>
+                <else/>
+                <for start="0" end="$totalPage">
+                        <ul class="bottom-pageNo">
+                            <li>
+                                <a>{$i+1}</a>
+                            </li>
+                        </ul>
+                </for>
+                </if>
+                <div>
+                    <ul class="search-left-page-ul1 pageDown">
+                        <li>
+                            <a>下一页 ></a>
+                        </li>
+                    </ul>
+                    <ul class="search-left-page-ul2">
+                        <li>
+                            到第
+                        </li>
+                    </ul>
+                    <input id="pageNo" class="search-left-page-input" type="text" value="1" />
+                    <ul class="search-left-page-ul2">
+                        <li>
+                            页
+                        </li>
+                    </ul>
+                    <ul id="submit" class="search-left-page-ul1">
+                        <li>
+                            <a>确定</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+        </div>
+        <div class="search-right">
+            <img id="hot-img" src="__PUBLIC__/Image/hot_recom.png" />
+            <volist name="hotgoodInfos" id="ho" >
+                <dl id="{$ho.id}" class="search-right-dl">
+                    <dt>
+                        <img src="__APP__{$ho.imgsArr.0}" style="width:130px;" />
+                    </dt>
+                    <dd>
+                        {$ho.name}
+                    </dd>
+                    <dd class="search-right-dl-price">
+                        <img src="__PUBLIC__/Image/price.png" />{$ho.marketPrice}
+                    </dd>
+                </dl>
+            </volist>
+        </div>
+    </div>
+</div>
+</if>
+
+<input type="hidden" id="goPage" value="1" />
+<input type="hidden" id="search_pageNo" value="{$Think.session.sortPageNo}" />
+
+<include file="Public:footer" />
+<script type="text/javascript" src="__PUBLIC__/Js/search.js"></script>
+<script>
+    function searchData($con,$pageno,$pageSize,$name){
+        $("#search_pageNo").val($pageno);
+        var postData = {
+            'con':$con,
+            'pageNo':$pageno,
+            'pageSize':$pageSize,
+            'name':$name
+        };
+        var tid = "{$_GET["tid"]}";
+        if (tid != "") {
+            postData["tid"] = tid;
+        }  
+        var brandId = "{$_GET["brandId"]}";
+        if (brandId != "") {
+            postData["brandId"] = brandId;
+        }  
+        var url = "{:U('Index/goodsSort')}";
+        // console.log(postData);
+        $.post(url,postData,function(data){
+            // console.log(data);
+            if(data["code"] == 2000){
+                var list = data["data"]["list"];
+                var $dl = "";
+                for(var i=0;i<list.length;i++){
+                    $dl += "<dl id='"+list[i].id+"' class='search-right-dl'>"+
+                                "<dt>";
+                        if(list[i].imgsArr!=null){
+                            $dl += "<img src='"+"__APP__" + list[i].imgsArr[0]+"' style='width:130px;' />";
+                        }else{
+                            $dl += "<img src='"+"__APP__" + list[i].imgs+"' style='width:130px;' />";
+                        }
+                            $dl += "</dt>"+
+                                "<dd>"+ list[i].name+"</dd>"+
+                                "<dd class='search-right-dl-price'>"+
+                                    "<img src='__PUBLIC__/Image/price.png' />"+list[i].marketPrice+
+                                "</dd>"+
+                            "</dl>";
+                }
+                $(".search-left-bottom dl").detach();
+                $(".search-left-bottom").append($dl);
+                $(".search-left-bottom dl").bind({
+                    mouseover:function(){
+                        $(this).css({"background-image":"url(__APP__/Public/Image/search-good-bg.png)","background-repeat":"no-repeat","cursor":"pointer"});
+                    },
+                    mouseout:function(){
+                        $(this).css({"background-image":"none","cursor":"default"});
+                    }
+                });
+                $(".search-left-bottom dl").click(function(){
+                    var gId = $(this).attr("id");
+                    var pageno = $("#currentPageNo").text();
+                    window.location.href = "__APP__/GoodInfo/goodInfo/gId/"+gId+"/pageno/"+pageno;
+                });
+                
+                var totalPage = data["totalPage"];
+                var $ul = "";
+                for(var j=0;j<totalPage;j++){
+                    if((j+1)>2){
+                        $ul += "<ul class='search-left-page-ul2'>"+
+                                    "<li>"+
+                                        "..."+
+                                    "</li>"+
+                                "</ul>";
+                    }
+                    $ul += "<ul class='bottom-pageNo'>"+
+                                "<li>"+
+                                    "<a>"+(j+1)+"</a>"+
+                                "</li>"+
+                            "</ul>";
+                    
+                }
+                $("#pageUp").siblings("ul").remove();
+                $("#pageUp").after($ul);
+            }
+        });
+    }
+
+    //点击页码显示效果
+    function pageColor(pageNos){
+            $(pageNos).css({"background-color":"#d30909"});  
+
+            $(pageNos).children().children().css({"color":"white"});
+
+            $(".search-left-page-ul2").css({"background-color":"white","color":"#000000"});
+
+            $(".search-left-page-ul3").css({"background-color":"white","color":"#000000"});
+
+            $(pageNos).siblings().css({"background-color":"#f4f4f4"});
+
+            $(pageNos).siblings().children().children().css({"color":"#000000"});
+    }
+
+
+    $(function(){
+        //默认排序，销量，价格，上架时间
+        var totalPage = $("#totalPage").text();
+        var name = $("#search-name").text();
+        $(".bottom-pageNo").click(function(){
+            var pageNo = $(this).children().children().text();
+            $("#currentPageNo").text(pageNo);
+            $("#pageNo").val(pageNo);
+            searchData($con,pageNo,8,name);
+        });
+        $(".bottom-pageNo").click(function(){
+                pageColor($(this));
+        });
+        //默认选中第一页效果
+        pageColor($(".bottom-pageNo:eq(0)"));
+
+        var $con = 1;      //当前条件（默认排序，销量，价格，上架时间）
+        var postData = {
+            'con':1,
+            'name':name
+        };
+        var url = "{:U('Index/goodsSort')}";
+
+        console.log($("#search_pageNo").val());
+        if(parseInt($.trim($("#search_pageNo").val()))>1){
+                $(".bottom-pageNo").each(function(){
+                        if($(this).children().children().text()==$("#search_pageNo").val()){
+                                pageColor($(this));
+                        }
+                });
+                searchData(1,$("#search_pageNo").val(),8,name);
+        }
+
+         $('#pageNo').bind('keyup', function(event) {
+                if (event.keyCode == "13") {
+                    //回车执行查询
+                    var pageNo = $(this).val();
+                    if(isNaN(pageNo)){
+                            pageNo = 1;
+                            $('#pageNo').val(1);
+                    }
+                    searchData($con,pageNo,8,name);
+                    $(".bottom-pageNo").each(function(){
+                            if($(this).children().children().text()==pageNo){
+                                    pageColor($(this));
+                            }
+                    });
+                }
+            });
+
+        $("#default").click(function(){
+            $con = 1;
+            // console.log($con);
+            searchData(1,1,8,name);
+        });
+        $("#sort").click(function(){
+            $con = 1;
+            searchData(1,1,8,name);
+        });
+        $("#price").click(function(){
+            $con = 2;
+            searchData(2,1,8,name);
+        });
+        $("#time").click(function(){
+            $con = 3;
+            searchData(3,1,8,name);
+        });
+        
+        //上一页，下一页，确定，输入框
+        $(".pageUp").click(function(){
+            var pageNo = $("#currentPageNo").text();
+            pageNo--;
+            if(pageNo<=0){
+                pageNo = 1;
+            }
+            $("#currentPageNo").text(pageNo);
+            $("#pageNo").val(pageNo);
+            console.log(name);
+            searchData($con,pageNo,8,name);
+
+            $(".bottom-pageNo").each(function(){
+                    if($(this).children().children().text()==pageNo){
+                            pageColor($(this));
+                    }
+            });
+        });
+        $(".pageDown").click(function(){
+            var pageNo = $("#currentPageNo").text();
+            pageNo++;
+            if(pageNo>=totalPage){
+                pageNo = totalPage;
+            }
+            $("#currentPageNo").text(pageNo);
+            $("#pageNo").val(pageNo);
+            searchData($con,pageNo,8,name);
+
+            $(".bottom-pageNo").each(function(){
+                    if($(this).children().children().text()==pageNo){
+                            pageColor($(this));
+                    }
+            });
+        });
+        $("#submit").click(function(){
+            var pageNo = $("#pageNo").val();
+            searchData($con,pageNo,8,name);
+
+            $(".bottom-pageNo").each(function(){
+                    if($(this).children().children().text()==pageNo){
+                            pageColor($(this));
+                    }
+            });
+        });
+        $(".search-right dl").click(function(){
+            var gId = $(this).attr("id");
+            var pageno = $("#currentPageNo").text();
+            window.location.href = "__APP__/GoodInfo/goodInfo/gId/"+gId+"/pageno/"+pageno;
+        });
+        $(".search-left-bottom dl").click(function(){
+            var gId = $(this).attr("id");
+            var pageno = $("#currentPageNo").text();
+            window.location.href = "__APP__/GoodInfo/goodInfo/gId/"+gId+"/pageno/"+pageno;
+        });
+        $(".search-right-dl").click(function(){
+            var pageno = $("#currentPageNo").text();
+            var isOr = $(this).children(".isOrExchange").attr("id");
+            var gId = $(this).attr("id"); 
+            if(isOr==0){
+                window.location.href = "__APP__/GoodInfo/goodInfo/gId/"+gId+"/pageno/"+pageno;
+            }else if(isOr==1){
+                window.location.href = "__APP__/GoodInfo/exchangeInfo/gId/"+gId+"/pageno/"+pageno;
+            }else if(isOr==2){
+                window.location.href = "__APP__/GoodInfo/vipexchangeInfo/gId/"+gId+"/pageno/"+pageno;
+            }else{
+                window.location.href = "__APP__/GoodInfo/goodInfo/gId/"+gId+"/pageno/"+pageno;
+            }
+        });
+        
+    });
+</script>

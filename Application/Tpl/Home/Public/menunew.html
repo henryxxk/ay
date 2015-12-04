@@ -1,0 +1,246 @@
+<style>
+    .menu{
+        height:722px;
+    }
+    .menu .menu-top{
+        clear:both;
+        overflow: hidden;
+    }
+    .menu .menu-top .logo{
+        height: 196px;
+        line-height: 196px;
+        padding-top: 50px;
+        width:354px;
+        margin: 0 auto;
+    }
+    .fcenter{
+        margin:0 auto;
+    }
+.search{
+    position: relative;
+}
+.lcircle{
+    width:25px;
+    height:45px;
+    background-color: #cf000e;
+    border-radius: 70px 0 0 70px;
+}
+.rcircle{
+    width:25px;
+    height:45px;
+    background-color: #cf000e;
+    border-radius: 0 70px 70px 0;
+}
+    .fl.search-input{
+
+    }
+    .menu .menu-top .search {
+        width: 542px;
+        height: 45px;
+        overflow: visible;
+        margin: 385px auto 232px auto;
+    }
+.menu .menu-top .search .search-input{
+    width: 470px;
+    height: 25px;
+    border-right:2px solid #cf000e;
+    border-top:10px solid  #cf000e;
+    border-bottom: 10px solid  #cf000e;
+    border-left:20px solid  #cf000e;
+    margin-top: 20px;
+}
+.menu .menu-top .search .search-input input{
+    width: 400px;
+    padding-left: 10px;
+    padding-right: 10px;
+    height: 25px;
+    border:none;
+}
+.login-btn{
+
+    display: block;
+    height: 54px;
+    width:50px;
+    line-height: 54px;
+    color: #FFF;
+    font-size: 14px;
+    text-align: center;
+    background-color: #cf000e;
+}
+    .menu .menu-bottom{
+        clear:both;
+        overflow: hidden;
+        height: 60px;
+        background: #563833;
+    }
+    .menu .menu-bottom .all-cate{
+         background-color: #563833;
+        width: 222px;
+        height: 60px;
+        line-height: 60px;
+        font-size: 16px;
+        display: inline-block;
+        text-align: center;
+        color: #FFF;
+    }
+    .menu .menu-bottom li{
+        height: 60px;
+        background-color: #563833;
+        float: left;
+        transition:.3s all;
+    }
+    .menu .menu-bottom li a{
+        height: 60px;
+        line-height: 60px;
+        font-size: 16px;
+        width: 110px;
+        text-align: center;
+        display: inline-block;
+        color: #FFF;
+    }
+    .headbg{
+        margin:0 auto;
+        background: url(__PUBLIC__/Image/headbg.png) no-repeat;
+        background-size:100% 100%;
+    }
+    .treelogo {
+        position: absolute;
+        width: 467px;
+        height: 44px;
+        top: -40px;
+        background: url(/Public/Image/trees.png) no-repeat;
+        background-size: 100% 100%;
+        left: 37px;
+    }
+
+</style>
+
+
+<div class="menu">
+    <div class="headbg">
+    <div class="menu-top">
+        <div class="container">
+            <!--div class="fcenter"-->
+                <div class="search">
+                    <div class="treelogo"></div>
+                    <div class="fl lcircle"></div>
+                    <div class="search-input fl" style="height:25px;margin-top: 0;">
+                        <input id="goodName" onkeydown="keydownEvent();" type="text" class="p-l"  style="height:25px;margin-top: 0;" placeholder="请输入商品名称">
+                        <a id="searchGood" class="login-btn fl" style="height:25px;margin-top: 0;line-height: 25px;">
+                            <img>
+                            搜索
+                        </a>
+                    </div>
+                    <div class="rcircle fl"></div>
+                    <div class="hot-keys">
+                        <ul>
+                            <li>
+                                热门搜索：
+                            </li>
+                            <volist name="hotword" id="vo">
+                                <li>
+                                    <a href="{:U("Index/search",array("name"=>$vo))}">{$vo}</a>
+                                </li>
+                            </volist>
+                        </ul>
+                    </div>
+                </div>
+            <!--/div-->
+            <!--div class="p-l menu-ensure">
+                <img src="__PUBLIC__/Image/img-hgjg.png">
+                <img src="__PUBLIC__/Image/img-zpbz.png">
+            </div-->
+        </div>
+    </div>
+
+    </div>
+    <div class="menu-bottom">
+        <div class="container" style="        background-color:#563833;">
+            <a id="all-good-type" href="javascript:;" class="all-cate p-l">
+                全部商品分类
+                <i class="icon-angle-down" style="margin-left: 10px;font-size: 20px;"></i>
+            </a>
+            <ul class="p-l">
+                <li>
+                    <a href="{:U("Index/index")}">首页</a>
+                </li>
+                <li>
+                    <a href="{:U("Index/scoreExchange")}">积分兑换</a>
+                </li>
+                <li>
+                    <a href="{:U("Index/vipZone")}">VIP专区</a>
+                </li>
+            </ul>
+        </div>
+        <div class="container">
+            <div id="menu-daohang-total">
+                <div class="menu-daohang" style="z-index:1000;">
+                    <volist name="type" id="t" key="k">
+                        <dl id="{$t.id}" class="menu-daohang-dl menu-daohang-dl3">
+                            <dt class="menu-daohang-dl-dt">
+                            <div class="main">
+                                <img src="__PUBLIC__/Image/daohang{$k}.png"  data-sel="__PUBLIC__/Image/daohang{$k}_hover.png" data-unsel="__PUBLIC__/Image/daohang{$k}.png"/>
+                                <a href="{:U('Index/search',array('tid'=>$t["id"]))}">{$t.name}</a>
+                            </div>
+
+                            <p class="info">
+                                <volist name="t.typeArr" id="vo" offset="0" length="3">
+                                    <a href="{:U('Index/search',array('sid'=>$vo["id"]))}">{$vo.name}</a>
+                                </volist>
+                            </p>
+
+                            </dt>
+                            <dd class="menu-daohang-dl-dd" dataid="{$t[id]}"  style="display: none;">
+                                <volist name="t.typeArr" id="vo">
+                                    <a href="{:U('Index/search',array('sid'=>$vo["id"]))}">{$vo.name}</a>
+                                </volist>
+                            </dd>
+                            <dt></dt>
+                        </dl>
+                    </volist>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script type="text/javascript" src="__PUBLIC__/Js/menu.js"></script>
+<script>
+    function keydownEvent() {
+        var e = window.event || arguments.callee.caller.arguments[0];
+        if (e && e.keyCode == 13 ) {
+            var name = $("#goodName").val();
+            if($.trim(name)==""){
+                alert("请输入搜索内容");
+                return;
+            }
+            window.location.href = "__APP__/Index/search/name/" + $.trim(name);
+        }
+    }
+    $(function(){
+        $(".menu-daohang dl").hover(function(){
+            $(this).children("dd").fadeIn();
+            $(this).children("dt").children("div").children("img").attr("src",$(this).children("dt").children("div").children("img").attr("data-sel"));
+
+
+        },function(){
+            $(this).children("dd").fadeOut();
+            $(this).children("dt").children("div").children("img").attr("src",$(this).children("dt").children("div").children("img").attr("data-unsel"));
+
+        });
+        $("#searchGood").click(function(){
+            var name = $("#goodName").val();
+            if($.trim(name)==""){
+                alert("请输入搜索内容");
+                return;
+            }
+            window.location.href = "__APP__/Index/search/name/" + $.trim(name);
+        });
+//        $(".hot-keys li a").click(function(){
+//            var type = $(this).html();
+//            window.location.href = "__APP__/Index/search/type/" + type;
+//        });
+    });
+</script>

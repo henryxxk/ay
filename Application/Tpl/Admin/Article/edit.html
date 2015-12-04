@@ -1,0 +1,178 @@
+<include file="Public:header" />
+
+    <!--dynamic table-->
+    <link href="__PUBLIC__/Template/assets/advanced-datatable/media/css/demo_page.css" rel="stylesheet" />
+    <link href="__PUBLIC__/Template/assets/advanced-datatable/media/css/demo_table.css" rel="stylesheet" />
+    <link rel="stylesheet" href="__PUBLIC__/Template/assets/data-tables/DT_bootstrap.css" />
+
+ <include file="Public:menu" />
+
+    <!--main content start-->
+    <section id="main-content">
+        <section class="wrapper">
+        <!-- page start--> 
+        <div class="row">
+            <div class="col-md-12">
+                <!--breadcrumbs start -->
+                <ul class="breadcrumb">
+                    <li><a href="#"><i class="fa fa-home"></i> 首页</a></li>
+                    <li><a href="#"> 文章管理</a></li>
+                    <li class="active"> 编辑文章</li>
+                </ul>
+                <!--breadcrumbs end -->
+            </div>
+        </div>
+
+        
+            <div class="row">
+                <div class="col-lg-12">
+                    <section class="panel">
+                        <header class="panel-heading">
+                            编辑文章
+                        </header>
+                        <div class="panel-body">
+                            
+                             <div class="form">
+                                <form class="cmxform form-horizontal " id="myForm" method="post" action="{:U('Article/update')}"> 
+                                    <div class="form-group ">
+                                        <label for="typeId" class="control-label col-lg-3">选择所属分类</label>
+                                        <div class="col-lg-6">
+                                            <select id="typeId" name="typeId" class="form-control form-inline  m-bot15" style="width:200px;float:left;color:#000">
+                                                <option value="{$list.treePathIdArr.0}">{$list.treePathNameArr.0}</option>
+                                               <!--  <option value="0">[无分类]</option>
+                                                <volist name="articleType" id="vo"> 
+                                                    <option value="{$vo.id}">{$vo.name}</option> 
+                                                </volist>  -->
+                                            </select> 
+                                        </div> 
+                                    </div>
+                                    <div class="form-group ">
+                                        <label for="title" class="control-label col-lg-3">标题</label>
+                                        <div class="col-lg-6">
+                                            <input class=" form-control" id="title" name="title" type="text" value="{$list.title}" />
+                                        </div>
+                                    </div> 
+                                    <div class="form-group ">
+                                        <label for="author" class="control-label col-lg-3">作者</label>
+                                        <div class="col-lg-6">
+                                            <input class=" form-control" id="author" name="author" type="text" value="{$list.author}" />
+                                        </div>
+                                    </div> 
+                                    <!-- <div class="form-group "> 
+                                        <div class="form-group last">
+                                            <label class="control-label col-md-3">商品图片</label>
+                                            <div class="col-md-9">
+                                                <div class="fileupload fileupload-new" data-provides="fileupload">
+                                                    <div class="fileupload-new thumbnail" style="width: 200px; height: 150px;">
+                                                        <img id="imgView" src="http://www.placehold.it/200x150/EFEFEF/AAAAAA&amp;text=no+image" alt="" />
+                                                    </div>
+                                                    <div class="fileupload-preview fileupload-exists thumbnail" style="max-width: 200px; max-height: 150px; line-height: 20px;"></div>
+                                                    <div>
+                                                               <span class="btn btn-white btn-file">
+                                                               <span class="fileupload-new fuBtn1"><i class="fa fa-paper-clip"></i> 选择图片</span>
+                                                               <span class="fileupload-exists fuBtn2"><i class="fa fa-undo"></i> 更换</span>
+                                                               <input type="file" id="uploadIcon" class="default" />
+                                                               </span>
+                                                                <a href="javascript:delImg()" class="btn btn-danger fileupload-exists fuBtn3" data-dismiss="fileupload"><i class="fa fa-trash"></i> 删除</a>
+                                                    </div>
+                                                </div> 
+                                            </div> 
+                                        </div>
+                                    </div>  -->
+                                    
+                                    <div class="form-group">
+                                        <label for="desc" class="control-label col-lg-3">内容</label>
+                                        <div class="col-lg-6">
+                                            <script type="text/javascript" charset="utf-8" src="__PUBLIC__/Plugin/ueditor/ueditor.config.js"></script>
+                                            <script type="text/javascript" charset="utf-8" src="__PUBLIC__/Plugin/ueditor/ueditor.all.min.js"> </script>
+                                            <script type="text/javascript" charset="utf-8" src="__PUBLIC__/Plugin/ueditor/lang/zh-cn/zh-cn.js"></script>
+                                            <script id="editor" name="content" type="text/plain" style="width:auto;height:500px;">{$list.content}</script>
+                                            <script type="text/javascript">
+                                               var ue = UE.getEditor('editor');
+                                            </script>
+                                            <!-- 百度编辑器 -->
+                                        </div>
+                                    </div>
+ 
+                                    <input type="hidden" name="id" value="{$list.id}" />
+                                    <input type="hidden" name="status" value="1" />
+                                    <!-- <input type="hidden" name="imgs" id="imgs" value="" /> -->
+
+                                    <div class="form-group">
+                                        <div class="col-lg-offset-3 col-lg-6">
+                                            <button class="btn btn-primary" type="submit"> 修改</button>
+                                            <button class="btn btn-default cancelBtn" dataurl="/Admin/Article/index/menu/article" type="button"> 取消</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div><!-- end form -->
+                    </section>
+                </div>
+            </div>
+            <!-- page end-->
+        <!-- page end-->
+        </section>
+    </section>
+    <!--main content end-->
+ 
+
+</section>
+
+<include file="Public:footer" />
+
+<!--common script init for all pages-->
+<script type="text/javascript" src="__PUBLIC__/Template/js/scripts.js"></script> 
+<script type="text/javascript" src="__PUBLIC__/Template/js/jquery-validate/jquery.validate.min.js"></script>
+<script> 
+//图片删除
+// function delImg(){
+//     console.log($('#imgs').val());
+//     $.post("{:U('/Admin/Base/delUploadImage')}",{'imgs':'.'+$('#imgs').val()},function(data){
+//         console.log(data);
+//         // eval("var data=" + data);
+//         if(data["code"] == 2000){
+//           $("#imgView").attr('src','http://www.placehold.it/200x150/EFEFEF/AAAAAA&amp;text=no+image');
+//           $("#imgs").val('');
+//           $(".fuBtn3").hide();
+//         } 
+//         console.log(data.msg);
+//     }) 
+// }
+
+$(function(){ 
+    $("#myForm").validate({
+        rules: {
+            typeId: "required",
+            title: "required"
+        },
+        messages: {
+            typeId: "请选择分类",
+            title: "标题不可为空"
+        }
+    });
+     //图片上传
+      // $("#uploadIcon").localResizeIMG({
+      //     width: 1,
+      //     quality: 1,
+      //     success: function (result) {
+      //       var postData = 
+      //       {
+      //         "data":result.clearBase64,
+      //         "path":'./Public/Uploads/'
+      //       };
+      //       $.post("{:U('/Base/uploadImage')}",postData,function(data){
+      //           // console.log(data);
+      //           // eval("var data=" + data);
+      //           if(data["code"] == 2000){
+      //             $("#imgView").attr('src',data["data"]);
+      //             $("#imgs").val(data["data"]);
+      //             $(".fuBtn3").show();
+      //           } 
+      //       }) 
+      //      }
+      //  });
+});
+</script>
+</body>
+</html>

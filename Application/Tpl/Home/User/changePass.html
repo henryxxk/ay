@@ -1,0 +1,81 @@
+<include file="Public:header" />
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/Css/newcommon.css">
+<include file="Public:menu" />
+<div class="user">
+	<div class="container">
+		<div class="user-content">
+			
+			<include file="Public:user_menu" />
+			<div class="user-right">
+				<div class="header">
+					修改密码
+				</div>
+				<div class="content">
+					<div class="pub" style="margin-top:20px;">
+						<label class="" >当前密码：</label>
+						<input type="password" id="oldPwd">
+						<p class="tip" style="color:#d92921">*请输入旧密码</p>
+					</div>
+					<div class="pub" style="margin-top:20px;">
+						<label class="" >设置新密码：</label>
+						<input type="password" id="newPwd">
+						<p class="tip" style="color:#d92921">*请输入新密码</p>
+					</div>
+					<div class="pub" style="margin-top:20px;">
+						<label class="" >确认新密码：</label>
+						<input type="password" id="rePwd">
+						<p class="tip" style="color:#d92921">*请再次输入新密码</p>
+					</div>
+					<a href="javascript:;" class="login-btn p-l" style="width:300px;display:inline-block;margin-bottom:60px;margin-left:110px;" id="sub">提交</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+	$(function(){
+
+		$("#sub").click(function(){
+
+			var oldPwd = $("#oldPwd").val();
+			var newPwd = $("#newPwd").val();
+			var rePwd = $("#rePwd").val();
+			if(oldPwd == ""
+				|| newPwd == ""
+				|| rePwd == ""){
+
+				alert("请将信息填写完整！");
+				return;
+			}
+			if(newPwd != rePwd){
+
+				alert("两次输入新密码不一致！");
+				return;
+			}
+			var postData = {
+				oldPwd:oldPwd,
+				newPwd:newPwd,
+				rePwd:rePwd
+			}
+			$.post("{:U("Member/updatePwdBymId")}",postData,function(data){
+				switch(data["code"]){
+					case 2000:{
+						$("#oldPwd").val("");
+						alert("修改成功！");
+						return;
+					}
+					case -2002:{
+						alert("原密码输入不正确，请重新输入！");
+						return;
+					}
+					default:{
+						alert("系统繁忙，请稍后再试！");
+						return;
+					}
+				}
+
+			})
+		})
+	})
+</script>
+<include file="Public:footer" />

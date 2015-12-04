@@ -1,0 +1,108 @@
+<include file="Public:header" />
+
+    <!--dynamic table-->
+    <link href="__PUBLIC__/Template/assets/advanced-datatable/media/css/demo_page.css" rel="stylesheet" />
+    <link href="__PUBLIC__/Template/assets/advanced-datatable/media/css/demo_table.css" rel="stylesheet" />
+    <link rel="stylesheet" href="__PUBLIC__/Template/assets/data-tables/DT_bootstrap.css" />
+
+ <include file="Public:menu" />
+
+    <!--main content start-->
+    <section id="main-content">
+        <section class="wrapper">
+        <!-- page start--> 
+        <div class="row">
+            <div class="col-md-12">
+                <!--breadcrumbs start -->
+                <ul class="breadcrumb">
+                    <li><a href="#"><i class="fa fa-home"></i> 首页</a></li>
+                    <li><a href="#"> 代金券管理</a></li>
+                    <li class="active"> 代金券赠送</li>
+                </ul>
+                <!--breadcrumbs end -->
+            </div>
+        </div>
+
+        
+            <div class="row">
+                <div class="col-lg-12">
+                    <section class="panel">
+                        <header class="panel-heading">
+                            赠送代金券
+                        </header>
+                        <div class="panel-body">
+                            
+                             <div class="form">
+                                <form class="cmxform form-horizontal " id="AddForm" method="post" action="{:U('Voucherinfo/sendinsert')}">  
+                                    <div class="form-group ">
+                                        <label for="userId" class="control-label col-lg-3">选择用户</label>
+                                        <div class="col-lg-6">
+                                            <select id="userId" name="userId" class="form-control form-inline  m-bot15" style="width:200px;float:left;color:#000">
+                                                <option value="0">[无用户]</option>
+                                                <volist name="dUser" id="vo">
+                                                    <option value="{$vo.id}">{$vo.name}</option>
+                                                </volist>
+                                            </select>  
+                                        </div>
+                                    </div>  
+                                   
+                                    <div class="form-group ">
+                                        <label for="name" class="control-label col-lg-3">代金券名称</label>
+                                        <div class="col-lg-6" style="padding-top: 7px">
+                                            {$dVoucherinfo.name}
+                                        </div>
+                                    </div> 
+                                    <div class="form-group ">
+                                        <label for="money" class="control-label col-lg-3">代金券金额</label>
+                                        <div class="col-lg-6" style="padding-top: 7px">
+                                            {$dVoucherinfo.money}
+                                        </div>
+                                    </div> 
+                                   <!--  <div class="form-group " id="prGroupPrice">
+                                        <label for="condition" class="control-label col-lg-3">代金券使用条件</label>
+                                        <div class="col-lg-6" style="padding-top: 7px">
+                                            {$dVoucherinfo.condition}
+                                        </div>
+                                    </div> -->  
+
+                                    <div class="form-group " id="prVipPrice">
+                                        <label for="startTime" class="control-label col-lg-3">生效时间</label>
+                                        <div class="col-lg-6" style="padding-top: 7px"> 
+                                            {$dVoucherinfo.startTime|date="Y-m-d H:i:s",###}
+                                        </div>
+                                    </div> 
+                                    <div class="form-group " id="prVipPrice">
+                                        <label for="endTime" class="control-label col-lg-3">失效时间</label>
+                                        <div class="col-lg-6" style="padding-top: 7px"> 
+                                            {$dVoucherinfo.endTime|date="Y-m-d H:i:s",###}
+                                        </div>
+                                    </div> 
+                                    <input type="hidden" name="id" value="{$dVoucherinfo.id}" /> 
+
+                                    <div class="form-group">
+                                        <div class="col-lg-offset-3 col-lg-6">
+                                            <button class="btn btn-primary" type="submit"> 赠送</button>
+                                            <button class="btn btn-default cancelBtn" dataurl="/Admin/Voucherinfo/index" type="button"> 取消</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div><!-- end form -->
+                    </section>
+                </div>
+            </div>
+            <!-- page end-->
+        <!-- page end-->
+        </section>
+    </section>
+    <!--main content end-->
+ 
+
+</section>
+
+<include file="Public:footer" />
+
+<!--common script init for all pages-->
+<script type="text/javascript" src="__PUBLIC__/Template/js/scripts.js"></script>  
+</body>
+</html>

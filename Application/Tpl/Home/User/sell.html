@@ -1,0 +1,157 @@
+<include file="Public:header" />
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/Css/newcommon.css">
+<include file="Public:menu" />
+<div class="user">
+	<div class="container">
+		<div class="user-content">
+			
+			<include file="Public:user_menu" />
+			<div class="user-right">
+				<div class="header">
+					销售情况
+				</div>
+				<div class="content">
+					<div class="address-title">
+						<img src="__PUBLIC__/Image/sampImg/score-logo.png" class="p-l">
+						<p class="p-l"> 今日销量</p>	
+					</div>
+					<table class="user-table clearfix" style="border-bottom:1px dashed #efefef;margin-bottom:0px;">
+						<thead>
+							<tr>
+								<th style="width:600px;">商品名称</th>
+								<th style="width:100px;">销售数量</th>
+								<th style="width:300px;">成交额</th>
+							</tr>
+						</thead>
+						<tbody>
+						<volist name="list" id="vo">
+							<tr>
+								<td style="padding:10px;">
+									<div style="border:1px solid #ccc" class="p-l">
+										<img src="{$vo.imgs}" class="user-table-td-img">
+									</div>
+									<div class="user-table-td-title">
+										<span>{$vo.name}</span>
+										<br>
+										<span>{$vo.colorId|getColorName}</span>
+									</div>
+								</td>
+								<td style="padding:10px;">{$vo.ctSales}</td>
+								<td style="padding:10px;">￥{$vo.bargain}</td>
+							</tr>
+							</volist>
+						</tbody>
+
+					</table>
+
+					<div class="" style="border-bottom:1px solid #efefef; border-top:none;text-align:right; width:950px; padding-right:20px;margin:0px auto; height:40px; line-height:40px; margin-bottom:20px;">
+						合计：
+						<span style="color:#f00; font-size:24px;font-weight:bold;">￥ {$sumBargainDay} </span>
+					</div>
+					<div class="address-title">
+						<img src="__PUBLIC__/Image/sampImg/icon-scan-old-sell.png" class="p-l">
+						<p class="p-l" style='margin-top:3px;'> 查看过往销量</p>	
+					</div>
+                    <form action="{:U(User/sell)}" id="sForm" method="post" accept-charset="utf-8"> 
+					<div style="position:relative; margin-left:20px;">
+						时间区间： 
+                        <input class="Wdate" type="text" name="startTime" value="{$startTime}" onClick="WdatePicker()"> 
+                         ~ 
+                        <input class="Wdate" type="text" name="endTime" value="{$endTime}"  onClick="WdatePicker()">  
+						<div class="p-l login-btn" style="width:70px;height:30px;line-height:30px; margin-left:10px;position:absolute;right:40px;top:-16px;" id="searchBtn">搜索</div>
+					</div>
+					</form>
+					<table class="user-table clearfix" style="border-bottom:1px dashed #efefef;margin-bottom:0px;">
+						<thead>
+							<tr>
+								<th style="width:600px;">商品名称</th>
+								<th style="width:100px;">销售数量</th>
+								<th style="width:300px;">成交额</th>
+							</tr>
+						</thead>
+						<tbody>
+						<volist name="list2" id="vo">
+							<tr>
+								<td style="padding:10px;">
+									<div style="border:1px solid #ccc" class="p-l">
+										<img src="{$vo.imgs}" class="user-table-td-img">
+									</div>
+									
+									<div class="user-table-td-title">
+										<span>{$vo.name}</span>
+										<br>
+										<span>{$vo.colorId|getColorName}</span>
+									</div>
+								</td>
+								<td style="padding:10px;">{$vo.ctSales}</td>
+								<td style="padding:10px;">￥{$vo.bargain}</td>
+							</tr>
+							</volist>
+						</tbody>
+
+					</table>
+
+					<div class="" style="border-bottom:1px solid #efefef; border-top:none;text-align:right; width:950px; padding-right:20px;margin:0px auto; height:40px; line-height:40px; margin-bottom:20px;">
+						合计：
+						<span style="color:#f00; font-size:24px;font-weight:bold;">￥ {$sumBargain} </span>
+					</div>
+
+                    <div class="mycoll-page">
+                        <ul>
+                            <li>
+                                <a href="{:U('User/sell',array('page'=>$curP-1))}">< 上一页</a>
+                            </li>
+                        </ul>
+                        <for start="0" end="$totalPage"> 
+                            <ul>
+                                <li>
+                                    <a href="{:U('User/sell',array('page'=>$i+1))}">{$i+1}</a>
+                                </li>
+                            </ul>
+                        </for> 
+                        <ul>
+                            <li>
+                                <a href="{:U('User/sell',array('page'=>$curP+1))}">< 下一页</a>
+                            </li>
+                        </ul>
+                        <ul class="mycoll-page-bg">
+                            <li>
+                                <a>到第</a>
+                            </li>
+                        </ul>
+                        <ul>
+                            <li>
+                                <input type="text" id="jumpNum" style="width:30px;" />
+                            </li>
+                        </ul>
+                        <ul class="mycoll-page-bg">
+                            <li>
+                                <a>页</a>
+                            </li>
+                        </ul>
+                        <ul>
+                            <li>
+                                <a id="jumpBtn">确定</a>
+                            </li>
+                        </ul>
+                    </div> 
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<include file="Public:footer" />
+<script language="javascript" type="text/javascript" src="__PUBLIC__/Plugin/My97DatePicker/WdatePicker.js"></script>
+<script type="text/javascript">
+	$(function(){
+		//搜索
+	    $('#searchBtn').click(function(){
+	        $('#sForm').submit();
+	    });
+    $('#jumpBtn').click(function(){
+        var p = $('#jumpNum').val();
+        window.location.href = "/Member/mycoll/page/"+p;
+    });
+	});
+</script>

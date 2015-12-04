@@ -1,0 +1,103 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <meta charset="utf-8"/>
+        <meta name="renderer" content="webkit">
+        <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+
+        <title>安奈优免税商城</title>
+
+        <!-- Css -->
+        <link rel="stylesheet" type="text/css" href="__PUBLIC__/Css/font-awesome-ie7.min.css">
+        <link rel="stylesheet" type="text/css" href="__PUBLIC__/Css/font-awesome.min.css">
+        <link rel="stylesheet" type="text/css" href="__PUBLIC__/Css/common.css">
+
+        <!-- Js -->
+        <script type="text/javascript" src="__PUBLIC__/Js/jquery.js"></script>
+        <script type="text/javascript" src="__PUBLIC__/Js/jquery.nivo.slider.pack.js"></script>
+        <script type="text/javascript" src="__PUBLIC__/Plugin/My97DatePicker/WdatePicker.js"></script>					
+    </head>
+    <body>
+        <div style="display:none" data-fake360="fake360"></div>
+        <if condition="$isLogin eq 1">
+        <div class="header">
+            <div class="container header">
+                <div class="p-l">您好，欢迎光临！</div>
+                <a href="{:U("Member/index")}" class="header-login-reg">{$Think.session.user}</a>
+                <a href="{:U("Login/dropOut")}" class="header-login-reg">退出</a>
+                
+                <!--<if condition="$isLoginPage eq 1">
+                <div class="p-r">
+                    <a href="{:U("Index/index")}" class="ml20">
+                        <i class="icon icon-home header-icon"></i>
+                        返回首页
+                    </a>
+                    <a href="{:U("GoodInfo/index")}" class="ml20">
+                        <i class="icon icon-shopping-cart header-icon"></i>
+                        购物车
+                        <font class="header-cart-num">0</font>
+                        件
+                    </a>
+                    <a class="helper" href="javascript:;" class="ml20">
+                        <i class="icon icon-lightbulb header-icon"></i>
+                        帮助中心
+                    </a>
+                </div>
+                <else/>-->
+                <div class="p-r">
+                    <a href="{:U("Index/index")}">
+                        <i class="icon icon-home header-icon"></i>
+                        返回首页
+                    </a>
+
+                    <a href="{:U("GoodInfo/index")}" class="ml20">
+                        <i class="icon icon-shopping-cart header-icon"></i>
+                        我的购物车
+                    </a>
+
+                    <a href="{:U("Member/index")}" class="ml20">
+                        <i class="icon icon-user header-icon"></i>
+                        个人中心
+                    </a>
+                </div>
+                <!--</if>-->
+                    
+            </div>
+        </div>
+        <else />
+        <div class="header">
+            <div class="container header">
+                <div class="p-l">您好，欢迎光临！</div>
+                <a href="{:U("Login/index")}" class="header-login-reg">登录</a>
+                <a href="{:U("Login/register")}" class="header-login-reg">注册</a>
+
+                <div class="p-r">
+                    <a href="{:U("Index/index")}" class="ml20">
+                        <i class="icon icon-home header-icon"></i>
+                        返回首页
+                    </a>
+                    <a href="{:U("GoodInfo/index")}" class="ml20">
+                        <i class="icon icon-shopping-cart header-icon"></i>
+                        购物车
+                        <font class="header-cart-num">0</font>
+                        件
+                    </a>
+                    <a class="helper" href="javascript:;" class="ml20">
+                        <i class="icon icon-lightbulb header-icon"></i>
+                        帮助中心
+                    </a>
+                </div>
+            </div>
+        </div>
+        </if>
+<script type="text/javascript" src="__PUBLIC__/Js/header.js"></script>
+<script>
+    $(function(){
+        $(".helper").click(function(){
+            var url = "{:U('Member/getArticleInfo')}";
+            var name = $(this).text();
+            name="帮助中心";
+            window.location.href = "__APP__/Index/article/name/"+name;
+        });
+    });
+</script>

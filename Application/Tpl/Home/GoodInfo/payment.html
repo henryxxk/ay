@@ -1,0 +1,209 @@
+<include file="Public:header" />
+<div class="container">
+    <div class="goodInfo-head">
+        <ul>
+            <li class="goodInfo-mg">
+                <img class="person-img" src="/Public/Image/logo.png" />
+            </li>
+            <li class="goodInfo-mg-two"><img src="/Public/Image/sampImg/buycar_head.png" /></li>
+            <li class="goodInfo-mg">购物车</li>
+            <img src="/Public/Image/03.jpg" style="margin:50px 0px 0px 244px;" />
+        </ul>
+    </div>
+    <div class="payment-content">
+        <if condition="$Think.session.vip neq true">
+        <p>
+            订单提交成功！请您尽快付款！订单号：{$Think.session.orderNum}
+        </p>
+        </if>
+        <ul class="payment-money ft12">
+            <if condition="$Think.session.vip neq true">
+            <li>请您在提交订单后24小时内完成支付，否则订单会自动取消。</li>
+            </if>
+            <div class="flo-r">
+                <li class="ft14">
+                    应付金额：
+                </li>
+                <li class="ft24 payment-mg ftbold">
+                    ￥
+                    <if condition="$Think.session.vip neq true">
+                        {$Think.session.shijiMoney}
+                    <else />
+                        5
+                    </if>
+                    
+                </li>
+            </div>
+        </ul>
+    </div>
+    <div class="payment-bottom">
+        <div class="payment-bottom-top">
+            <ul>
+                <li>支付平台</li>
+            </ul>
+            <ul>
+                <li>网银支付</li>
+            </ul>
+        </div>
+        <div class="payment-bank">
+            <div class="payment-bank-one">
+                <ul>
+                    <li>
+                        <input class="payment-bank-rdo" type="radio" name="bank" />
+                    </li>
+                    <li class="payment-bank-img"><img src="__PUBLIC__/Image/sampImg/bank.png" /></li>
+                </ul>
+                <ul>
+                    <li>
+                        <input class="payment-bank-rdo" type="radio" name="bank" />
+                    </li>
+                    <li class="payment-bank-img"><img src="__PUBLIC__/Image/sampImg/bank.png" /></li>
+                </ul>
+                <ul>
+                    <li>
+                        <input class="payment-bank-rdo" type="radio" name="bank" />
+                    </li>
+                    <li class="payment-bank-img"><img src="__PUBLIC__/Image/sampImg/bank.png" /></li>
+                </ul>
+                <ul>
+                    <li>
+                        <input class="payment-bank-rdo" type="radio" name="bank" />
+                    </li>
+                    <li class="payment-bank-img"><img src="__PUBLIC__/Image/sampImg/bank.png" /></li>
+                </ul>
+                <ul>
+                    <li>
+                        <input class="payment-bank-rdo" type="radio" name="bank" />
+                    </li>
+                    <li class="payment-bank-img"><img src="__PUBLIC__/Image/sampImg/bank.png" /></li>
+                </ul>
+                <ul>
+                    <li>
+                        <input class="payment-bank-rdo" type="radio" name="bank" />
+                    </li>
+                    <li class="payment-bank-img"><img src="__PUBLIC__/Image/sampImg/bank.png" /></li>
+                </ul>
+            </div>
+            <div class="payment-bank-one">
+                <ul>
+                    <li>
+                        <input class="payment-bank-rdo" type="radio" name="bank" />
+                    </li>
+                    <li class="payment-bank-img"><img src="__PUBLIC__/Image/sampImg/bank.png" /></li>
+                </ul>
+                <ul>
+                    <li>
+                        <input class="payment-bank-rdo" type="radio" name="bank" />
+                    </li>
+                    <li class="payment-bank-img"><img src="__PUBLIC__/Image/sampImg/bank.png" /></li>
+                </ul>
+                <ul>
+                    <li>
+                        <input class="payment-bank-rdo" type="radio" name="bank" />
+                    </li>
+                    <li class="payment-bank-img"><img src="__PUBLIC__/Image/sampImg/bank.png" /></li>
+                </ul>
+                <ul>
+                    <li>
+                        <input class="payment-bank-rdo" type="radio" name="bank" />
+                    </li>
+                    <li class="payment-bank-img"><img src="__PUBLIC__/Image/sampImg/bank.png" /></li>
+                </ul>
+                <ul>
+                    <li>
+                        <input class="payment-bank-rdo" type="radio" name="bank" />
+                    </li>
+                    <li class="payment-bank-img"><img src="__PUBLIC__/Image/sampImg/bank.png" /></li>
+                </ul>
+                <ul>
+                    <li>
+                        <input class="payment-bank-rdo" type="radio" name="bank" />
+                    </li>
+                    <li class="payment-bank-img"><img src="__PUBLIC__/Image/sampImg/bank.png" /></li>
+                </ul>
+            </div>
+            <div class="payment-bank-one">
+                <ul>
+                    <li>
+                        <input class="payment-bank-rdo" type="radio" name="bank" />
+                    </li>
+                    <li class="payment-bank-img"><img src="__PUBLIC__/Image/sampImg/bank.png" /></li>
+                </ul>
+                <ul>
+                    <li>
+                        <input class="payment-bank-rdo" type="radio" name="bank" />
+                    </li>
+                    <li class="payment-bank-img"><img src="__PUBLIC__/Image/sampImg/bank.png" /></li>
+                </ul>
+                <ul>
+                    <li>
+                        <input class="payment-bank-rdo" type="radio" name="bank" />
+                    </li>
+                    <li class="payment-bank-img"><img src="__PUBLIC__/Image/sampImg/bank.png" /></li>
+                </ul>
+                <ul>
+                    <li>
+                        <input class="payment-bank-rdo" type="radio" name="bank" />
+                    </li>
+                    <li class="payment-bank-img"><img src="__PUBLIC__/Image/sampImg/bank.png" /></li>
+                </ul>
+                <ul>
+                    <li>
+                        <input class="payment-bank-rdo" type="radio" name="bank" />
+                    </li>
+                    <li class="payment-bank-img"><img src="__PUBLIC__/Image/sampImg/bank.png" /></li>
+                </ul>
+                <ul>
+                    <li>
+                        <input class="payment-bank-rdo" type="radio" name="bank" />
+                    </li>
+                    <li class="payment-bank-img"><img src="__PUBLIC__/Image/sampImg/bank.png" /></li>
+                </ul>
+            </div>
+            <div class="payment-submit">
+                <ul>
+                    <li>
+                        <if condition="$Think.session.vip neq true">
+                            <a href="{:U('GoodInfo/payover')}" >立即结算</a>
+                        <else />
+                            <a href="javascript:;" >立即结算</a>
+                        </if>
+                        
+                    </li>
+                </ul>
+            </div>
+            
+            
+            
+        </div>
+        
+    </div>
+    
+</div>
+
+<form id="form1" action="" method="post">
+        <input id="payUrl" type="hidden" style="width: 500px;" />
+        <input id="version" type="hidden" style="width: 500px;" />
+        <input id="charset" type="hidden" style="width: 500px;" />
+        <input id="signMethod" type="hidden" style="width: 500px;" />
+        <input id="payType" type="hidden" style="width: 500px;" />
+        <input id="transType" type="hidden" style="width: 500px;" />
+        <input id="merId" type="hidden" style="width: 500px;" />
+        <input id="signKey" style="width: 500px;" type="hidden" />
+        <input id="backEndUrl" type="hidden" style="width: 500px;" />
+        <input id="frontEndUrl" type="hidden" style="width: 500px;" />
+        <input id="orderTime" type="hidden" style="width: 500px;" />
+        <input id="orderNumber" type="hidden" style="width: 500px;"/>
+        <input id="orderAmount" type="hidden" style="width: 500px;" />
+        <input id="orderCurrency" type="hidden" style="width: 500px;" />
+        <input id="defaultBankNumber" type="hidden" style="width: 500px;" />
+        <input id="customerIp" type="hidden" style="width: 500px;" />
+        <input id="merReserved1" type="hidden" style="width: 500px;"/>
+        <input id="merReserved2" type="hidden" style="width: 500px;" />
+        <input id="merReserved3" type="hidden" style="width: 500px;" />
+        <input id="merSiteIP" type="hidden" style="width: 500px;" />
+        <input id="gateWay" type="hidden" style="width: 500px;"/>
+</form>
+<include file="Public:footer" />
+<script type="text/javascript" src="__PUBLIC__/Js/buycar.js"></script>
+

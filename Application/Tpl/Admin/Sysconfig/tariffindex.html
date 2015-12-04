@@ -1,0 +1,125 @@
+<include file="Public:header" />
+
+    <!--dynamic table-->
+    <link href="__PUBLIC__/Template/assets/advanced-datatable/media/css/demo_page.css" rel="stylesheet" />
+    <link href="__PUBLIC__/Template/assets/advanced-datatable/media/css/demo_table.css" rel="stylesheet" />
+    <link rel="stylesheet" href="__PUBLIC__/Template/assets/data-tables/DT_bootstrap.css" />
+
+ <include file="Public:menu" />
+
+    <!--main content start-->
+    <section id="main-content">
+        <section class="wrapper">
+        <!-- page start--> 
+        <div class="row">
+            <div class="col-md-12">
+                <!--breadcrumbs start -->
+                <ul class="breadcrumb">
+                    <li><a href="#"><i class="fa fa-home"></i> 首页</a></li>
+                    <li><a href="#">系统设置</a></li>
+                    <li class="active">关税查看</li>
+                </ul>
+                <!--breadcrumbs end -->
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-12">
+                <section class="panel">
+                    <header class="panel-heading">
+                       <!--  <button type="button" onclick="javascript:btnJump('add','')" class="btn btn-primary"><i class="fa fa-plus"></i> 新增商品</button> -->
+                        <!-- <button type="button" onclick="javascript:btnJump('ruleEdit')" class="btn btn-primary"><i class="fa fa-pencil"></i> 编辑</button> -->
+                        <!-- <button type="button" class="btn btn-primary"><i class="fa  fa-mail-reply"></i> 返回</button> -->
+                        <!-- <button type="button" onclick="javascript:btnJump('ruleDel')" class="btn btn-danger"><i class="fa fa-trash-o"></i> 删除</button> -->
+                    </header>
+                    <div class="panel-body">
+                    <div class="adv-table">
+                    <table cellpadding="0" cellspacing="0" border="0" class="display table table-bordered" id="myTable">
+                    <thead>
+                    <tr>
+                        <th>编号</th>
+                        <th>分类</th>
+                        <th>描述</th>
+                        <th>税率</th> 
+                        <!-- <th>操作</th> -->
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <volist name="list" id="vo">
+                    <tr class="gradeX">
+                        <td>{$vo.id}</td>
+                        <td>{$vo.classify}</td>
+                        <td>{$vo.scope}</td>
+                        <td>{$vo.revenue}</td>
+                     <!--    <td>
+                            <button type="button" onclick="javascript:btnJump('/Admin/Member/show',{$vo.id})" class="btn btn-primary"><i class="fa fa-eye"></i> 查看</button>&nbsp;&nbsp;
+                            <button type="button" class="btn btn-primary"><i class="fa  fa-mail-reply"></i> 返回</button>
+                        </td> -->
+                    </tr>
+                    </volist> 
+                    </tbody>
+                    </table>
+
+                    </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+        <!-- page end-->
+        </section>
+    </section>
+    <!--main content end-->
+ 
+
+</section>
+
+<include file="Public:footer" />
+
+<!--common script init for all pages-->
+<script src="__PUBLIC__/Template/js/scripts.js"></script> 
+<script>
+//表格
+$(function(){ 
+    dTable('#myTable'); 
+});
+//del
+// function del(msg,method,id){
+//     var url = method;
+//     var postData = {
+//         'id':id
+//     }
+//     $.post(url,postData,function(data){
+//         if(data.code == 2000){
+//             window.location.href = "{:U('Article/index')}";
+//         }else{
+//             alert(data.msg);
+//         }
+//     });
+// }
+// //before
+// function beforeDel(msg,method,id){
+//     if(confirm(msg)){ 
+//         del(method,id);
+//     }  
+// }
+//del
+// function changStatus(msg,method,id,val){
+//     if(!confirm(msg)){ 
+//         return;
+//     }  
+//     var url = method;
+//     var postData = {
+//         'id':id,
+//         'status':val
+//     }
+//     $.post(url,postData,function(data){
+//         if(data.code == 2000){
+//             window.location.reload();
+//         }else{
+//             alert(data.msg);
+//         }
+//     });
+// }
+</script>
+</body>
+</html>

@@ -1,0 +1,222 @@
+<include file="Public:header" />
+
+    <!--dynamic table-->
+    <link href="__PUBLIC__/Template/assets/advanced-datatable/media/css/demo_page.css" rel="stylesheet" />
+    <link href="__PUBLIC__/Template/assets/advanced-datatable/media/css/demo_table.css" rel="stylesheet" />
+    <link rel="stylesheet" href="__PUBLIC__/Template/assets/data-tables/DT_bootstrap.css" />
+
+ <include file="Public:menu" />
+
+    <!--main content start-->
+    <section id="main-content">
+        <section class="wrapper">
+        <!-- page start--> 
+        <div class="row">
+            <div class="col-md-12">
+                <!--breadcrumbs start -->
+                <ul class="breadcrumb">
+                    <li><a href="#"><i class="fa fa-home"></i> 首页</a></li>
+                    <li><a href="#"> VIP等级管理</a></li>
+                    <li class="active"> 修改VIP等级</li>
+                </ul>
+                <!--breadcrumbs end -->
+            </div>
+        </div>
+
+        
+            <div class="row">
+                <div class="col-lg-12">
+                    <section class="panel">
+                        <header class="panel-heading">
+                            修改VIP等级
+                        </header>
+                        <div class="panel-body">
+                            
+                             <div class="form">
+                                <form class="cmxform form-horizontal " id="AddForm" method="post" action="{:U('Member/viplevelUpdate')}"> 
+                                   
+                                   <volist name="list" id="vo" key="k">
+                                    <div class="form-group ">
+                                        <label for="name{$k}" class="control-label col-lg-3">VIP级别名称</label>
+                                        <div class="col-lg-6">
+                                            <input class=" form-control" id="name{$k}" name="name{$k}" type="text" value="{$vo.name}" />
+                                        </div>
+                                    </div> 
+                                    <div class="form-group ">
+                                        <label for="code{$k}" class="control-label col-lg-3">VIP级别所需积分</label>
+                                        <div class="col-lg-6">
+                                            <input class=" form-control" id="code{$k}" name="code{$k}" type="text" value="{$vo.code}" />
+                                        </div>
+                                    </div>  
+                                    <div class="form-group ">
+                                        <label for="status" class="control-label col-lg-3" for="inputSuccess">VIP级别状态</label>
+                                        <div class="col-lg-6">
+                                        <if condition="$vo.status eq 1 ">
+                                            <label class="radio-inline">
+                                                <input type="radio" name="status{$k}" value="1" checked="checked"> 启用
+                                            </label>
+                                            <label class="radio-inline">
+                                                <input type="radio" name="status{$k}" value="0"> 禁用
+                                            </label>
+                                        <elseif condition="$vo.status eq 0 " /> 
+                                            <label class="radio-inline">
+                                                <input type="radio" name="status{$k}" value="1"> 启用
+                                            </label>
+                                            <label class="radio-inline">
+                                                <input type="radio" name="status{$k}" value="0" checked="checked"> 禁用
+                                            </label>   
+                                        </if>  
+                                        </div>
+                                    </div> 
+
+                                     <div class="form-group "> 
+                                        <div class="form-group last">
+                                            <label class="control-label col-md-3">等级图标</label>
+                                            <div class="col-md-9">
+                                                <div class="fileupload fileupload-new" data-provides="fileupload">
+                                                    <div class="fileupload-new thumbnail" style="width: 200px; height: 150px;">
+                                                        <img id="imgView{$k}" src="{$vo.imgs}" alt="" />
+                                                    </div>
+                                                    <div class="fileupload-preview fileupload-exists thumbnail" style="max-width: 200px; max-height: 150px; line-height: 20px;"></div>
+                                                    <div>
+                                                               <span class="btn btn-white btn-file">
+                                                               <span class="fileupload-new fuBtn1"><i class="fa fa-paper-clip"></i> 选择图片</span>
+                                                               <span class="fileupload-exists fuBtn2"><i class="fa fa-undo"></i> 更换</span>
+                                                               <input type="file" id="uploadIcon{$k}" class="default" />
+                                                               </span>
+                                                               <!--  <a href="javascript:delImg({$k})" class="btn btn-danger fileupload-exists fuBtn3" data-dismiss="fileupload"><i class="fa fa-trash"></i> 删除</a> -->
+                                                                <input type="hidden" id="imgs{$k}" name="imgs{$k}" value="" />
+                                                    </div>
+                                                </div> 
+                                            </div> 
+                                        </div>
+                                    </div> 
+                                    
+                                    <div class="form-group">
+                                        <label for="desc" class="control-label col-lg-3">描述</label>
+                                        <div class="col-lg-6">
+                                            <textarea id="desc{$k}" name="desc{$k}" rows="5" cols="120">{$vo.desc}</textarea>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <div class="col-lg-offset-3 col-lg-6">
+                                            <button class="btn btn-primary" onclick="updateVip({$vo.id},{$k})" type="button"> 修改</button>
+                                            <button class="btn btn-default cancelBtn" dataurl="/Admin/Member/viplevel/menu/member" type="button"> 取消</button>
+                                        </div>
+                                    </div>
+                                    <hr>
+
+                                    </volist>
+
+                                </form>
+                            </div>
+                        </div><!-- end form -->
+                    </section>
+                </div>
+            </div>
+            <!-- page end-->
+        <!-- page end-->
+        </section>
+    </section>
+    <!--main content end-->
+ 
+
+</section>
+
+<include file="Public:footer" />
+
+<!--common script init for all pages-->
+<script type="text/javascript" src="__PUBLIC__/Template/js/scripts.js"></script> 
+<script type="text/javascript" src="__PUBLIC__/Template/js/jquery-validate/jquery.validate.min.js"></script>
+<script> 
+function updateVip(id,tag){
+    var url = "/Admin/Member/updateVip";
+    var postData = {
+        'id':id,
+        'name':$('#name'+tag).val(),
+        'code':$('#code'+tag).val(),
+        'status':$('input[name="status'+tag+'"]:checked').val(),
+        'imgs':$('#imgs'+tag).val(),
+        'desc':$('#desc'+tag).val()
+    }
+    console.log(postData);
+    $.post(url,postData,function(data){
+        console.log(data);
+        if(data.code == 2000){
+            alert(data.msg);
+            //window.location.reload();
+        }else{
+            alert(data.msg);
+        }
+    });
+}
+$(function(){
+ //图片上传 01
+$("#uploadIcon1").localResizeIMG({
+  width: 1,
+  quality: 1,
+  success: function (result) {
+    var postData = 
+    {
+      "data":result.clearBase64,
+      "path":'./Public/Uploads/'
+    };
+    $.post("{:U('/Base/uploadImage')}",postData,function(data){
+        // console.log(data);
+        // eval("var data=" + data);
+        if(data["code"] == 2000){
+          $("#imgView1").attr('src',data["data"]);
+          $("#imgs1").val(data["data"]);
+          $(".fuBtn3").show();
+        } 
+    }) 
+   }
+});
+ //图片上传 02
+$("#uploadIcon2").localResizeIMG({
+  width: 1,
+  quality: 1,
+  success: function (result) {
+    var postData = 
+    {
+      "data":result.clearBase64,
+      "path":'./Public/Uploads/'
+    };
+    $.post("{:U('/Base/uploadImage')}",postData,function(data){
+        // console.log(data);
+        // eval("var data=" + data);
+        if(data["code"] == 2000){
+          $("#imgView2").attr('src',data["data"]);
+          $("#imgs2").val(data["data"]);
+          $(".fuBtn3").show();
+        } 
+    }) 
+   }
+});
+ //图片上传 03
+$("#uploadIcon3").localResizeIMG({
+  width: 1,
+  quality: 1,
+  success: function (result) {
+    var postData = 
+    {
+      "data":result.clearBase64,
+      "path":'./Public/Uploads/'
+    };
+    $.post("{:U('/Base/uploadImage')}",postData,function(data){
+        // console.log(data);
+        // eval("var data=" + data);
+        if(data["code"] == 2000){
+          $("#imgView3").attr('src',data["data"]);
+          $("#imgs3").val(data["data"]);
+          $(".fuBtn3").show();
+        } 
+    }) 
+   }
+});
+
+});
+</script>
+</body>
+</html>

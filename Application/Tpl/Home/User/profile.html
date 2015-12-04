@@ -1,0 +1,136 @@
+<include file="Public:header" />
+<include file="Public:menu" />
+<div class="user">
+	<div class="container">
+		<div class="user-content">
+			
+			<include file="Public:user_menu" />
+			<div class="user-right">
+				<div class="header">
+					我的资料
+				</div>
+				<div class="content">
+					<div class="register-form">
+						<div class="line" style="height:100px;">
+							<label class="p-l">用户头像:</label>
+							<div style="position: relative;">
+							<img src="{$list.imgUrl}" id="imgshow" style="width:100px;height:100px;border: 1px solid #efefef;">
+							<div class="uploadimage"  id="test" style="position: absolute;top: 35px;left: 210px;width:100px;height:30px;cursor: pointer; border: 1px solid #efefef; line-height: 30px; text-align: center;">点击上传</div>
+							</div>
+							<input type="file" id="uploadimg" style="display:none;"/> 
+							<input type="hidden" id="imgsTag" value="" />  <br> 
+						</div>
+						<div class="line">
+							<label class="p-l">用户名：</label>
+							<input type="text" id="nickname" class="p-l" value="{$list.nickname}">
+							<span class="p-l">*用户名不能为空</span>
+						</div>
+						<div class="line">
+							<label class="p-l">手机号：</label>
+							<input type="text" id="tel" class="p-l" value="{$list.tel}">
+							<span class="p-l">*请正确填写手机号</span>
+						</div>
+						<div class="line">
+							<label class="p-l">真实姓名：</label>
+							<input type="text" id="name" class="p-l" value="{$list.name}">
+							<span class="p-l">*请填写真实姓名</span>
+						</div>
+						<div style="margin:10px;text-indent: 2em;">
+							<label class="p-l">性别：</label>
+							<div>
+								<if condition="$list.sex eq 男 ">
+									<input type="radio" name="sex" value="男" checked="checked">男&nbsp;&nbsp;
+									<input type="radio" name="sex" value="女">女&nbsp;&nbsp;
+								<elseif condition="$list.sex eq 女 " />
+									<input type="radio" name="sex" value="男" >男&nbsp;&nbsp;
+									<input type="radio" name="sex" value="女" checked="checked">女&nbsp;&nbsp;
+								<else />
+									<input type="radio" name="sex" value="男" >男&nbsp;&nbsp;
+									<input type="radio" name="sex" value="女" >女&nbsp;&nbsp;
+								</if> 
+							</div>
+						</div>
+						<div class="line" style="clear:both">
+							<label class="p-l">电子邮箱：</label>
+							<input type="text" id="email" class="p-l" value="{$list.email}"> 
+						</div>
+						<input type="hidden" id="id" value="{$Think.session.memberId}" />
+						<div class="line">
+							<label class="p-l"></label>
+							<a href="javascript:;" class="login-btn p-l" style="width:300px;display:inline-block;" id="btn">更新资料</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<include file="Public:footer" />
+<script type="text/javascript" src="__PUBLIC__/Js/LocalResizeIMG.js"></script> 
+<script>
+$(function(){ 
+	$("#test").click(function(){
+			$("#uploadimg").trigger('click');
+	});
+});
+$(function(){  
+	//图片上传
+	$('input:file').localResizeIMG({
+	  width: 1,
+	  quality: 1,
+	  success: function (result) {
+	  	console.log(result);
+	    var postData = 
+	    {
+	      "data":result.clearBase64,
+	      "path":'./Public/Uploads/'
+	    };
+	    $.post("/Base/uploadImage",postData,function(data){ 
+	        if(data["code"] == 2000){
+             var img = new Image(); 
+	          $("#imgshow").attr('src',data.data); 
+	          $("#imgsTag").val(data.data); 
+	        } 
+	    }) 
+	   }
+	}); 
+});
+//更新
+$(function(){
+	$('#btn').click(function(){
+		var url = "/User/updateUser";
+		var postData = {
+			'id':$('#id').val(),
+			'imgs':$('#imgsTag').val(),
+			'nickname':$('#nickname').val(),
+			'tel':$('#tel').val(),
+			'email':$('#email').val(),
+			'name':$('#name').val(),
+			'sex':$('input[name="sex"]:checked').val(),
+		}
+		if(postData.nickname == ''){
+			alert('昵称不可为空');return;
+		}
+		if(postData.tel == ''){
+			alert('联系方式不可为空');return;
+		}
+		if(postData.name == ''){
+			alert('请填写真实姓名');return;
+		}
+		// console.log(postData);
+		$.post(url,postData,function(data){ 
+			switch (data["code"]) {
+			    case 2000:{
+			        alert("提交成功！");
+			        return;
+			    }
+			    default:{
+			        alert("系统繁忙，请稍后再试！");
+			        return;
+			    }
+			}
+		});
+	});
+});
+</script>

@@ -1,0 +1,409 @@
+    <!--clock css-->
+
+    <link href="__PUBLIC__/Template/assets/css3clock/css/style.css" rel="stylesheet"> 
+
+    <!-- Custom styles for this template -->
+
+    <link href="__PUBLIC__/Template/css/style.css" rel="stylesheet">
+
+    <link href="__PUBLIC__/Template/css/style-responsive.css" rel="stylesheet"/>
+
+    <link href="__PUBLIC__/Css/common.css" rel="stylesheet">
+
+    <!-- Just for debugging purposes. Don't actually copy this line! -->
+
+    <!--[if lt IE 9]><script src="__PUBLIC__/Template/js/ie8/ie8-responsive-file-warning.js"></script><![endif]-->
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+
+    <!--[if lt IE 9]>
+
+    <script src="__PUBLIC__/Template/js/html5shiv.js"></script>
+
+    <script src="__PUBLIC__/Template/js/respond.min.js"></script>
+
+    <![endif]--> 
+
+</head>
+
+<body>
+
+<section id="container">
+
+    <!--header start-->
+
+    <header class="header fixed-top clearfix" style="height:80px;">
+
+        <!--logo start-->
+
+        <div class="brand">
+
+
+
+            <a href="index-2.html" class="logo">
+
+                <img src="__PUBLIC__/Image/logo3.png" alt="">
+
+            </a>
+
+            <div class="sidebar-toggle-box">
+
+                <div class="fa fa-bars"></div>
+
+            </div>
+
+        </div>
+
+        <!--logo end-->
+
+
+
+        <div class="nav notify-row" id="top_menu">
+
+           
+
+        </div>
+
+        <div class="top-nav clearfix">
+
+            <!--search & user info start-->
+
+            <ul class="nav pull-right top-menu" style="position:absolute;top:19px;right:10px;">
+
+                <li>
+
+                    <!-- <input type="text" class="form-control search" placeholder=" Search"> -->
+
+                </li>
+
+                <!-- user login dropdown start-->
+
+                <li class="dropdown">
+
+                    <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+
+                        <img alt="" src="__PUBLIC__/Template/images/avatar1_small.jpg">
+
+                        <span class="username">{$Think.session.loginName}</span>
+
+                        <b class="caret"></b>
+
+                    </a>
+
+                    <ul class="dropdown-menu extended logout">
+
+                        <li><a href="#"><i class=" fa fa-suitcase"></i>用户资料</a></li>
+
+                        <li><a href="#"><i class="fa fa-cog"></i> 设置</a></li>
+
+                        <li><a href="javascript:if(!confirm('您确认要退出吗?')){return;}else{window.location.href='/Admin/Public/logout'}"><i class="fa fa-key"></i> 退出</a></li>
+
+                    </ul>
+
+                </li>
+
+                <!-- user login dropdown end -->
+
+                <!-- <li>
+
+                    <div class="toggle-right-box">
+
+                        <div class="fa fa-bars"></div>
+
+                    </div>
+
+                </li> -->
+
+            </ul>
+
+            <!--search & user info end-->
+
+        </div>
+
+    </header>
+
+    <!--header end-->
+
+
+
+ <!--sidebar start-->
+
+    <aside>
+
+        <div id="sidebar" class="nav-collapse">
+
+            <!-- sidebar menu start-->
+
+            <ul class="sidebar-menu" id="nav-accordion">
+
+                <li>
+
+                    <a class="active" href="{:U('Index/index')}">
+
+                        <i class="fa fa-dashboard"></i>
+
+                        <span> 首页</span>
+
+                    </a>
+
+                </li>  
+
+                
+
+                <li class="sub-menu">
+
+                    <a href="javascript:;" <eq name="Think.get.menu" value="filing">class="active"</eq>>
+
+                        <i class="fa fa-plus-square"></i>
+
+                        <span>商品备案</span>
+
+                    </a>
+
+                    <ul class="sub">
+
+                        <li><a href="{:U('Filing/setting',array('menu'=>'filing'))}">企业海关备案信息</a></li> 
+
+                        <li><a href="{:U('Base/createGXml',array('menu'=>'filing'))}">立即生成商品备案文件</a></li> 
+
+                        <li><a href="{:U('Base/createOrderXml',array('menu'=>'filing'))}">立即生成订单备案文件</a></li> 
+
+                        <!-- <li><a href="{:U('Base/createOldGoodsXml',array('menu'=>'filing'))}">生成所有文件(维护用)</a></li>  -->
+
+                     <!--    <li><a href="{:U('Filing/createGoods',array('menu'=>'filing'))}">生成商品XML文件</a></li> 
+
+                        <li><a href="{:U('Filing/createOrder',array('menu'=>'filing'))}">生成订单XML文件</a></li>  -->
+
+                      <!--   <li><a href="{:U('Filing/add',array('menu'=>'filing'))}">发送商品备案</a></li>
+
+                        <li><a href="{:U('Filing/index',array('menu'=>'filing'))}">商品备案列表</a></li>
+
+                        <li><a href="{:U('Filing/add',array('menu'=>'filing'))}">发送订单备案</a></li>
+
+                        <li><a href="{:U('Filing/index',array('menu'=>'filing'))}">订单备案列表</a></li> -->
+
+                    </ul>
+
+                </li>
+
+                
+
+                <li class="sub-menu">
+
+                    <a href="javascript:;" <eq name="Think.get.menu" value="goods">class="active"</eq>>
+
+                        <i class="fa  fa-leaf"></i>
+
+                        <span>商品管理</span>
+
+                    </a>
+
+                    <ul class="sub">
+
+                        <li><a href="{:U('Goods/index',array('tag'=>'goods','menu'=>'goods'))}">商品列表</a></li>
+
+                        <li><a href="{:U('Goods/add',array('menu'=>'goods'))}">发布商品</a></li>
+
+                        <li><a href="{:U('Goods/index',array('tag'=>'behalf','menu'=>'goods'))}">代购商品</a></li>
+
+                        <li><a href="{:U('Goods/goodsType',array('menu'=>'goods'))}">商品参数管理</a></li>
+
+                    </ul>
+
+                </li>
+
+
+
+                <li class="sub-menu">
+
+                    <a href="javascript:;" <eq name="Think.get.menu" value="order">class="active"</eq>>
+
+                        <i class="fa  fa-paste"></i>
+
+                        <span>订单管理</span>
+
+                    </a>
+
+                    <ul class="sub">
+
+                        <li><a href="{:U('Order/index',array('menu'=>'order'))}">订单列表</a></li>
+
+                        <li><a href="{:U('Order/index2',array('menu'=>'order'))}">订单发货</a></li>
+
+                        <li><a href="{:U('Comment/index',array('menu'=>'order'))}">评论管理</a></li>
+
+                    </ul>
+
+                </li>
+
+
+
+                <li class="sub-menu">
+
+                    <a href="javascript:;" <eq name="Think.get.menu" value="member">class="active"</eq>>
+
+                        <i class="fa  fa-group"></i>
+
+                        <span>会员管理</span>
+
+                    </a>
+
+                    <ul class="sub">
+
+                        <li><a href="{:U('Member/index',array('menu'=>'member'))}">会员列表</a></li>
+
+                        <li><a href="{:U('Member/vipIndex',array('menu'=>'member'))}">VIP列表</a></li>
+
+                        <li><a href="{:U('Member/viplevel',array('menu'=>'member'))}">VIP等级设置</a></li>
+
+                        <li><a href="{:U('Member/vipcost',array('menu'=>'member'))}">VIP费用设置</a></li>
+
+                        <li><a href="{:U('Member/vipcode',array('menu'=>'member'))}">积分消耗设置</a></li>
+
+                        <li><a href="{:U('Member/groupIndex',array('menu'=>'member'))}">团体列表</a></li>
+
+                        <li><a href="{:U('Member/behalfIndex',array('menu'=>'member'))}">代购列表</a></li>
+
+                    </ul>
+
+                </li>
+
+
+
+                <li class="sub-menu">
+
+                    <a href="javascript:;" <eq name="Think.get.menu" value="sales">class="active"</eq>>
+
+                        <i class="fa   fa-tags"></i>
+
+                        <span>促销管理</span>
+
+                    </a>
+
+                    <ul class="sub">
+
+                        <li><a href="{:U('Score/setting',array('menu'=>'sales'))}">按分值浏览设置</a></li>
+
+                        <li><a href="{:U('Score/index',array('menu'=>'sales'))}">积分兑换</a></li>
+
+                        <li><a href="{:U('Vip/index',array('menu'=>'sales'))}">VIP专区</a></li>
+
+                        <li><a href="{:U('Voucherinfo/index',array('menu'=>'sales'))}">代金券</a></li>
+
+                    </ul>
+
+                </li>
+
+
+
+                <li class="sub-menu">
+
+                    <a href="javascript:;" <eq name="Think.get.menu" value="report">class="active"</eq>>
+
+                        <i class="fa  fa-table"></i>
+
+                        <span>报表统计</span>
+
+                    </a>
+
+                    <ul class="sub">
+
+                        <li><a href="{:U('Statistics/sales',array('menu'=>'report'))}">销售情况</a></li>
+
+                        <!-- <li><a href="{:U('Statistics/index',array('menu'=>'report'))}">流量概况</a></li> -->
+
+                        <li><a href="{:U('Statistics/hotmember',array('menu'=>'report'))}">会员排行</a></li>
+
+                        <li><a href="{:U('Statistics/hotsales',array('menu'=>'report'))}">销售排行</a></li>
+
+                    </ul>
+
+                </li>
+
+
+
+                <li class="sub-menu">
+
+                    <a href="javascript:;" <eq name="Think.get.menu" value="article">class="active"</eq>>
+
+                        <i class="fa fa-file-text-o"></i>
+
+                        <span>文章管理</span>
+
+                    </a>
+
+                    <ul class="sub">
+
+                        <li><a href="{:U('Article/index',array('menu'=>'article'))}">文章列表</a></li>
+
+                        <li><a href="{:U('Article/add',array('menu'=>'article'))}">发布新闻</a></li>
+
+                    </ul>
+
+                </li>
+
+
+
+                <li class="sub-menu">
+
+                    <a href="javascript:;" <eq name="Think.get.menu" value="system">class="active"</eq>>
+
+                        <i class="fa fa-gear"></i>
+
+                        <span>系统设置</span>
+
+                    </a>
+
+                    <ul class="sub">
+
+                        <li><a href="{:U('Sysconfig/banner',array('menu'=>'system','submenu'=>'banner'))}">商城基本设置</a></li>
+
+                        <li><a href="{:U('Sysconfig/banner2',array('menu'=>'system','submenu'=>'banner1'))}">静态Banner图片设置</a></li>
+
+                        <li><a href="{:U('Index/index',array('menu'=>'system'))}">第三方支付接口</a></li>
+
+                        <li><a href="{:U('Index/index',array('menu'=>'system'))}">短信接口</a></li>
+
+                        <li><a href="{:U('Index/index',array('menu'=>'system'))}">运费模板</a></li>
+
+                        <li><a href="{:U('Sysconfig/tariffindex',array('menu'=>'system'))}">关税表</a></li>
+
+                        <li><a href="{:U('Index/index',array('menu'=>'system'))}">客服管理</a></li>
+
+                    </ul>
+
+                </li>
+
+
+
+               <!--  <li class="sub-menu">
+
+                    <a href="javascript:;" <eq name="Think.get.menu" value="auth">class="active"</eq>>
+
+                        <i class="fa  fa-unlock-alt"></i>
+
+                        <span>权限分配</span>
+
+                    </a>
+
+                    <ul class="sub">
+
+                        <li><a href="{:U('Auth/ruleIndex',array('menu'=>'auth'))}">权限规则</a></li>
+
+                        <li><a href="{:U('Auth/groupIndex',array('menu'=>'auth'))}">权限分组</a></li>
+
+                        <li><a href="{:U('Auth/accessIndex',array('menu'=>'auth'))}">用户对应组</a></li>
+
+                    </ul>
+
+                </li>  -->
+
+            </ul>
+
+            <!-- sidebar menu end-->
+
+        </div>
+
+    </aside>
+
+    <!--sidebar end-->

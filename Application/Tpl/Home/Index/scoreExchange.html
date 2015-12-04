@@ -1,0 +1,324 @@
+<include file="Public:header" />
+<include file="Public:menu" />
+<div>
+	<div id="banner">
+	</div>
+</div>
+<style>
+	.active{
+		background-color:rgb(211, 9, 9) !important;
+	}
+    .active li{
+        color:#FFF !important;
+    }
+	.active a{
+		color:#FFF !important;
+	}
+</style>
+<div class="search-score">
+    <div>
+		<div class="search-left-score">
+            <div class="search-left-top-score">
+                <div id="search-con" class="search-left-top-con-score">
+                    <ul id="default">
+                        <li>
+                            <a>按分值浏览</a>
+                        </li>
+                    </ul>
+                    <ul id="sort">
+                        <!-- <li><a class="start">0</a>-<a class="end">500</a></li>  -->
+                    </ul>
+                    <ul id="price">
+                        <li>
+                           <!--  <a class="start">500</a>-<a class="end">1000</a>  -->
+                        </li>
+                    </ul>
+                    <ul id="time">
+                        <li>
+                           <!--  <a class="start">1000</a>以上 -->
+                        </li>
+                    </ul>
+                    <div class="search-left-top-con-page-score">
+                        <ul class="search-left-top-con-page-ul-first score-page">
+                             <label id="currentPageNo">1</label>/<label id="totalPage">{$totalPage}</label>
+                        </ul>
+                        <ul class="pageUp">
+                            <li><<</li>
+                        </ul>
+                        <ul class="pageDown">
+                            <li>>></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="search-left-bottom-score">
+                <volist name="searchlist" id="vo" >
+                    <dl id="{$vo.id}" class="search-right-dl">
+                        <dt>
+                            <img src="{$vo.imgsArr.0}" style="width:130px; height:190px;" />
+                        </dt>
+                        <dd style="height:36px;">
+                            {$vo.name}
+                        </dd>
+                        <dd>
+                            <label class="ftbold">兑换积分：</label>
+                            <label class="fc">{$vo.score}</label>
+                        </dd>
+                        <dd class="search-right-dl-price-score">
+                            <label>立即兑换</label>
+                        </dd>
+                    </dl>
+                </volist>
+            </div>
+            <div class="search-left-page">
+                <ul id="pageUp" class="search-left-page-ul1 pageUp">
+                    <li>
+                        <a>< 上一页</a>
+                    </li>
+                </ul>
+                <div>
+                    <ul class="search-left-page-ul1 pageDown">
+                        <li>
+                            <a>下一页 ></a>
+                        </li>
+                    </ul>
+                    <ul class="search-left-page-ul2">
+                        <li>
+                            到第
+                        </li>
+                    </ul>
+                    <input id="pageNo" class="search-left-page-input search-page-input" type="text" value="1" />
+                    <ul class="search-left-page-ul2">
+                        <li>
+                            页
+                        </li>
+                    </ul>
+                    <ul id="submit" class="search-left-page-ul1">
+                        <li>
+                            <a>确定</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+</div>
+<script type="text/javascript" src="__PUBLIC__/Js/logic/index.js"></script>
+<include file="Public:footer" />
+<script>
+    function getAdvert(){
+        //获取广告
+        var url1 = "{:U('Index/getAllAdvert')}";
+        var postData = {
+            'mapStr':'banner2'
+        };
+        $.post(url1,postData,function(data){
+            if(data["code"]==2000){
+                var list = data["data"].list;
+                var imgs = "";
+                for(var i=0;i<list.length;i++){
+                    imgs += "<img style='width:100%;height:470px' src='"+list[i].imgs+"'>";
+                }
+                $("#banner").append(imgs);
+            }
+        });
+    }
+    function searchData($start,$end,$pageno,$pageSize){
+        var postData = {
+            'start':$start,
+            'end':$end,
+            'pageNo':$pageno,
+            'pageSize':$pageSize
+        };
+        var url = "{:U('Index/convertScoreByScore')}";
+        $.post(url,postData,function(data){
+            if(data["code"] == 2000){
+                var list = data["data"]["list"];
+                var $dl = "";
+                for(var i=0;i<list.length;i++){
+                    $dl += "<dl id='"+list[i].id+"' class='search-right-dl'>"+
+                                "<dt>"+
+                                    "<img src="+list[i].imgsArr[0]+" style='width:130px; height:190px;' />"+
+                                "</dt>"+
+                                "<dd style='height:36px;'>"+ list[i].name+"</dd>"+
+                                "<dd>"+
+                                    "<label class='ftbold'>兑换积分：</label>"+
+                                    "<label class='fc'>"+list[i].score+"</label>"+
+                                "</dd>"+
+                                "<dd class='search-right-dl-price-score'>"+
+                                    "<label>立即兑换</label>"+
+                                "</dd>"+
+                            "</dl>";
+                }
+                $(".search-left-bottom-score dl").detach();
+                $(".search-left-bottom-score").append($dl);
+                $(".search-left-bottom-score dl").bind({
+                    mouseover:function(){
+                        $(this).css({"background-image":"url(/Public/Image/search-good-bg.png)","background-repeat":"no-repeat","cursor":"pointer"});
+                    },
+                    mouseout:function(){
+                        $(this).css({"background-image":"none","cursor":"default"});
+                    }
+                });
+                $(".search-left-bottom-score dl").click(function(){
+                    var gId = $(this).attr("id");
+                    window.location.href = "__APP__/GoodInfo/exchangeInfo/gId/"+gId;
+                });
+                var totalPage = data["totalPage"];
+                var $ul = "";
+                for(var j=0;j<totalPage;j++){
+                    if((j+1)>2){
+                        $ul += "<ul class='search-left-page-ul2'>"+
+                                    "<li>"+
+                                        "..."+
+                                    "</li>"+
+                                "</ul>";
+                    }
+                    $ul += "<ul class='bottom-pageNo'>"+
+                                "<li>"+
+                                    "<a>"+(j+1)+"</a>"+
+                                "</li>"+
+                            "</ul>";
+                    
+                }
+                $("#pageUp").siblings("ul").remove();
+                $("#pageUp").after($ul);
+                $(".bottom-pageNo").click(function(){
+                    $(this).addClass("active");
+                    $(this).siblings().removeClass("active");
+                    var pageNo = $(this).children().children().text();
+                    $("#currentPageNo").text(pageNo);
+                    searchData(0,0,pageNo,10);
+                });
+                var pageNo = $("#currentPageNo").text();
+                var sumPageNo = $("#totalPage").text();
+                $(".bottom-pageNo:eq("+(pageNo-1)+")").addClass("active");
+                $("#totalPage").html($(".bottom-pageNo:last").text());
+                $("#currentPageNo").html(pageNo);
+            }
+        });
+    }
+    $(function(){
+        getAdvert();
+        searchData(0,0,1,10);
+        
+        
+        var $con = 1;      //当前条件
+        var url = "{:U('Index/convertScoreByScore')}";
+        
+        //分值
+        var totalPage = $("#totalPage").text();
+        var start = "0";
+        var end = "0";
+        
+        $("#default").click(function(){
+            start="0";
+            end="0";
+            searchData(start,end,1,10);
+        });
+        $("#sort").click(function(){
+            $("#currentPageNo").html(1);
+            start = $("#sort .start").text();
+            end = $("#sort .end").text();
+            searchData(start,end,1,10);
+        });
+        $("#price").click(function(){ 
+            $("#currentPageNo").html(1);
+            start = $("#price .start").text();
+            end = $("#price .end").text();
+            searchData(start,end,1,10);
+        });
+        $("#time").click(function(){  
+            start = $("#time .start").text();
+            end = "0"
+            searchData(start,end,1,10);
+        });
+        
+        //上一页，下一页，确定，输入框
+        $(".pageUp").click(function(){
+            var pageNo = $("#currentPageNo").text();
+            pageNo--;
+            if(pageNo<=0){
+                pageNo = 1;
+            }
+            $("#currentPageNo").text(pageNo);
+            searchData(start,end,pageNo,10);
+        });
+        $(".pageDown").click(function(){
+            var totalPage = $("#totalPage").text();
+            var pageNo = $("#currentPageNo").text();
+            pageNo++;
+            if(pageNo>=totalPage){
+                pageNo = totalPage;
+            }
+            if(pageNo>totalPage){
+                pageNo--;
+            }
+            $("#currentPageNo").text(pageNo);
+            searchData(start,end,pageNo,10);
+            var pageNo = $("#currentPageNo").text();
+            var sumPageNo = $("#totalPage").text();
+            if(pageNo==sumPageNo){
+                $(".bottom-pageNo:last").addClass("active");
+                $(".bottom-pageNo:not(:last)").removeClass("active");
+            }
+        });
+        $("#submit").click(function(){
+            var pageNo = $("#pageNo").val();
+            searchData(start,end,pageNo,10);
+        });
+        $(".search-left-bottom-score dl").click(function(){
+            var gId = $(this).attr("id");
+            window.location.href = "__APP__/GoodInfo/exchangeInfo/gId/"+gId;
+        });
+        
+    });
+
+    //获取分值区间
+    $(function(){
+        var url = "/Index/codeScope";
+        var postData = {}
+        $.post(url,postData,function(data){
+            if(data.code == 2000){
+                $.each(data.data,function(k,v){
+                    if(v.content != '' && k == 0){
+                        $('#sort').html('<li><a class="start">'+v.title+'</a>-<a class="end">'+v.content+'</a></li>');
+                    }
+                    if(v.content != '' && k == 1){
+                        $('#price').html('<li><a class="start">'+v.title+'</a>-<a class="end">'+v.content+'</a></li>');
+                    }
+                    if(v.content != '' && k == 2){
+                        $('#time').html('<li><a class="start">'+v.title+'</a>-<a class="end">'+v.content+'</a></li>');
+                    }else if(v.content == '' && k == 2){
+                        $('#time').html('<li><a class="start">'+v.title+'</a>以上</li>');
+                    }
+                });
+            }else{
+                alert(data.msg);
+            }
+            $("#default").click(function(){
+                $(this).addClass("active");
+                $(this).siblings().removeClass("active");
+            });
+            $("#sort").click(function(){
+                $(this).addClass("active");
+                $(this).siblings().removeClass("active");
+            });
+            $("#price").click(function(){
+                $(this).addClass("active");
+                $(this).siblings().removeClass("active");
+            });
+            $("#time").click(function(){
+                $(this).addClass("active");
+                $(this).siblings().removeClass("active");
+            });
+            
+        });
+    });
+    
+    
+    
+    
+</script>
+

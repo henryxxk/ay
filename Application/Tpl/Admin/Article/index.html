@@ -1,0 +1,165 @@
+<include file="Public:header" />
+
+    <!--dynamic table-->
+    <link href="__PUBLIC__/Template/assets/advanced-datatable/media/css/demo_page.css" rel="stylesheet" />
+    <link href="__PUBLIC__/Template/assets/advanced-datatable/media/css/demo_table.css" rel="stylesheet" />
+    <link rel="stylesheet" href="__PUBLIC__/Template/assets/data-tables/DT_bootstrap.css" />
+
+ <include file="Public:menu" />
+
+    <!--main content start-->
+    <section id="main-content">
+        <section class="wrapper">
+        <!-- page start--> 
+        <div class="row">
+            <div class="col-md-12">
+                <!--breadcrumbs start -->
+                <ul class="breadcrumb">
+                    <li><a href="#"><i class="fa fa-home"></i> 首页</a></li>
+                    <li><a href="#">文章管理</a></li>
+                    <li class="active">文章列表</li>
+                </ul>
+                <!--breadcrumbs end -->
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-12">
+                <section class="panel">
+                    <header class="panel-heading">
+                       <!--  <button type="button" onclick="javascript:btnJump('add','')" class="btn btn-primary"><i class="fa fa-plus"></i> 新增商品</button> -->
+                        <!-- <button type="button" onclick="javascript:btnJump('ruleEdit')" class="btn btn-primary"><i class="fa fa-pencil"></i> 编辑</button> -->
+                        <!-- <button type="button" class="btn btn-primary"><i class="fa  fa-mail-reply"></i> 返回</button> -->
+                        <!-- <button type="button" onclick="javascript:btnJump('ruleDel')" class="btn btn-danger"><i class="fa fa-trash-o"></i> 删除</button> -->
+                    </header>
+                    <div class="panel-body">
+                    <div class="adv-table">
+                    <table cellpadding="0" cellspacing="0" border="0" class="display table table-bordered" id="myTable">
+                    <thead>
+                    <tr>
+                        <th>编号</th>
+                        <th>分类</th>
+                        <th>标题</th>
+                        <!-- <th>内容</th> -->
+                        <th class="hidden-phone">状态</th>
+                        <th>发布时间</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <volist name="list" id="vo">
+                    <tr class="gradeX">
+                        <td>{$vo.id}</td>
+                        <td>文章/{$vo.typeId|getTreeTypeName}</td>
+                        <td>{$vo.title}</td>
+                        <!-- <td>&nbsp;{$vo.content|msubstr=###,0,30}</td> -->
+                        <!-- <td>&nbsp;{$vo.content}</td> -->
+                        <td class="center hidden-phone">
+                            <if condition="$vo.status eq 1 ">
+                                正常
+                            <elseif condition="$vo.status eq 0 " />
+                                已屏蔽
+                            </if>    
+                        </td>
+                        <td>
+                            <if condition="$vo.typeId neq 28 ">
+                                {$vo.updatetime|date="Y-m-d H:i",###}
+                            <else />
+                                {$vo.createtime|date="Y-m-d H:i",###}
+                            </if>    
+                        </td>
+                        <td>
+                            <button type="button" onclick="javascript:btnJump('/Admin/Article/show',{$vo.id})" class="btn btn-primary"><i class="fa fa-eye"></i> 查看</button>&nbsp;&nbsp;
+                        <!-- <button type="button" class="btn btn-primary"><i class="fa  fa-mail-reply"></i> 返回</button> -->
+
+                        <if condition="$vo.status eq 0 ">
+                            <button type="button" onclick="javascript:changStatus('你确定要启用吗','statuschange',{$vo.id},1)" class="btn btn-round btn-danger"><i class="fa fa-magic"></i> 激活</button>
+                        <elseif condition="$vo.status eq 1 "/>
+                            <button type="button" onclick="javascript:btnJump('/Admin/Article/edit',{$vo.id})" class="btn btn-primary"><i class="fa fa-pencil"></i> 编辑</button>&nbsp;&nbsp;
+                            <!-- <button type="button" onclick="javascript:changStatus('你确定要禁用吗','/Admin/Article/statuschange',{$vo.id},0)" class="btn btn-round btn-danger"><i class="fa fa-exclamation-triangle"></i> 屏蔽</button> -->
+                        <elseif condition="$vo.status eq 2 " />
+                            <button type="button" onclick="javascript:btnJump('/Admin/Article/edit',{$vo.id})" class="btn btn-primary"><i class="fa fa-pencil"></i> 编辑</button>&nbsp;&nbsp;
+                            <!-- <button type="button" onclick="javascript:changStatus('你确定要禁用吗','/Admin/Article/statuschange',{$vo.id},0)" class="btn btn-round btn-danger"><i class="fa fa-exclamation-triangle"></i> 屏蔽</button> -->
+                        </if>   
+                        <if condition="$vo.typeId eq 28 ">
+                            <button type="button" onclick="javascript:beforeDel('您确定要删除吗?','/Admin/Article/virtualdelete',{$vo.id})" class="btn btn-danger"><i class="fa fa-eye"></i> 删除</button>&nbsp;&nbsp;
+                        </if>
+                        </td>
+                    </tr>
+                    </volist> 
+                    </tbody>
+                    </table>
+
+                    </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+        <!-- page end-->
+        </section>
+    </section>
+    <!--main content end-->
+ 
+
+</section>
+
+<include file="Public:footer" />
+
+<!--common script init for all pages-->
+<script src="__PUBLIC__/Template/js/scripts.js"></script> 
+<script>
+//表格
+$(function(){ 
+    dTable('#myTable'); 
+});
+//btnJump
+function btnJump(method,id){
+    if(id != ''){
+        //alert("Auth/"+ method + "/id/" + id);
+        window.location.href = method + "/id/" + id;
+    }else{
+        //alert("Auth/"+ method + "/");
+       window.location.href = method;
+    }
+}
+//del
+function del(method,id){
+    var url = method;
+    var postData = {
+        'id':id
+    }
+    $.post(url,postData,function(data){
+        if(data.code == 2000){
+            window.location.href = "{:U('Article/index')}";
+        }else{
+            alert(data.msg);
+        }
+    });
+}
+//before
+function beforeDel(msg,method,id){
+    if(confirm(msg)){ 
+        del(method,id);
+    }  
+}
+//del
+function changStatus(msg,method,id,val){
+    if(!confirm(msg)){ 
+        return;
+    }  
+    var url = method;
+    var postData = {
+        'id':id,
+        'status':val
+    }
+    $.post(url,postData,function(data){
+        if(data.code == 2000){
+            window.location.href = "{:U('Article/index')}";
+        }else{
+            alert(data.msg);
+        }
+    });
+}
+</script>
+</body>
+</html>

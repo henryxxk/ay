@@ -1,0 +1,88 @@
+<include file="Public:header" />
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/Css/newcommon.css">
+<include file="Public:menu" />
+<style type="text/css">
+	.width3select{
+		width: 91px !important;
+	}
+.container{font-family: "微软雅黑";font-size: 14px;}
+.container h2{width: 100%;text-align: center;margin-bottom: 20px;}	
+.container h4{width: 100%;height:30px;line-height: 30px;background-color: #ddd;text-indent: 1em;}
+.container .text{width:20em;height:2em;}
+.container p{margin: 15px;}
+.container .myBtn{width: 200px;height:30px;line-height:30px;text-align:center;background-color: #d30909;display: inline-block;overflow: hidden;color:#fff;font-size: 14px;cursor: pointer;}
+.container textarea{width:100%;height:200px;margin-top: 20px;}
+</style>
+<div class="container">
+	首页 > 团体认证
+</div>
+<form action="/User/insertGroupVerify" method="post" id="myForm">
+<div class="container">
+	<h2>申请团体认证</h2>
+	<h4>第一步:填写机构名称</h4>
+	<p> 机 构 名：
+	<input class="text" type="text" name="organization" />
+	</p>
+	<h4>第二步:填写团队成员身份证信息</h4>
+	<div id="mem">
+		<p>
+			成员姓名：<input class="text" type="text" name="memName[]"> &nbsp; &nbsp; 
+			对应身份证号：<input class="text" type="text" name="memCode[]">
+		</p>
+		<p>
+			成员姓名：<input class="text" type="text" name="memName[]"> &nbsp; &nbsp; 
+			对应身份证号：<input class="text" type="text" name="memCode[]">
+		</p>
+		<p>
+			成员姓名：<input class="text" type="text" name="memName[]"> &nbsp; &nbsp; 
+			对应身份证号：<input class="text" type="text" name="memCode[]">
+		</p>
+		<p>
+			成员姓名：<input class="text" type="text" name="memName[]"> &nbsp; &nbsp; 
+			对应身份证号：<input class="text" type="text" name="memCode[]">
+		</p>
+		<p>
+			成员姓名：<input class="text" type="text" name="memName[]"> &nbsp; &nbsp; 
+			对应身份证号：<input class="text" type="text" name="memCode[]">
+		</p>
+	</div>
+		<p><span class="myBtn" id="addMemBtn">新增成员</span></p>
+	<h4>第三步:填写联系人联系方式</h4>
+	<p>
+		联系人姓名：<input class="text" type="text" name="contacts" /> &nbsp; &nbsp; 
+		联系人手机号：<input class="text" type="text" name="phone" />
+	</p>
+	<h4>第四步:留言</h4>
+	<textarea cols="50" rows="20" name="remark"></textarea>
+		<p><span class="myBtn" id="submitBtn">提交申请</span></p>
+</div>
+</form>
+<include file="Public:footer" />
+<script type="text/javascript">
+$(function(){
+	$('#addMemBtn').click(function(){
+		$('#mem').append('<p>成员姓名：<input class="text" type="text" name="memName[]"> &nbsp; &nbsp; 对应身份证号：<input class="text" type="text" name="memCode[]"></p>');
+	});
+	$('#submitBtn').click(function(){
+		if($('input[name="organization"]').val() == ''){
+			$('input[name="organization"]').css({ "border-color": "#ff0000"});
+			alert('机构名称不可为空');return;
+		}else{
+			$('input[name="organization"]').css({ "border-color": ""});
+		}
+		/*if($('input[name="contacts"]').val() == ''){
+			$('input[name="contacts"]').css({ "border-color": "#ff0000"});
+			alert('联系人姓名不可为空');return;
+		}else{
+			$('input[name="contacts"]').css({ "border-color": ""});
+		}*/
+		if($('input[name="phone"]').val() == ''){
+			$('input[name="phone"]').css({ "border-color": "#ff0000"});
+			alert('联系人电话不可为空');return;
+		}else{
+			$('input[name="phone"]').css({ "border-color": ""});
+		}
+		$('#myForm').submit();
+	});
+});	
+</script>

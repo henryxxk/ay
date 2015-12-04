@@ -1,0 +1,45 @@
+<include file="Public:header" />
+<include file="Public:menu" />
+<div class="user">
+	<div class="container">
+		<div class="user-content">
+			
+			<include file="Public:user_menu" />
+			<div class="user-right">
+				<div class="header">
+					<img src="__PUBLIC__/Image/sampImg/score-logo.png" style="margin-right:10px;">我的积分
+				</div>
+				<div class="content">
+					<div class="user-score-head">
+						<img src="__PUBLIC__/Image/sampImg/score-logo.png" class="p-l">
+						<span >{$Think.session.memberId|getField=###,score,Member}</span>
+						<img src="__PUBLIC__/Image/sampImg/user-score-gift.png" class="p-l" style="margin-left:50px">
+						<p class="p-l" >积分兑换</p>
+					</div>
+					<table class="user-table clearfix">
+						<thead>
+							<tr>
+								<th style="width:600px;">来源/用途</th>
+								<th style="width:100px;">积分变化</th>
+								<th style="width:300px;">日期</th>
+							</tr>
+						</thead>
+						<tbody>
+						<volist name="dVipchangelog" id="vo">
+							<tr>
+								<td>积分兑换：{$vo.goodsId|getField=###,name,Goods}</td>
+								<td>-{$vo.consumeScore}</td>
+								<td>{$vo.createtime|date="Y-m-d H:i:s",###}</td>
+							</tr>
+						</volist>	
+						</tbody>
+
+					</table>
+					
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<include file="Public:footer" />

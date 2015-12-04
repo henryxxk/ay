@@ -1,0 +1,448 @@
+<include file="Public:header" />
+<div class="container">
+    <input type="hidden" id="{$Think.session.sumScore}" class="memScore" />
+    <div class="goodInfo-head">
+        <ul>
+            <li class="goodInfo-mg">
+                <a href="{:U("Index/index")}">
+                    <img class="person-img" src="/Public/Image/logo.png" />
+                </a>
+            </li>
+            <li class="goodInfo-mg-two"><img src="/Public/Image/sampImg/buycar_head.png" /></li>
+            <li class="goodInfo-mg">购物车</li>
+            <img src="/Public/Image/01.jpg" style="margin:50px 0px 0px 244px;" />
+        </ul>
+    </div>
+    <div class="goodInfo-content">
+        <div class="goodInfo-con-top">
+            <ul class="goodInfo-wd-first" style="width:607px;">
+                <li>
+                    <input id="all-select" class="goodInfo-input" type="checkbox" />  
+                </li>
+                <li>全选</li>
+                <li class="goodInfo-wd-third goodInfo-li-mr-first">商品名称</li>
+            </ul>
+            <ul class="goodInfo-wd-two" style="width:193px;">
+                <li>积分</li>
+            </ul> 
+            <ul class="goodInfo-wd-two" style="width:193px;">
+                <li>数量(件)</li>
+            </ul>
+            <ul class="goodInfo-wd-two" style="width:193px;">
+                <li>操作</li>
+            </ul>
+        </div>
+<!---------------->
+
+        <div class="buycar-update" >
+			<div class="goodInfo-con-bottom"><div id="mybuycar" class="goodInfo-con-bottom-one goodInfo-con-top">
+			<volist name="list" id="vo">
+				<div id='{$vo.goodsId}' class='goodInfo-buycar'>
+					<ul class='goodInfo-wd-first' style="width:607px;">
+						<li>
+							<input name='good-one' id='{$vo.goodsScore}' class='goodInfo-input' type='checkbox' />
+						</li>
+						<li><img id='{$vo.goodsId}' class='good-buycar-img' src='{$vo.goodsId|getField=###,imgs,Goods|getImgUrl}' style='width:80px;height:94px;' />
+                            <input type="hidden" id="{$vo.isOrExchange}" class="isOrExchange" />
+                        </li>
+						<li class='goodInfo-con-bottom-goodName'>
+							{$vo.goodsId|getField=###,name,Goods}
+							<if condition="$vo.goodsColor neq '' ">
+								<p>颜色：<span id='goodTypeName' class="gTypeName" data-id="{$vo.goodsColor}">{$vo.goodsColor|getField=###,name,Goodscolor}</span></p>
+							</if>  
+						</li>
+					</ul>
+					<ul class='goodInfo-wd-two' style="width:193px;">
+						<li class='goodInfo-two-li'>
+							 <span class='price'>{$vo.goodsScore}</span> 
+						</li>
+					</ul>
+					<ul class='goodInfo-wd-two goodInfo-buycar-count'>
+						<li>
+							 <span>{$vo.goodsNum}</span>  
+						</li>
+				   </ul>
+                    <ul class='goodInfo-wd-two' style="width:170px;margin-left:50px;">
+						<li class='goodInfo-two-li'>
+							 <a id="{$vo.id}" class="delete" href="javascript:;" style="color:#70b2f9;">移除</a>
+						</li>
+					</ul>
+				</div>
+			</volist>
+			</div></div>
+        </div>
+
+<!---------------->
+        <!--<div class="buycar-update" id="zysj" style="display:none">
+            <p><input id="ziying" class="goodInfo-input" type="checkbox" name="good-one" />商家：自营</p><div class="goodInfo-con-bottom"><div id="mybuycar" class="goodInfo-con-bottom-one goodInfo-con-top"></div></div>
+        </div>
+        <br/>
+        <div class="buycar-update" id="dgsj" style="display:none">
+            <p><input id="yxdaigou" class="goodInfo-input" type="checkbox" name="good-one" />商家：优选代购</p><div class="goodInfo-con-bottom"><div id="daigou" class="goodInfo-con-bottom-one goodInfo-con-top"></div></div>
+        </div>-->
+        <div class="goodInfo-bottom-submit">
+            <ul id="immedit">
+                <li>
+                    <a href="javascript:;" >立即结算</a>
+                </li>
+            </ul>
+        </div>
+        
+    </div>
+</div>
+<include file="Public:footer" />
+<script type="text/javascript" src="__PUBLIC__/Js/buycar.js"></script>
+<script>
+    //计算商品小计
+    function getsubTotal($buycar,$con){
+        var count = 0;
+        if($con==1){
+            count = $buycar.val();
+        }else if($con==2){
+            count = $buycar.next().val();
+        }else{
+            count = $buycar.prev().val();
+        }
+        var price = $buycar.parent().parent().prev().prev().children().children(".price").text();
+        var duty = $buycar.parent().parent().prev().children().children(".duty").text();
+        if(duty=="免税"){
+            duty=0;
+        }
+        var subTotal = ((parseFloat(price)+parseFloat(duty))*count).toFixed(2);
+        $buycar.parent().parent().next().children().children(".subtotal").text(subTotal);
+    }
+    //计算商品总额
+    function getSummer($divs){
+        var summer = 0;
+        var integral = 0;
+        var price = 0;
+        //var carri = "";
+        var count = 0;
+        var subTotal = 0;
+        $divs.each(function(i,dom){
+            var inchk = $(dom).children().children().children("input[name='good-one']");
+            if(inchk.get(0).checked==true){
+                count = $(dom).children().siblings().children().children(".goodInfo-buycar-input2").text();
+                subTotal = $(dom).children().children().children(".subtotal").html();
+                summer += parseFloat(subTotal);
+            }
+        });
+        var vou = $("#voucherMoney").html();
+        var total = (integral + summer);// + parseFloat(yunfei)).toFixed(2);
+        var shenyu = (total - vou).toFixed(2);
+        $("#sumDuty").html((integral).toFixed(2));
+        $("#money").html((summer).toFixed(2));
+        $("#total").html(total);
+        $("#shijiMoney").html(shenyu);
+    }
+    //改变商品数量
+    function changeInput($input){
+        var url = "{:U('GoodInfo/updateBuyCars')}";
+        var price = $input.parent().parent().siblings().children().children(".price").text();
+        var total = $input.parent().parent().siblings().children().children(".subtotal").text();
+        var postData = {
+            'bId':$input.attr("id"),
+            'pNum':$input.val(),
+            'price':price,
+            'total':total
+        };
+        $.post(url,postData,function(data){
+            if(data["code"]==2000){
+
+            }else{
+                alert("系统繁忙，请稍后再试！");
+            }
+        });
+    }
+    $(function(){
+        var url = "{:U('GoodInfo/ajaxcashindex')}";
+        $.post(url,null,function(data){
+			console.log(data);
+            if(data["code"]==2000){
+                var goods = data["data"].goods;
+                var vouchers = data["data"].voucher;
+                console.log(vouchers);
+                $(".good-buycar-img").css("cursor","pointer");
+                $("#voucherMoney").html(data["data"].voucher);
+                getSummer($(".goodInfo-buycar"));  //计算总价
+                $(".good-buycar-img").click(function(){
+                    var isOr = $(this).next(".isOrExchange").attr("id");
+                    console.log(isOr+",");
+                    var gId = $(this).attr("id");
+                    if(isOr==0){
+                        window.location.href = "__APP__/GoodInfo/goodInfo/gId/"+gId;
+                    }else if(isOr==1){
+                        window.location.href = "__APP__/GoodInfo/exchangeInfo/gId/"+gId;
+                    }else if(isOr==2){
+                        window.location.href = "__APP__/GoodInfo/vipexchangeInfo/gId/"+gId;
+                    }else{
+                        window.location.href = "__APP__/GoodInfo/goodInfo/gId/"+gId;
+                    }
+                });
+                
+                //全选，单选
+                $("input[name='good-one']").click(function(){
+                    var one = $(this).parent().parent().parent().parent().attr("id");
+                    console.log(one);
+                    var k=0;
+                    if(one=="mybuycar"){
+                        $("#mybuycar").each(function(){
+                            var ones = $(this).children("div").children().children().find("input[name='good-one']");
+                            for(var i=0;i<ones.length;i++){
+                                if(ones[i].checked==false){
+									$("#ziying").get(0).attr("checked",false);
+                                    $("#all-select").get(0).attr("checked",false);
+                                    getSummer($(".goodInfo-buycar"));
+                                    return;
+                                }
+                            }
+                            $("#ziying").get(0).checked=true;
+                            if($("#yxdaigou").get(0).checked==true){
+                                $("#all-select").get(0).checked=true;
+                            }else{
+                                $("#all-select").get(0).checked=false;
+                            }
+                            getSummer($(".goodInfo-buycar"));
+                        });
+                    }else{
+                        $("#daigou").each(function(){
+                            var ones = $(this).children("div").children().children().find("input[name='good-one']");
+                            for(var i=0;i<ones.length;i++){
+                                if(ones[i].checked==false){
+                                    $("#yxdaigou").get(0).checked=false;
+                                    $("#all-select").get(0).checked=false;
+                                    getSummer($(".goodInfo-buycar"));
+                                    return;
+                                }
+                            }
+                            $("#yxdaigou").get(0).checked=true;
+                            if($("#ziying").get(0).checked==true){
+                                $("#all-select").get(0).checked=true;
+                            }else{
+                                $("#all-select").get(0).checked=false;
+                            }
+                            getSummer($(".goodInfo-buycar"));
+                        });
+                    }
+                });
+                //加载时，默认的所有的商品都是选中的
+                $("input[name='good-one']").each(function(){
+                    $(this)[0].checked=true;
+                    $("#all-select").get(0).checked=true;
+                    getSummer($(".goodInfo-buycar"));
+                });
+                
+                $(".goodInfo-minus").bind({
+                    mouseover:function(){
+                        $(this).next().css({"border":"1px solid #fd4d45"});
+                        $(this).css({"background-color":"#fd4d45","cursor":"pointer"});
+                        $(this).next().next().css({"background-color":"#fd4d45","cursor":"pointer"});
+                    },
+                    mouseout:function(){
+                        $(this).next().css({"border":"1px solid #dddddd"});
+                        $(this).css({"background-color":"#dddddd","cursor":"default"});
+                        $(this).next().next().css({"background-color":"#dddddd","cursor":"default"});
+                    }
+                });
+                $(".goodInfo-add").bind({
+                    mouseover:function(){
+                        $(this).prev().css({"border":"1px solid #fd4d45"});
+                        $(this).css({"background-color":"#fd4d45","cursor":"pointer"});
+                        $(this).prev().prev().css({"background-color":"#fd4d45","cursor":"pointer"});
+                    },
+                    mouseout:function(){
+                        $(this).prev().css({"border":"1px solid #dddddd"});
+                        $(this).css({"background-color":"#dddddd","cursor":"default"});
+                        $(this).prev().prev().css({"background-color":"#dddddd","cursor":"default"});
+                    }
+                });
+                $(".goodInfo-buycar-input").bind({
+                    focus:function(){
+                        $(this).css({"border":"1px solid #fd4d45"});
+                        $(this).prev().css({"background-color":"#fd4d45"});
+                        $(this).next().css({"background-color":"#fd4d45"});
+                    },
+                    blur:function(){
+                        $(this).css({"border":"1px solid #dddddd"});
+                        $(this).prev().css({"background-color":"#dddddd"});
+                        $(this).next().css({"background-color":"#dddddd"});
+                        var count = $(this).val();
+                        if(isNaN($.trim(count))){
+                            $(this).val(1);
+                        }
+                        if($.trim(count)>=100){
+                            $(this).val(1);
+                        }
+                        getsubTotal($(this),1);
+                        changeInput($(this));
+                        getSummer($(".goodInfo-buycar"));
+                    }
+                });
+                
+                //数量+，-
+                $(".goodInfo-minus").click(function(){
+                    var count = $(this).next().val();
+                    if(isNaN($.trim(count))){
+                        $(this).next().val(1);
+                    }
+                    count--;
+                    if(count<=0){
+                        $(this).next().val(1);
+                    }else{
+                        $(this).next().val(count);
+                    }
+                    getsubTotal($(this),2);
+                    changeInput($(this).next());
+                    getSummer($(".goodInfo-buycar"));
+                });
+                $(".goodInfo-add").click(function(){
+                    var count = $(this).prev().val();
+                    if(isNaN($.trim(count))){
+                        $(this).prev().val(1);
+                    }
+                    count++;
+                    if(count>=100){
+                        $(this).prev().val(1);
+                    }else{
+                        $(this).prev().val(count);
+                    }
+                    getsubTotal($(this),3);
+                    changeInput($(this).prev());
+                    getSummer($(".goodInfo-buycar"));
+                });
+            }
+        });
+        $("#immedit").click(function(){ 
+            var memScore = $(".memScore").attr("id");
+            var url = "{:U('GoodInfo/immeditBuyScore')}";
+            var price = 0;
+            var gId = 0;
+            var num = 0;
+            var tax = 0;
+            var score = 0;
+            var sumScore = 0;  //购物总积分
+            var typeName = null;
+            var postArr = new Array();
+            var oId=0;  //订单Id
+            var k=0;
+            
+            //判断有无选中商品
+            $("input[name='good-one']:checked").each(function(k,v){
+                k++;
+                var $tot = $(this).parent().parent().parent().attr("class");
+                var $one = $(this).parent().parent().parent();
+                score = $one.children().children().children(".price").text();
+                gId = $one.attr("id");
+                num = $one.children().siblings(".goodInfo-buycar-count").children().children().html();
+                typeName = $one.children().find('.gTypeName').html();//$("#goodTypeName").data('id');         gTypeName
+                score = score*num;
+                sumScore +=score;
+                if(tax=="免税"){
+                    tax="0.00";
+                }
+                var pData = {
+                    'goodsId':gId,
+                    'goodsNum':num,
+                    'getScore':score,
+                    'goodsColor':typeName
+                }
+                postArr[k-1]=pData;
+                console.log(pData);
+            });
+			console.log(postArr.length);
+            console.log("sumhh="+sumScore);
+			//return;
+            if(postArr.length == 0){
+                alert("请选择商品！");
+                return;
+            }
+            if(memScore < sumScore){
+                alert("你的积分不足,无法兑换!");
+                return;
+            }
+            if(postArr.length>0){
+                //添加订单参数
+                var money = 0;
+                var payment = 0;
+                var postDt = {
+                    'money':money,
+                    'payment':payment,
+                    'score':sumScore
+                }
+                $.post(url,postDt,function(data){
+					console.log(data);
+                    if(data["code"]==2000){
+                        oId = data["res"];
+                        console.log(oId+"..");
+                        postData = {
+                            'name': postArr
+                        };
+                        console.log("dfd="+postData);
+                        
+                        url = "{:U('GoodInfo/immeditBuyInfoScore')}";
+                        $.post(url,postData,function(data){
+                            if(data["code"]==2000){
+                                window.location.href="{:U('GoodInfo/cashorder')}";
+                            }else{
+                                alert("系统繁忙，请稍后再试！");
+                            }
+                        });
+                        
+                    }else{
+                        alert("系统繁忙，请稍后再试！");
+                    }
+                });
+            }
+            
+            
+        });
+        //全选，全不选
+        $("#all-select").click(function(){
+            var ones = $("input[name*='good-one']");
+            for(var i=0;i<ones.length;i++){
+                ones[i].checked=$(this).get(0).checked;
+            }
+            getSummer($(".goodInfo-buycar"));
+        });
+        $("#ziying").click(function(){
+            var zy = $(this).get(0).checked;
+            $("#mybuycar").each(function(){
+                var ones = $(this).children("div").children().children().find("input[name='good-one']");
+                for(var i=0;i<ones.length;i++){
+                    ones[i].checked=zy;
+                }
+            });
+            getSummer($(".goodInfo-buycar"));
+        });
+        $("#yxdaigou").click(function(){
+            var dg = $(this).get(0).checked;
+            $("#daigou").each(function(){
+                var ones = $(this).children("div").children().children().find("input[name='good-one']");
+                for(var i=0;i<ones.length;i++){
+                    ones[i].checked=dg;
+                }
+            });
+            getSummer($(".goodInfo-buycar"));
+        });
+        $(".delete").click(function(){
+            if(confirm("确定要移除吗？")){
+                var url = "{:U('GoodInfo/deleteExchangeByBid')}"
+                var bId = $(this).attr("id");
+                var postData = {
+                    'bId':bId
+                };
+                console.log(bId);
+                $.post(url,postData,function(data){
+                    if(data["code"]==2000){
+                        window.location.href="__APP__/GoodInfo/cashindex";
+                    }else{
+                        alert("系统繁忙，请稍后再试！");
+                    }
+                });
+            }
+        });
+        
+        
+    });
+</script>
+

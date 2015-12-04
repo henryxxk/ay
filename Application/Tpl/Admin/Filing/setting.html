@@ -1,0 +1,206 @@
+<include file="Public:header" />
+
+    <!--dynamic table-->
+    <link href="__PUBLIC__/Template/assets/advanced-datatable/media/css/demo_page.css" rel="stylesheet" />
+    <link href="__PUBLIC__/Template/assets/advanced-datatable/media/css/demo_table.css" rel="stylesheet" />
+    <link rel="stylesheet" href="__PUBLIC__/Template/assets/data-tables/DT_bootstrap.css" />
+
+ <include file="Public:menu" />
+
+    <!--main content start-->
+    <section id="main-content">
+        <section class="wrapper">
+        <!-- page start--> 
+        <div class="row">
+            <div class="col-md-12">
+                <!--breadcrumbs start -->
+                <ul class="breadcrumb">
+                    <li><a href="#"><i class="fa fa-home"></i> 首页</a></li>
+                    <li><a href="#"> 企业备案信息</a></li>
+                    <li class="active"> 企业海关备案基本信息</li>
+                </ul>
+                <!--breadcrumbs end -->
+            </div>
+        </div>
+
+        
+            <div class="row">
+                <div class="col-lg-12">
+                    <section class="panel">
+                        <header class="panel-heading">
+                            设置企业海关备案基本信息
+                        </header>
+                        <div class="panel-body">
+                            
+                             <div class="form">
+                                <form class="cmxform form-horizontal " id="AddForm" method="post" action="{:U('Filing/setupdate')}"> 
+                                    
+                                    <div class="form-group ">
+                                        <label for="customsCode" class="control-label col-lg-3">(西安国际港务)商户号 *</label>
+                                        <div class="col-lg-6">
+                                            <input class=" form-control" id="shopNum" name="shopNum" type="text" value="{$list.shopNum}" />
+                                        </div>
+                                    </div> 
+                                    <div class="form-group ">
+                                        <label for="customsCode" class="control-label col-lg-3">(西安国际港务)商户秘钥 *</label>
+                                        <div class="col-lg-6">
+                                            <input class=" form-control" id="shopKey" name="shopKey" type="text" value="{$list.shopKey}" />
+                                        </div>
+                                    </div> 
+                                    <hr>
+                                    <div class="form-group ">
+                                        <label for="customsCode" class="control-label col-lg-3">(韵达)物流来源渠道appkey *</label>
+                                        <div class="col-lg-6">
+                                            <input class=" form-control" id="appkey" name="appkey" type="text" value="{$list.appkey}" />
+                                        </div>
+                                    </div> 
+                                    <hr>
+                                    <div class="form-group ">
+                                        <label for="customsCode" class="control-label col-lg-3">申报海关代码 *</label>
+                                        <div class="col-lg-6">
+                                            <input class=" form-control" id="customsCode" name="customsCode" type="text" value="{$list.customsCode}" />
+                                        </div>
+                                    </div> 
+                                    <div class="form-group ">
+                                        <label for="cbeCode" class="control-label col-lg-3">电商代码</label>
+                                        <div class="col-lg-6">
+                                            <input class=" form-control" id="cbeCode" name="cbeCode" type="text" value="{$list.cbeCode}"  />
+                                        </div>
+                                    </div> 
+                                    <div class="form-group ">
+                                        <label for="cbeName" class="control-label col-lg-3">电商名称 *</label>
+                                        <div class="col-lg-6">
+                                            <input class=" form-control" id="cbeName" name="cbeName" type="text" value="{$list.cbeName}"  />
+                                        </div>
+                                    </div> 
+                                    <div class="form-group ">
+                                        <label for="applyCode" class="control-label col-lg-3">申报企业代码</label>
+                                        <div class="col-lg-6">
+                                            <input class=" form-control" id="applyCode" name="applyCode" type="text" value="{$list.applyCode}"  />
+                                        </div>
+                                    </div> 
+                                    <div class="form-group ">
+                                        <label for="applyName" class="control-label col-lg-3">申报企业名称 *</label>
+                                        <div class="col-lg-6">
+                                            <input class=" form-control" id="applyName" name="applyName" type="text" value="{$list.applyName}"  />
+                                        </div>
+                                    </div>  
+                                    <div class="form-group ">
+                                        <label for="ecpCode" class="control-label col-lg-3">电商平台代码 *</label>
+                                        <div class="col-lg-6">
+                                            <input class=" form-control" id="ecpCode" name="ecpCode" type="text" value="{$list.ecpCode}"  />
+                                        </div>
+                                    </div> 
+                                    <div class="form-group ">
+                                        <label for="ecpName" class="control-label col-lg-3">电商平台名称 *</label>
+                                        <div class="col-lg-6">
+                                            <input class=" form-control" id="ecpName" name="ecpName" type="text" value="{$list.ecpName}"  />
+                                        </div>
+                                    </div>  
+  
+                                    <div class="form-group ">
+                                        <label for="agentCode" class="control-label col-lg-3">预归类企业代码</label>
+                                        <div class="col-lg-6">
+                                            <input class=" form-control" id="agentCode" name="agentCode" type="text" value="{$list.agentCode}"  />
+                                        </div>
+                                    </div> 
+                                    <div class="form-group ">
+                                        <label for="agentName" class="control-label col-lg-3">预归类企业名称</label>
+                                        <div class="col-lg-6">
+                                            <input class=" form-control" id="agentName" name="agentName" type="text" value="{$list.agentName}"  />
+                                        </div>
+                                    </div> 
+                                    <div class="form-group ">
+                                        <label for="accessType" class="control-label col-lg-3" for="inputSuccess">接入类型 *</label>
+                                        <div class="col-lg-6"> 
+                                            <label class="radio-inline">
+                                                <input type="radio" name="accessType" value="1" <eq name="list.accessType" value="1">checked="checked"</eq>> 总署
+                                            </label>
+                                            <label class="radio-inline">
+                                                <input type="radio" name="accessType" value="2" <eq name="list.accessType" value="2">checked="checked"</eq>> 地方
+                                            </label>
+                                        </div>
+                                    </div>  
+                                    <div class="form-group ">
+                                        <label for="ieType" class="control-label col-lg-3" for="inputSuccess">进出口标志 *</label>
+                                        <div class="col-lg-6"> 
+                                            <label class="radio-inline">
+                                                <input type="radio" name="ieType" value="I" <eq name="list.ieType" value="I">checked="checked"</eq>> 进口
+                                            </label>
+                                            <label class="radio-inline">
+                                                <input type="radio" name="ieType" value="E" <eq name="list.ieType" value="E">checked="checked"</eq>> 出口
+                                            </label>
+                                        </div>
+                                    </div>   
+                                    <div class="form-group ">
+                                        <label for="place" class="control-label col-lg-3">用户编号 *</label>
+                                        <div class="col-lg-6">
+                                            <input class=" form-control" id="appUid" name="appUid" type="text" value="{$list.appUid}"  />
+                                        </div>
+                                    </div>
+                                    <div class="form-group ">
+                                        <label for="place" class="control-label col-lg-3">用户名称 *</label>
+                                        <div class="col-lg-6">
+                                            <input class=" form-control" id="appUname" name="appUname" type="text" value="{$list.appUname}"  />
+                                        </div>
+                                    </div>
+                                    
+
+                                    <div class="form-group">
+                                        <div class="col-lg-offset-3 col-lg-6">
+                                            <button class="btn btn-primary" type="submit"> 设置</button>
+                                            <button class="btn btn-default cancelBtn" dataurl="/Admin/Filing/setting" type="button"> 取消</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div><!-- end form -->
+                    </section>
+                </div>
+            </div>
+            <!-- page end-->
+        <!-- page end-->
+        </section>
+    </section>
+    <!--main content end-->
+ 
+
+</section>
+
+<include file="Public:footer" />
+
+<!--common script init for all pages-->
+<script type="text/javascript" src="__PUBLIC__/Template/js/scripts.js"></script> 
+<script type="text/javascript" src="__PUBLIC__/Template/js/jquery-validate/jquery.validate.min.js"></script>
+<script> 
+
+$(function(){ 
+    $("#AddForm").validate({
+        rules: {
+            customsCode: "required",
+            cbeName: "required",
+            applyName: "required",
+            ecpCode: "required",
+            ecpName: "required",
+            accessType: "required",
+            ieType: "required",
+            appUid: "required",
+            appUname: "required",
+        },
+        messages: {
+            customsCode: "申报海关代码不可为空",
+            cbeName: "电商名称不可为空",
+            applyName: "申报企业名称不可为空",
+            ecpCode: "电商平台代码不可为空",
+            ecpName: "电商平台名称不可为空",
+            accessType: "接入类型必选",
+            ieType: "进出口标志必选",
+            appUid: "用户编号不可为空",
+            appUname: "用户名称不可为空",
+        }
+    });
+   
+});
+</script>
+</body>
+</html>

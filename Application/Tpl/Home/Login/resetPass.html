@@ -1,0 +1,76 @@
+<include file="Public:header" />
+
+	<div class="login-logo">
+		<div class="container">
+			<a href="{:U("Index/index")}">
+				<img src="__PUBLIC__/Image/login-logo.png" class="p-l">
+			</a>
+			<span class="p-l title">找回密码</span>
+		</div>
+	</div>
+	<div class="container">
+		
+		<div class="register">
+			<div class="forget-pass-step">
+				<div class="line line-lbordered line-lighted">
+					<div class="step">1</div>
+					<div class="text">验证手机</div>
+				</div>
+				<div class="line  line-lighted">
+					<div class="step">2</div>
+					<div class="text">重置密码</div>
+				</div>
+				<div class="line line-rbordered">
+					<div class="step">3</div>
+					<div class="text">设置成功</div>
+				</div>
+			</div>
+			<div class="register-form">
+				<div class="line">
+					<label class="p-l">新 密 码：</label>
+					<input name="newpwd" type="password" class="p-l">
+					<span class="p-l">*密码不能为空</span>
+				</div>
+				<div class="line">
+					<label class="p-l">确认密码：</label>
+					<input name="oldpwd" type="password" class="p-l">
+					<span class="p-l">*密码不能为空</span>
+				</div>
+				<div class="line">
+					<label class="p-l"></label>
+					<a id="regist"  class="login-btn p-l" style="display:inline-block; width: 300px;" href="javascript:;" onclick="isOk()">确认手机号</a>
+					<span class="p-l"></span>
+				</div>
+			</div>
+		</div>
+	</div>
+<script>
+	function isOk(){
+	            if($.trim($("[name='newpwd']").val())==""||$.trim($("[name='oldpwd']").val())==""){
+	                alert("密码不能为空！");
+	                return;
+	            }
+	            if($.trim($("[name='newpwd']").val())!=$.trim($("[name='oldpwd']").val())){
+	                alert("两次密码输入不一致，请重新输入！");
+	                return;
+	            }
+	            var postData = {
+	                'pwd':$("[name='newpwd']").val()
+	            };
+	            var url = "{:U('Login/resetPwd')}";
+	            $.post(url,postData,function(data){
+	                switch(data["code"]){
+	                    case 2000:   //跳到登录页
+	                        window.location.href = "{:U('Login/resetSuccess')}";
+	                        break;
+	                    case -4000:
+	                    	  alert(data.msg);	
+	                        break;
+	                    default:
+	                        break;
+	                }
+	            });
+	}
+</script>
+
+<include file="Public:footer" />

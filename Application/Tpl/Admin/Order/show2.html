@@ -1,0 +1,219 @@
+<include file="Public:header" />
+
+    <!--dynamic table-->
+    <link href="__PUBLIC__/Template/assets/advanced-datatable/media/css/demo_page.css" rel="stylesheet" />
+    <link href="__PUBLIC__/Template/assets/advanced-datatable/media/css/demo_table.css" rel="stylesheet" />
+    <link rel="stylesheet" href="__PUBLIC__/Template/assets/data-tables/DT_bootstrap.css" />
+
+ <include file="Public:menu" />
+
+    <!--main content start-->
+    <section id="main-content">
+        <section class="wrapper">
+        <!-- page start--> 
+        <div class="row">
+            <div class="col-md-12">
+                <!--breadcrumbs start -->
+                <ul class="breadcrumb">
+                    <li><a href="#"><i class="fa fa-home"></i> 首页</a></li>
+                    <li><a href="#"> 订单管理</a></li>
+                    <li class="active"> 待发货订单详情</li>
+                </ul>
+                <!--breadcrumbs end -->
+            </div>
+        </div>
+
+        
+            <div class="row">
+                <div class="col-lg-12">
+                    <section class="panel">
+                        <header class="panel-heading">
+                            待发货订单详情
+                        </header>
+                        <div class="panel-body">
+                            
+                            <div class="row"> 
+                                <div class="col-lg-4"><p>订单编号:{$list.orderNum}</p></div>
+                                <div class="col-lg-4"><p>会员:{$list.memberId|getUserField}</p></div> 
+                                <div class="col-lg-4"><p>状态:
+                                 <if condition="$vo.status eq 0 ">
+                                    待付款
+                                <elseif condition="$vo.status eq 1 " />
+                                    待发货
+                                <elseif condition="$vo.status eq 2 " />
+                                    已发货
+                                <elseif condition="$vo.status eq 3 " />
+                                    交易成功
+                                <elseif condition="$vo.status eq 4 " />
+                                    交易关闭
+                                <elseif condition="$vo.status eq 5 " />
+                                    退款中
+                                <elseif condition="$vo.status eq 6 " />
+                                    待评价
+                                <elseif condition="$vo.status eq 7 " />
+                                    已完成
+                                </if>    
+                                </p>
+                                </div> 
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-4"><p>下单时间:{$list.createtime|date="Y-m-d H:i:s",###}</p></div>
+                                <div class="col-lg-4"><p>付款时间:{$list.payTime|date="Y-m-d H:i:s",###}</p></div>
+                                <div class="col-lg-4"><p>支付方式:{$list.paytypeId}</p></div>
+                            </div> 
+                            <div class="row">
+                                <div class="col-lg-3"><p>配送方式:{$list.expressId}</p></div>
+                                <div class="col-lg-3"><p>收货人:{$list.addressId|getField=###,name,Address}</p></div>
+                                <div class="col-lg-3"><p>手机:{$list.addressId|getField=###,tel,Address}</p></div>
+                                <div class="col-lg-3"><p>地址:{$list.addressId|getField=###,specificAddr,Address} {$list.addressId|getField=###,addr,Address}</p></div>
+                            </div>
+                            <div class="row"><hr></div>
+                            <div class="row" style="border-bottom: 1px dotted #ccc;margin-bottom: 5px;">
+                                <div class="col-lg-3"><p>商品</p></div>
+                                <div class="col-lg-3"><p>数量</p></div> 
+                                <div class="col-lg-3"><p>单价(元)</p></div>
+                                <div class="col-lg-3"><p>小计(元)</p></div>
+                            </div>
+                            <volist name="dOrderinfo" id="vo" key="k">
+                            <div class="row" <eq name="k%2" value="0">style="background-color:#eee"</eq>>
+                                <div class="col-lg-3"><p>{$vo.goodsId|getField=###,name,Goods}</p></div>
+                                <div class="col-lg-3"><p>{$vo.goodsNum}</p></div> 
+                                <div class="col-lg-3"><p>{$vo.goodsPrice} 元</p></div>
+                                <div class="col-lg-3"><p>小计:{$vo.subtotal} 元</p></div>
+                            </div>
+                            </volist>
+
+                            <div class="row" style="border-top: 1px dotted #ccc;margin-bottom: 5px;">
+                                <div class="col-lg-3"><p>&nbsp;</p></div>
+                                <div class="col-lg-3"><p>&nbsp;</p></div> 
+                                <div class="col-lg-3"><p>&nbsp;</p></div>
+                                <div class="col-lg-3">
+                                    <p style="color:red" id="yunfeiShow">运费:<b>{$list.freight}</b> 元 &nbsp;&nbsp;<button type="button" onclick="javascript:editPayment({$list.id},1)" class="btn btn-primary btn-xs"><i class="fa fa-pencil"></i> 改价</button>
+                                    </p>
+                                    <p style="color:red;display:none" id="yunfeiEdit">修改运费:<input type="text" id="freight" style="width:3em" value="{$list.freight}" /> 
+                                    &nbsp;&nbsp;<button type="button" onclick="javascript:editPayment({$list.id},2)" class="btn btn-primary btn-xs"><i class="fa fa-pencil"></i> 确认</button>
+                                    <!-- <a href="javascript:editPayment({$list.id},2)" style="color:red;background-color:#aaa;padding:3px">确认</a> -->
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-3"><p>&nbsp;</p></div>
+                                <div class="col-lg-3"><p>&nbsp;</p></div> 
+                                <div class="col-lg-3"><p>&nbsp;</p></div>
+                                <div class="col-lg-3"><p style="color:red">优惠券:<b>-{$list.voucherId}</b> 元</p></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-3"><p>商品品种数合计:{$total.totalGoods}</p></div>
+                                <div class="col-lg-3"><p><!--商品数量合计:{$total.totalGoodsNum}--></p></div> 
+                                <div class="col-lg-3"><p><!--小计合计:{$total.totalSubtotal} 元--></p></div>
+                                <div class="col-lg-3"><p style="color:red" id="tatalPrice">实收:<b>{$list.payment}</b> (合计:{$total.totalPrice}) 元</p></div>
+                            </div>
+
+<hr>
+                            <div class="form">
+                                <form class="cmxform form-horizontal " id="myForm" method="post" action="#"> 
+                                     <div class="form-group ">
+                                        <label for="expressId" class="control-label col-lg-3">选择物流公司</label>
+                                        <div class="col-lg-6">
+                                            <select id="expressId" name="expressId" class="form-control form-inline  m-bot15" style="width:200px;float:left;color:#000">
+                                                <option value="0">[请选择]</option>
+                                                <volist name="express" id="vo">
+                                                    <option value="{$vo.id}">{$vo.name}</option>
+                                                </volist>
+                                            </select>  
+                                        </div>
+                                    </div>
+                                    <div class="form-group ">
+                                        <label for="sendNum" class="control-label col-lg-3">物流运单号</label>
+                                        <div class="col-lg-6">
+                                            <input class=" form-control" id="sendNum" name="sendNum" type="text" />
+                                        </div>
+                                    </div> 
+                                </form>
+                            </div>
+                            <input type="hidden" id="id" value="{$list.id}">
+<hr>
+                             <div class="form">
+                                <form class="cmxform form-horizontal " id="myForm" method="post" action="#"> 
+                                    <div class="form-group">
+                                        <div class="col-lg-offset-3 col-lg-6">
+                                            <button class="btn btn-primary" id="btn" type="button"> 发货</button>
+                                            <button class="btn btn-default cancelBtn" dataurl="/Admin/Order/index/menu/order" type="button"> 取消</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div><!-- end form -->
+                    </section>
+                </div>
+            </div>
+            <!-- page end-->
+        <!-- page end-->
+        </section>
+    </section>
+    <!--main content end-->
+ 
+
+</section>
+
+<include file="Public:footer" />
+
+<!--common script init for all pages-->
+<script type="text/javascript" src="__PUBLIC__/Template/js/scripts.js"></script> 
+<script>
+//改价
+function editPayment(id,tag){ 
+    var newYunfei = $('#freight').val();
+    if(newYunfei < 0){
+        alert('运费不可为负数');
+        return;
+    }
+    var url = "/Admin/Order/editPayment";
+    var postData = {
+        'id':id,
+        'newYunfei':newYunfei
+    }
+
+    if(tag == 2){
+        $('#yunfeiShow').show();
+        $('#yunfeiEdit').hide();
+        console.log(postData);
+        $.post(url,postData,function(data){
+            console.log(data);
+            if(data.code == 2000){
+                $('#yunfeiShow').html('运费:<b>'+data.data.freight+'</b> 元 &nbsp;&nbsp;');
+                $('#tatalPrice').html('合计:<b>'+data.data.payment+'</b> 元'); 
+            }else{
+                alert(data.msg);
+            }
+        });
+    }else{
+        $('#yunfeiShow').hide();
+        $('#yunfeiEdit').show(); 
+    }   
+}//editPayment()
+
+//发货
+$(function(){
+    $('#btn').click(function(){ 
+        var url = "/Admin/Order/sendGoods";
+        var postData = {
+            'id':$('#id').val(),
+            'expressId':$('#expressId').val(),
+            'sendNum':$('#sendNum').val()
+        } 
+        console.log(postData);
+        $.post(url,postData,function(data){
+            console.log(data);
+            if(data.code == 2000){
+                window.location.href = "/Admin/Order/index2";
+            }else{
+                alert(data.msg);
+            }
+        });
+
+    });
+});
+</script>
+</body>
+</html>

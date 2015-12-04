@@ -1,0 +1,149 @@
+<include file="Public:header" />
+<include file="Public:menu" />
+<div class="user">
+	<div class="container">
+		<div class="user-content">
+			<include file="Public:user_menu" />
+			<div class="user-right">
+				<div class="header">
+                    订单详情
+                </div>
+                <div class="content">
+                    <div class="myorder-con-top">
+                        <ul>
+                            <li>订单编号：</li>
+                            <li>{$list.orderNum}</li>
+                        </ul>
+                        <ul>
+                            <li>下单时间：</li>
+                            <li>{$list.createtime|date="Y-m-d H:i:s",###}</li>
+                        </ul>
+                        <ul>
+						<!-- status：表示订单状态，待付款0、待发货1、已发货2、交易成功3、交易关闭4、退款中订单5,待评价6，已完成7 -->
+                            <li>订单状态：</li>
+                            <if condition="$list.status eq 0 "><li>待付款</li>
+							<elseif condition="$list.status eq 1 " /><li>待发货</li>
+							<elseif condition="$list.status eq 2 " /><li>已发货</li>
+							<elseif condition="$list.status eq 3 " /><li>交易成功</li>
+							<elseif condition="$list.status eq 4 " /><li>交易关闭</li>
+							<elseif condition="$list.status eq 5 " /><li>退款中</li>
+							<elseif condition="$list.status eq 6 " /><li>待评价</li>
+							<elseif condition="$list.status eq 7 " /><li>已完成 </li>
+							</if> 
+                        </ul>
+                    </div>
+
+                    <div class="myorder-con-person">
+                        <p class="ft14">收货人信息：</p>
+                        <ul>
+                            <li>收货人：</li>
+                            <li>{$dAddr.name}</li>
+                        </ul>
+                        <ul>
+                            <li>收货人电话：</li>
+                            <li>{$dAddr.tel}</li>
+                        </ul>
+                        <ul>
+                            <li>收货地址：</li>
+                            <li>{$dAddr.specificAddr} {$dAddr.addr}</li>
+                        </ul>
+                    </div>
+                    <div class="myorder-con-person myorder-mr-top">
+                        <p class="ft14">支付信息：</p>
+                        <ul>
+                            <li>支付状态：</li>
+                            <li>{$list.paytypeId|getField=###,name,Paytype}</li>
+                        </ul>
+                    </div>
+                    <div class="myorder-con-person myorder-mr-top">
+                        <p class="ft14">物流信息：</p>
+                        <ul>
+                            <li>物流公司：</li>
+                            <li>{$list.expressId|getField=###,name,Express}</li>
+                        </ul>
+                        <ul>
+                            <li>运单号：</li>
+                            <li>{$list.sendNum}</li>
+                        </ul>
+                    </div>
+                    <div class="myorder-con-person myorder-mr-top myorder-bd-botm">
+                        <p class="ft14">评价：</p>
+                        <ul>
+                            <li>商品质量：</li>
+							<for start="0" end="dComment.service">
+								<li><img src="__PUBLIC__/Image/sampImg/star.png" /></li>
+							</for> 
+                        </ul>
+                        <ul>
+                            <li>描述相符：</li>
+							<for start="0" end="dComment.desc">
+								<li><img src="__PUBLIC__/Image/sampImg/star.png" /></li>
+							</for> 
+                        </ul>
+                        <ul>
+                            <li>配送速度：</li>
+							<for start="0" end="dComment.loginstics">
+								<li><img src="__PUBLIC__/Image/sampImg/star.png" /></li>
+							</for> 
+                        </ul>
+                        <ul>
+                            <li>{$dComment.content}</li>
+                            <li></li>
+                        </ul>
+                    </div>
+<style type="text/css">
+.myorder-goodInfo-p .row{ 
+	border:1px solid #aaa;
+}
+.myorder-goodInfo-p .row .cols{
+	padding:8px 10px;
+	border:1px solid #aaa;
+}
+</style>
+                    <div class="goodInfo-content myorder-goodinfo">
+                        <p class="ft14 myorder-goodInfo-p">商品信息：</p>
+						<div class="row">
+							<span class="cols">商品名称:{$dOrderinfo.goodsId|getField=###,name,Goods}</span>
+							<span class="cols">单价|{$dOrderinfo.goodsPrice}</span>
+							<span class="cols">进口税:{$dOrderinfo.goodsTax}</span>
+							<span class="cols">数量:{$dOrderinfo.goodsNum}</span>
+							<span class="cols">小计:{$dOrderinfo.subtotal}</span>
+						</div> 
+						<div class="row">
+							<span class="cols">本单税费：￥ </span>
+							<span class="cols">运费：￥ </span>
+							<span class="cols">货款：￥ </span>
+							<span class="cols">数量：</span>
+							<span class="cols">合计： </span>
+						</div>   
+
+						<div class="myorder-buycar-end-two">
+							<div class="myorder-fl-ri">
+								<ul>
+									<li>使用优惠券：</li>
+									<li>-20.00</li>
+								</ul>
+							</div>
+						</div>
+						<div class="myorder-buycar-end-thired">
+							<div class="myorder-fl-ri ft18">
+								<ul>
+									<li>实际付款金额
+									   <span class="myorder-thired-text">（不含运费）</span> ：
+									</li>
+									<li class="myorder-thired-text-price">
+										￥<span></span>
+									</li>
+								</ul>
+							</div>
+						</div>
+                        </div>    
+                    </div>
+                </div>
+            </div>
+            
+		</div>
+	</div>
+</div>
+
+<include file="Public:footer" />

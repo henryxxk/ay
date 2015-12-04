@@ -1,0 +1,74 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Untitled Document</title>
+</head>
+<body>
+<!--//团体
+<form action="{:U('GoodInfo/upGradeVIP')}" method="post"> 
+    
+    <input type="text" name="mId" /> 
+    
+    <hr>
+    <input type="text" name="name[]" />
+    <input type="text" name="tel[]" /> 
+    <input type="text" name="name[]" />
+    <input type="text" name="tel[]" /> 
+    <input type="text" name="name[]" />
+    <input type="text" name="tel[]" /> 
+    
+    <hr>
+    
+    <input type="text" name="organi" /><br/>
+    <input type="text" name="contacts" />
+    <input type="text" name="phone" />
+    <input type="text" name="remark" />
+    
+    <input type="submit" value="submit" / >
+    
+</form>-->
+    
+//提交购物车中的商品信息到订单（商品id,数量）
+<form action="{:U('GoodInfo/immeditBuy')}" method="post"> 
+    <input type="text" name="cargoodId[]" />
+    <input type="text" name="cargoodId[]" />
+    <br/>
+    <input id='1' type="text" name="goodsId[]" />
+    <input id='2' type="text" name="goodsId[]" />
+    <br/>
+    <input type="text" name="pNum[]" />
+    <input type="text" name="pNum[]" /> 
+    <br/>
+    <hr/>
+
+    <input type="text" name="mId" />
+    <input type="text" name="money" />
+    <input type="text" name="payment" />
+
+    <input type="submit" value="submit" / >
+    
+</form>
+
+</body>
+</html>
+<!-- Js -->
+<script type="text/javascript" src="__PUBLIC__/Js/jquery.js"></script>
+<script>
+    function transdate(endTime){
+        var date=new Date();
+        date.setFullYear(endTime.substring(0,4));
+        date.setMonth(endTime.substring(5,7)-1);
+        date.setDate(endTime.substring(8,10));
+        date.setHours(endTime.substring(11,13));
+        date.setMinutes(endTime.substring(14,16));
+        date.setSeconds(endTime.substring(17,19));
+        return Date.parse(date)/1000;
+    }
+    $(function(){
+        var  ddate = new Date(('2014/05/10 13:25:50').replace(new RegExp("-","gm"),"/")).getTime()/1000;
+        alert(ddate);
+        var shijianchuo = new Date(parseInt(ddate) * 1000).toLocaleString().replace(/:d{1,2}$/,' ');
+        alert(shijianchuo);
+    });
+</script>

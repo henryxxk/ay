@@ -1,0 +1,150 @@
+<include file="Public:header" />
+
+	<div class="login-logo">
+		<div class="container">
+			<a href="{:U("Index/index")}">
+				<img src="__PUBLIC__/Image/login-logo.png" class="p-l">
+			</a>
+			<span class="p-l title">用户注册</span>
+		</div>
+	</div>
+	<div class="container">
+		<div class="register-title">
+			我已经注册，现在就
+			<a href="{:U("Login/index")}" style="color: #d92921;">登录</a>
+		</div>
+	</div>
+	<div class="container">
+		<div class="register">
+			<div class="register-form">
+				<div class="line">
+					<label class="p-l">账 户 名：</label>
+					<input name="uname" type="text" class="p-l">
+					<span class="p-l">*账户名不能为空</span>
+				</div>
+				<div class="line">
+					<label class="p-l">手 机 号：</label>
+					<input name="tel" type="text" class="p-l">
+					<span class="p-l">*手机号不能为空</span>
+				</div>
+				<div class="line">
+					<label class="p-l">验 证 码：</label>
+					<input id="imgYzm" type="text" style="width:123px;" class="p-l">
+					<img style="width:120px;margin-left:10px;height:45px;" title="验证码" src="{:U("Login/verify")}" id="verifyCode">
+				</div>
+				<div class="line">
+					<label class="p-l" style="width:100px;margin-left:-30px;">手机验 证 码：</label>
+					<input id="yzm" type="text" style="width:123px;" class="p-l">
+					<button id="send"  class="login-btn p-l" style="width:123px;margin-left: 30px;border:none;" onclick="send()"  >发送验证码</button>
+					<span class="p-l"></span>
+				</div>
+				<div class="line">
+					<label class="p-l">设置密码：</label>
+					<input name="password" type="password" class="p-l">
+					<span class="p-l"></span>
+				</div>
+				<div class="line">
+					<label class="p-l">确认密码：</label>
+					<input name="repassword" type="password" class="p-l">
+					<span class="p-l"></span>
+				</div>
+				<div class="line">
+					<label class="p-l"></label>
+					<a id="regist" href="javascript:;"  class="login-btn p-l" style="display:inline-block; width: 300px;">立即注册</a>
+					<span class="p-l"></span>
+				</div>
+			</div>
+		</div>
+	</div>
+<script>
+	$("#verifyCode").click(function(){
+
+		$(this).attr("src",$(this).attr("src").split("?")[0] + "?" + Math.random());
+
+	});
+	function send(){
+		if($.trim($("[name='tel']").val())==""){
+    			alert("请输入手机号！");
+    			return;
+    		}
+                    
+
+    		if($.trim($("#imgYzm").val())==""){
+    			alert("请输入验证码！");
+    			return;
+    		}
+                    
+    		var url = "{:U('Login/sendCheckcode')}";
+    		var postData = {
+    			'phone':$("[name='tel']").val(),
+    			'verify':$("#imgYzm").val()
+    		}
+                    
+    		$.post(url,postData,function(data){
+    			// console.log(data);
+    			if(data["code"]==-4001){
+    				alert("验证码错误！");
+    			}else if(data["code"]==-6001){
+    				alert("请输入正确的手机号！");
+                                }else if(data["code"]==-6003){
+                                        $("#send").get(0).disabled = true; 
+                                        $("#send").css("background-color","#DDDDDD");
+                                        alert("请1分钟后重新发送！");
+    			}else if(data["code"]==2000){
+                                        $("#send").get(0).disabled = true; 
+                                        $("#send").css("background-color","#DDDDDD");
+                                }
+    		});
+
+	}
+    $(function(){
+        $("#regist").click(function(){
+            var uname = $("[name=uname]").val();
+            var tel = $("[name=tel]").val();
+            var password = $("[name=password]").val();
+            var repassword = $("[name=repassword]").val();
+            if($.trim(uname)==""||$.trim(tel)==""||$.trim(password)==""){
+                alert("注册参数不能为空！");
+                return;
+            }
+            if($.trim($("#yzm").val())==""){
+                alert("验证码不能为空！");
+                return;
+            }
+            if($.trim(password)!=$.trim(repassword)){
+                alert("两次密码输入不一致，请重新输入！");
+                return;
+            }
+
+            var postData = {
+                'uname':uname,
+                'tel':tel,
+                'password':password,
+                'code':$("#yzm").val(),
+                'verify':$("#imgYzm").val()
+            };
+            var url = "{:U('Login/registerIn')}";
+            $.post(url,postData,function(data){
+            	console.log(data);
+                switch(data["code"]){
+                    case -2001,-3000:
+                        alert(data.msg);
+                        break;
+                    case 2000:   //跳到登录页
+                        window.location.href = "{:U('Login/index')}";
+                        break;
+                    case -4000:
+                    	  alert(data.msg);	
+                        break;
+                    case -5000:
+                    	   alert("验证码错误！");
+                    	   break;
+                    default:
+                        break;
+                }
+            });
+        });
+    });
+</script>
+
+<include file="Public:footer" />

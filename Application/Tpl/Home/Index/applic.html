@@ -1,0 +1,55 @@
+<include file="Public:header" />
+<include file="Public:menu" />
+<div class="location">
+	<div class="container">
+		<span class="location-main">首页></span>
+		<span class="location-sub">
+            在线申请
+        </span> 
+	</div>
+</div>
+<div class="article-title">
+	<div class="container">
+		在线申请
+	</div>
+</div>
+<div class="article-content">
+    <div class="container">
+        <div class="applic-con">
+            <p class="applic-p-first">
+                上传身份证：<input type="text" name="iden" id="iden" />
+            </p>
+            <p class="applic-p-two">
+                <span>代购证明：</span>
+                <textarea rows="11" cols="70" name="prove" id="prove" ></textarea>
+            </p>
+            <p class="applic-p-third">
+               <span><a href="javascript:;" id="btn">提交申请</a></span>
+            </p>
+        </div>
+    </div>
+</div>
+<include file="Public:footer" />
+<script>
+$(function(){
+    $('#btn').click(function(){
+        if($.trim($('#iden').val())==""||$.trim($('#prove').val())==""){
+            alert("请输入申请信息");
+            return;
+        }
+        
+        var url = "/Index/applybehalf";
+        var postData = {
+            'iden':$('#iden').val(),
+            'prove':$('#prove').val()
+        }
+        $.post(url,postData,function(data){
+            console.log(data);
+            alert(data.msg);
+            if(data.code == 2000){
+                window.location.href = "";
+            }
+        });
+    });
+});
+</script>

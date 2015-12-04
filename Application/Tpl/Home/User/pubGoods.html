@@ -1,0 +1,445 @@
+<include file="Public:header" />
+<link href="__PUBLIC__/Css/newcommon.css" rel="stylesheet" />
+<!--dynamic table-->
+    <link href="__PUBLIC__/Template/assets/advanced-datatable/media/css/demo_page.css" rel="stylesheet" />
+    <link href="__PUBLIC__/Template/assets/advanced-datatable/media/css/demo_table.css" rel="stylesheet" />
+    <link rel="stylesheet" href="__PUBLIC__/Template/assets/data-tables/DT_bootstrap.css" />
+<include file="Public:menu" />
+<div class="user">
+	<div class="container">
+		<div class="user-content">
+			
+			<include file="Public:user_menu" />
+			<div class="user-right">
+				<div class="header">
+					发布商品
+				</div>
+				<div class="content">
+					<div class="pub" style="margin-top:20px;">
+						<label class="" >商品名称：</label>
+						<input type="text" id="name">
+						<p class="tip" style="color:#d92921">*商品名称不能为空</p>
+					</div>
+					<div class="pub" >
+						<label class="">商品分类：</label>
+						<select id="type1">
+							<option value="">--请选择--</option>
+							<volist name="goodsType" id="vo">
+							<option value="{$vo.id}">{$vo.name}</option>
+							</volist> 
+						</select>
+						<select id="type2">
+							<option>--请选择--</option> 
+						</select>
+					</div>
+				<!-- 	<div class="form-group" style="margin-left:40px;margin-bottom:10px;">
+						<div class="col-lg-6">
+							<label for="taxrateId" class="control-label col-lg-3">选择税率：</label>
+			                                            <input type="button" onclick="taxrateShow()" value="展开税率表>>" />
+			                                            <input type="button" onclick="taxrateHide()" value="合上税率表<<" />
+			                                            <div id="taxrateShow" style="border:1px solid #bbb;padding:10px;display:none;">
+			                                            <volist name="taxratelist" id="vo">
+			                                                <p><input type="radio" name="taxrateId" value="{$vo.id}" />&nbsp;<b>{$vo.classify} (税率:<span style="color:red">{$vo.revenue}</span>)</b><br>
+			                                                {$vo.scope}</p> 
+			                                                <input type="hidden" name="taxrate" value="{$vo.revenue}" />
+			                                            </volist> 
+			                                            <input type="button" onclick="taxrateHide()" value="合上税率表<<" />
+			                                            </div>
+			                                 </div>
+					</div> -->
+ 				<!-- 关税开始 --> 
+				<div class="pub" >
+					<label class="">选择税率：</label>
+					<select id="gs001">
+                        <option value="0">[请选择]</option> 
+                         <volist name="taxratelist" id="vo">
+                            <option value="{$vo.id}">[{$vo.snum}] {$vo.classify}</option>
+                        </volist>
+                    </select> 
+                    <select id="gs002" style="display:none;">
+                        <option value="0">[请选择]</option> 
+                    </select>  
+                    <select id="gs003" style="display:none;">
+                        <option value="0">[请选择]</option> 
+                    </select> 
+
+                    <select id="gs004" style="display:none;">
+                        <option value="0">[请选择]</option> 
+                    </select> 
+                    
+                    <span id="gsTxt"></span>
+                    <input type="hidden" name="taxrateId" value="" />
+				</div>  
+                <!-- 关税 -->
+
+					<div class="pub clearfix" >
+						<label class="">上传商品图片01：</label>
+						<div style="position: relative;">
+						<img src="{$list.imgUrl}" id="imgshow" style="width:100px;height:100px;"><br>
+						<div class="uploadimage"  id="test" style="position: absolute;top: 3px;left: 210px;">上传</div>
+						</div>
+						<input type="file" id="uploadimg" style="display:none;"/> 
+						<input type="hidden" id="imgsTag" value="" />  <br>
+					</div>
+					<div class="pub clearfix" >
+						<label class="">上传商品图片02：</label>
+						<div style="position: relative;">
+						<img src="{$list.imgUrl}" id="imgshow2" style="width:100px;height:100px;"><br>
+						<div class="uploadimage"  id="test2" style="position: absolute;top: 3px;left: 210px;">上传</div>
+						</div>
+						<input type="file" id="uploadimg2" style="display: none" /> 
+						<input type="hidden" id="imgsTag2" value="" />   <br> 
+					</div>
+					<div class="pub clearfix" >
+						<label class="">上传商品图片03：</label>
+						<div style="position: relative;">
+						<img src="{$list.imgUrl}" id="imgshow3" style="width:100px;height:100px;"><br>
+						<div class="uploadimage"  id="test3" style="position: absolute;top: 3px;left: 210px;">上传</div>
+						</div>
+						<input type="file" id="uploadimg3" style="display: none" /> 
+						<input type="hidden" id="imgsTag3" value="" />    <br>
+					</div>
+					<div class="pub clearfix" >
+						<label class="">上传商品图片04：</label> 
+						<div style="position: relative;">
+						<img src="{$list.imgUrl}" id="imgshow4" style="width:100px;height:100px;"><br>
+						<div class="uploadimage"  id="test4" style="position: absolute;top: 3px;left: 210px;">上传</div>
+						</div>
+						<input type="file" id="uploadimg4" style="display: none" /> 
+						<input type="hidden" id="imgsTag4" value="" />  <br> 
+					</div>
+					<div class="pub clearfix" style="margin-top:62px;">
+						<label class="">市场价：</label>
+						<input type="text" id="marketPrice">
+						<p class="tip">元</p>
+					</div>
+					<!--<div class="pub" >
+						<label class="">VIP价：</label>
+						<input type="text" id="vipPrice">
+						<p class="tip">元</p>
+					</div>-->
+					<div class="pub" >
+						<label class="">库存：</label>
+						<input type="text" id="stock">
+						<p class="tip">件</p>
+					</div>
+					<!--<div class="pub" >
+						<label class="">团购价：</label>
+						<input type="text" id="groupPrice">
+						<p class="tip">元</p>
+					</div>-->
+					<div class="pub" >
+						<label class="">详细描述：</label>
+						<textarea id="desc"></textarea>
+					</div>
+					
+					<input type="hidden" id="commodity" value="1" />
+					<input type="hidden" id="commodityUser" value="{$Think.session.memberId}" />
+						
+					<a href="javascript:;" class="login-btn p-l" style="width:300px;display:inline-block;margin-bottom:15px;margin-left:110px;margin-top:140px;" id="btn">新增商品</a>
+						
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<include file="Public:footer" />
+<script type="text/javascript" src="__PUBLIC__/Js/jquery-1.11.2.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__/Js/LocalResizeIMG.js"></script> 
+<script>  
+$(function(){
+	$("#test").click(function(){
+			$("#uploadimg").trigger('click');
+
+	});
+	$("#test2").click(function(){
+			$("#uploadimg2").trigger('click');
+
+	});
+	$("#test3").click(function(){
+			$("#uploadimg3").trigger('click');
+
+	});
+	$("#test4").click(function(){
+			$("#uploadimg4").trigger('click');
+
+	});
+});
+$(function(){  
+	//图片上传
+	$('#uploadimg').localResizeIMG({
+	  width: 1,
+	  quality: 1,
+	  success: function (result) {
+	  	console.log(result);
+	    var postData = 
+	    {
+	      "data":result.clearBase64,
+	      "path":'./Public/Uploads/'
+	    };
+	    $.post("/Base/uploadImage",postData,function(data){ 
+	        if(data["code"] == 2000){
+             var img = new Image(); 
+	          $("#imgshow").attr('src',data.data); 
+	          $("#imgsTag").val(data.data); 
+	        } 
+	    }) 
+	   }
+	}); 
+});
+$(function(){  
+	//图片上传
+	$('#uploadimg2').localResizeIMG({
+	  width: 1,
+	  quality: 1,
+	  success: function (result) {
+	  	console.log(result);
+	    var postData = 
+	    {
+	      "data":result.clearBase64,
+	      "path":'./Public/Uploads/'
+	    };
+	    $.post("/Base/uploadImage",postData,function(data){ 
+	        if(data["code"] == 2000){
+             var img = new Image(); 
+	          $("#imgshow2").attr('src',data.data); 
+	          $("#imgsTag2").val(data.data); 
+	        } 
+	    }) 
+	   }
+	}); 
+});
+$(function(){  
+	//图片上传
+	$('#uploadimg3').localResizeIMG({
+	  width: 1,
+	  quality: 1,
+	  success: function (result) {
+	  	console.log(result);
+	    var postData = 
+	    {
+	      "data":result.clearBase64,
+	      "path":'./Public/Uploads/'
+	    };
+	    $.post("/Base/uploadImage",postData,function(data){ 
+	        if(data["code"] == 2000){
+             var img = new Image(); 
+	          $("#imgshow3").attr('src',data.data); 
+	          $("#imgsTag3").val(data.data); 
+	        } 
+	    }) 
+	   }
+	}); 
+});
+$(function(){  
+	//图片上传
+	$('#uploadimg4').localResizeIMG({
+	  width: 1,
+	  quality: 1,
+	  success: function (result) {
+	  	console.log(result);
+	    var postData = 
+	    {
+	      "data":result.clearBase64,
+	      "path":'./Public/Uploads/'
+	    };
+	    $.post("/Base/uploadImage",postData,function(data){ 
+	        if(data["code"] == 2000){
+             var img = new Image(); 
+	          $("#imgshow4").attr('src',data.data); 
+	          $("#imgsTag4").val(data.data); 
+	        } 
+	    }) 
+	   }
+	}); 
+});
+//分类
+$(function(){
+	$('#type1').change(function(){
+		var url = "/Base/getType2";
+		var postData = {
+			'id':$('#type1').val()
+		}
+		$.post(url,postData,function(data){
+			if(data.code == 2000){
+				$('#type2').html('<option value="">请选择</option>');
+				$.each(data.data,function(k,v){
+					var str = '<option value="'+v.id+'">'+v.name+'</option>';
+					$('#type2').append(str);
+				});
+			}
+		});
+	});
+});
+//新增
+$(function(){
+	$('#btn').click(function(){
+		var imgStr = '';
+		var img01 = $("#imgsTag").val();
+		if( img01 != ''){
+			imgStr += img01;
+		}
+		var img02 = $("#imgsTag2").val();
+		if( img02 != ''){
+			imgStr += ","+img02;
+		}
+		var img03 = $("#imgsTag3").val();
+		if( img03 != ''){
+			imgStr += ","+img03;
+		}
+		var img04 = $("#imgsTag4").val();
+		if( img04 != ''){
+			imgStr += ","+img04;
+		}
+		var tax = 1;
+		$("[name='taxrateId']").each(function(){
+			if($(this).get(0).checked==true){
+				tax = $(this).val();
+			}
+		});
+		console.log("ff="+tax); 
+		var url ="/User/addPubGoods";
+		var postData = {
+			'name':$('#name').val(),
+			'type1':$('#type1').val(),
+			'type2':$('#type2').val(),
+			'marketPrice':$('#marketPrice').val(),
+			'vipPrice':0,
+			'groupPrice':0,
+			'stock':$('#stock').val(),
+			'desc':$('#desc').val(),
+			'commodity':1,
+			'commodityUser':$('#commodityUser').val(),
+			'imgs':imgStr,
+			'taxrateId': tax
+		}
+		//验证
+		if(postData.name == ''){
+			alert('标题不能为空');return;
+		}
+		if(postData.marketPrice == ''){
+			alert('市场价不能为空');return;
+		} 
+		if(postData.stock == ''){
+			alert('库存不能为空');return;
+		} 
+		$.post(url,postData,function(data){ 
+			alert("发布成功！"); 
+			window.location.href = "/User/goods";
+			
+		});
+	});
+
+});
+</script>
+<script>
+function taxrateShow(){  
+     $("#taxrateShow").show("slow"); 
+}
+function taxrateHide(){  
+     $("#taxrateShow").hide("slow"); 
+}
+</script>
+<script type="text/javascript">
+$(function(){
+    //
+    $('#gs001').change(function(){ 
+        var url = "{:U('Goods/getTaxrate')}";
+        var postData = {
+            'id':$(this).val()
+        }
+        console.log(postData);
+        $.post(url,postData,function(data){
+            console.log(data);
+            if(data.code == 2000){
+                $('#gs002').show().html('<option value="0">[请选择]</option>');
+                $.each(data.data,function(k,v){ 
+                    if(v.revenue != ''){
+                        $('#gs002').append('<option value="'+v.id+'">['+v.snum+'] '+v.classify+' (税率:'+v.revenue+')'+'</option>');
+                    }else{
+                        $('#gs002').append('<option value="'+v.id+'">['+v.snum+'] '+v.classify+'</option>');
+                    }
+                });
+            }else{
+                var gsId = $('#gs001').val();
+                // $('#gsTxt').html(gsId);
+                $('input[name="taxrateId"]').val(gsId);
+            }
+        });
+    });
+    //
+    $('#gs002').change(function(){
+        var url = "{:U('Goods/getTaxrate')}";
+        var postData = {
+            'id':$(this).val()
+        }
+        $.post(url,postData,function(data){
+            console.log(data);
+            if(data.code == 2000){
+                $('#gs003').show().html('<option value="0">[请选择]</option>');
+                $.each(data.data,function(k,v){ 
+                    if(v.revenue != ''){
+                        $('#gs003').append('<option value="'+v.id+'">['+v.snum+'] '+v.classify+' (税率:'+v.revenue+')'+'</option>');
+                    }else{
+                        $('#gs003').append('<option value="'+v.id+'">['+v.snum+'] '+v.classify+'</option>');
+                    }
+                });
+            }else{
+                var gsId = $('#gs002').val();
+                // $('#gsTxt').html(gsId);
+                $('input[name="taxrateId"]').val(gsId);
+            }
+        });
+    });
+    //
+    $('#gs003').change(function(){
+        var url = "{:U('Goods/getTaxrate')}";
+        var postData = {
+            'id':$(this).val()
+        }
+        $.post(url,postData,function(data){
+            console.log(data);
+            if(data.code == 2000){
+                $('#gs004').show().html('<option value="0">[请选择]</option>');
+                $.each(data.data,function(k,v){ 
+                    if(v.revenue != ''){
+                        $('#gs004').append('<option value="'+v.id+'">['+v.snum+'] '+v.classify+' (税率:'+v.revenue+')'+'</option>');
+                    }else{
+                        $('#gs004').append('<option value="'+v.id+'">['+v.snum+'] '+v.classify+'</option>');
+                    }
+                });
+            }else{
+                var gsId = $('#gs003').val();
+                // $('#gsTxt').html(gsId);
+                $('input[name="taxrateId"]').val(gsId);
+            }
+        });
+    });
+    //
+    $('#gs004').change(function(){
+        var url = "{:U('Goods/getTaxrate')}";
+        var postData = {
+            'id':$(this).val()
+        }
+        $.post(url,postData,function(data){
+            console.log(data);
+            if(data.code == 2000){
+                $('#gs004').show().html('<option value="0">[请选择]</option>');
+                $.each(data.data,function(k,v){
+                    if(v.revenue != ''){
+                        $('#gs004').append('<option value="'+v.id+'">['+v.snum+'] '+v.classify+' (税率:'+v.revenue+')'+'</option>');
+                    }else{
+                        $('#gs004').append('<option value="'+v.id+'">['+v.snum+'] '+v.classify+'</option>');
+                    }
+                });
+            }else{
+                var gsId = $('#gs004').val();
+                // $('#gsTxt').html(gsId);
+                $('input[name="taxrateId"]').val(gsId);
+            }
+        });
+    });
+});
+</script>

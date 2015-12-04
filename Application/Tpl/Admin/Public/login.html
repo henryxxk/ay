@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="ThemeBucket">
+    <link rel="shortcut icon" href="__PUBLIC__/Template/images/favicon.html">
+
+    <title>安优后台登录</title>
+
+    <!--Core CSS -->
+    <link href="__PUBLIC__/Template/bs3/css/bootstrap.min.css" rel="stylesheet">
+    <link href="__PUBLIC__/Template/css/bootstrap-reset.css" rel="stylesheet">
+    <link href="__PUBLIC__/Template/assets/font-awesome/css/font-awesome.css" rel="stylesheet" />
+
+    <!-- Custom styles for this template -->
+    <link href="__PUBLIC__/Template/css/style.css" rel="stylesheet">
+    <link href="__PUBLIC__/Template/css/style-responsive.css" rel="stylesheet" />
+
+    <!-- Just for debugging purposes. Don't actually copy this line! -->
+    <!--[if lt IE 9]><script src="__PUBLIC__/Template/js/ie8/ie8-responsive-file-warning.js"></script><![endif]-->
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="__PUBLIC__/Template/js/html5shiv.js"></script>
+    <script src="__PUBLIC__/Template/js/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+  <body class="login-body">
+
+    <div class="container">
+
+      <form class="form-signin" action="{:U('Public/checkLogin')}">
+        <h2 class="form-signin-heading" style="position:relative;text-indent:4em"><img src="__PUBLIC__/Image/logo2.png" style="width:80px;height:50px;position:absolute;top:17px;left:28px;" /> 后 台 管 理 平 台 </h2>
+        <div class="login-wrap">
+            <div class="user-login-info">
+                <input type="text" class="form-control" id="name" name="name" placeholder="用户名" autofocus>
+                <input type="password" class="form-control" id="pass" name="pass" placeholder="密码">
+            </div>
+            <label class="checkbox">
+                <!--<input type="checkbox" name="rememberMe" id="rem" value="remember-me"> 记住密码 -->
+                <span class="pull-right">
+                    <a data-toggle="modal" href="#myModal"> 忘记密码?</a>
+
+                </span>
+            </label>
+            <button class="btn btn-lg btn-login btn-block" type="submit"> 登 录 </button>
+
+           <!--  <div class="registration"> 
+                <a class="" href="registration.html">
+                    注册新用户
+                </a>
+            </div> -->
+
+        </div>
+
+          <!-- Modal -->
+          <div aria-hidden="true" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" id="myModal" class="modal fade">
+              <div class="modal-dialog">
+                  <div class="modal-content">
+                      <div class="modal-header">
+                          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                          <h4 class="modal-title">忘记密码?</h4>
+                      </div>
+                      <div class="modal-body">
+                        <p>请联系管理员找回密码！</p>
+                         <!--  <p>输入您的注册邮箱完成密码找回！</p>
+                          <input type="text" name="email" placeholder="Email" autocomplete="off" class="form-control placeholder-no-fix"> -->
+
+                      </div>
+                     <!--  <div class="modal-footer">
+                          <button data-dismiss="modal" class="btn btn-default" type="button"> 取 消 </button>
+                          <button class="btn btn-success" type="button"> 确 认 </button>
+                      </div> -->
+                  </div>
+              </div>
+          </div>
+          <!-- modal -->
+
+      </form>
+
+    </div>
+
+
+
+    <!-- Placed js at the end of the document so the pages load faster -->
+
+    <!--Core js-->
+    <script src="__PUBLIC__/Template/js/lib/jquery.js"></script>
+    <script src="__PUBLIC__/Template/bs3/js/bootstrap.min.js"></script>
+    <script src="__PUBLIC__/Js/jquery.cookie.js"></script>
+    <script type="text/javascript">
+    $(function(){
+      console.log($.cookie('remberme'));
+      var remberme = $.cookie('remberme');
+      if(remberme == 'remember-me'){
+        $('#rem').attr('checked','checked');
+        $('#name').val($.cookie('hgmsN'));
+        $('#pass').val($.cookie('hgmsP'));
+      }else{
+        $('#rem').attr('checked',null);
+        $.cookie('remberme',null);
+        $.cookie('hgmsN',null);
+        $.cookie('hgmsP',null);
+      }
+    });
+    </script>
+  </body>
+</html>

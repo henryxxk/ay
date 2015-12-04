@@ -1,0 +1,123 @@
+<div class="menu">
+	<div class="menu-top">
+		<div class="container">
+			<div class="p-l logo">
+				<a href="{:U("Index/index")}">
+					<img src="__PUBLIC__/Image/login-logo.png">
+				</a>
+			</div>
+			<div class="p-l search">
+				<div class="search-input">
+					<input id="goodName" onkeydown="keydownEvent();" type="text" class="p-l" placeholder="请输入商品名称">
+					<a id="searchGood" class="login-btn">搜索</a>
+				</div>
+				<div class="hot-keys">
+					<ul>
+						<li>
+							热门搜索：
+						</li>
+						<volist name="hotword" id="vo">
+						<li>
+    							<a href="{:U("Index/search",array("name"=>$vo))}" target="_blank">{$vo}</a>
+						</li>
+						</volist>
+					</ul>
+				</div>
+			</div>
+			<div class="p-l menu-ensure">
+					<img src="__PUBLIC__/Image/img-hgjg.png">
+					<img src="__PUBLIC__/Image/img-zpbz.png">
+			</div>
+		</div>
+	</div>
+	<div class="menu-bottom">
+		<div class="container">
+			<a id="all-good-type" href="javascript:;" class="all-cate p-l">
+				全部商品分类
+				<i class="icon-angle-down" style="margin-left: 10px;font-size: 20px;"></i>
+			</a>
+			<ul class="p-l">
+				<li>
+					<a href="{:U("Index/index")}" target="_blank">首页</a>
+				</li>
+				<li>
+					<a href="{:U("Index/scoreExchange")}" target="_blank">积分兑换</a>
+				</li>
+				<li>
+					<a href="{:U("Index/vipZone")}" target="_blank">VIP专区</a>
+				</li>
+			</ul>
+		</div>
+    <div class="container">
+        <div id="menu-daohang-total">
+                <div class="menu-daohang" style="z-index:1000;">
+                    <volist name="type" id="t" key="k">
+                    <dl id="{$t.id}" class="menu-daohang-dl menu-daohang-dl3">
+                        <dt class="menu-daohang-dl-dt">
+                        	<div class="main">
+                        		<img src="__PUBLIC__/Image/daohang{$k}.png"  data-sel="__PUBLIC__/Image/daohang{$k}_hover.png" data-unsel="__PUBLIC__/Image/daohang{$k}.png"/>
+                        		<a href="{:U('Index/search',array('tid'=>$t["id"]))}" target="_blank">{$t.name}</a>
+                        	</div>
+                            
+                           <p class="info">
+                           	<volist name="t.typeArr" id="vo" offset="0" length="3">
+                           	   <a href="{:U('Index/search',array('sid'=>$vo["id"]))}" target="_blank">{$vo.name}</a>
+                           	</volist>
+                           </p> 
+                            
+                        </dt>
+                        <dd class="menu-daohang-dl-dd" dataid="{$t[id]}"  style="display: none;">
+                            <volist name="t.typeArr" id="vo">
+                               <a href="{:U('Index/search',array('sid'=>$vo["id"]))}" target="_blank">{$vo.name}</a>
+                            </volist>
+                        </dd>
+                        <dt></dt>
+                    </dl>
+                    </volist>
+                </div>
+                
+            </div>
+    </div>    
+        
+	</div>
+</div>
+<script type="text/javascript" src="__PUBLIC__/Js/menu.js"></script>
+<script>
+     function keydownEvent() {
+         var e = window.event || arguments.callee.caller.arguments[0];
+         if (e && e.keyCode == 13 ) {
+             var name = $("#goodName").val();
+            if($.trim(name)==""){
+                alert("请输入搜索内容");
+                return;
+            }
+            window.location.href = "__APP__/Index/search/name/" + $.trim(name);
+         }
+     }
+    $(function(){
+        $("#3").hide();
+        $("#4").hide();
+        $(".menu-daohang dl").hover(function(){
+            $(this).children("dd").fadeIn();
+            $(this).children("dt").children("div").children("img").attr("src",$(this).children("dt").children("div").children("img").attr("data-sel"));
+           
+            
+        },function(){
+            $(this).children("dd").fadeOut();
+            $(this).children("dt").children("div").children("img").attr("src",$(this).children("dt").children("div").children("img").attr("data-unsel"));
+        
+        });
+        $("#searchGood").click(function(){
+            var name = $("#goodName").val();
+            if($.trim(name)==""){
+                alert("请输入搜索内容");
+                return;
+            }
+            window.location.href = "__APP__/Index/search/name/" + $.trim(name);
+        });
+//        $(".hot-keys li a").click(function(){
+//            var type = $(this).html();
+//            window.location.href = "__APP__/Index/search/type/" + type;
+//        });
+    });
+</script>

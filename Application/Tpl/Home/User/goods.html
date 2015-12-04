@@ -1,0 +1,150 @@
+<include file="Public:header" />
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/Css/newcommon.css">
+<include file="Public:menu" />
+<style type="text/css">
+	.blue{
+		color: blue;
+	}
+</style>
+<div class="user">
+	<div class="container">
+		<div class="user-content">
+			
+			<include file="Public:user_menu" />
+			<div class="user-right">
+				<div class="header">
+					商品列表
+				</div>
+				<div class="content">
+					<table class="user-table clearfix" style="border-bottom:1px dashed #efefef;margin-top:20px;">
+						<thead>
+							<tr>
+								<th style="width:500px;">商品名称</th>
+								<th style="width:200px;">分类</th>
+								<th style="width:100px;">库存</th>
+								<th style="width:100px;">市场价</th>
+								<th style="width:100px;">状态</th>
+								<th style="width:100px;">操作</th>
+							</tr>
+						</thead>
+						<tbody id="tb">
+						<volist name="list" id="vo">
+							<tr>
+								<td style="padding:10px;">
+									<div style="border:1px solid #ccc" class="p-l">
+										<img src="{$vo.imgs|getImgUrl}" class="user-table-td-img">
+									</div>
+									<div class="user-table-td-title">
+										<span>{$vo.name}</span>
+										<span>{$vo.colorId|getColorName}</span>
+									</div>
+								</td>
+								<td style="padding:10px;">{$vo.typeId|getTypeName}</td>
+								<td style="padding:10px;">{$vo.stock} 件</td>
+								<td style="padding:10px;">￥
+									<if condition="$Think.session.typeId eq 43 " >
+										{$vo.vipPrice}
+									<elseif condition="$Think.session.typeId eq 44 " />	
+										{$vo.groupPrice}
+									<else  />
+										{$vo.marketPrice}
+									</if>
+								</td>
+								<td style="padding:10px;">
+									<if condition="$vo.checkstatus eq 1 ">
+										审核中
+									<elseif condition="$vo.checkstatus eq 2 " />
+										审核失败
+									<elseif condition="$vo.checkstatus eq 3 " />		
+										审核通过
+									</if>
+								</td>
+								<td style="padding:10px;">
+									<a id="{$vo.id}" href="javascript:;" class="goodSta blue">
+                                        <if condition="$vo.status eq 1">
+                                            下架
+                                        <else />  
+                                            上架
+                                        </if>
+                                    </a>
+									|
+                                    <a href="javascript:edit({$vo.id});"class="blue" >编辑</a>
+								</td>
+							</tr>
+							</volist>
+						</tbody>
+
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<include file="Public:footer" />
+<script>
+$(function(){
+    $(".goodSta").click(function(){
+        var id = $(this).attr("id");
+        var sta = $(this).text();
+        if(!confirm("您确定要"+$.trim(sta)+"吗?")){
+            return false;
+        }
+        var url = "{:U('Member/updateGoodStatusBygId')}";
+        var status = 1;
+        if($.trim(sta)=="下架"){
+            status = 2;
+        }
+        var postData = {
+            'gId':id,
+            'status':status
+        }
+        $.post(url,postData,function(data){
+            if(data.code ==2000){
+                window.location.reload();
+            }else{
+                alert(data.msg);
+            }
+        });
+    });
+});    
+    
+function edit(id){
+	window.location.href = "/User/editGoods/id/"+id;
+}
+// $(function(){
+// 	var url = "/Member/getGoodInfosBymId";
+// 	var postData = {}
+// 	$.post(url,'',function(data){
+// 		console.log(data);
+// 		if(data.code == 2000){
+// 			var str ='';
+// 			$.each(data.data,function(k,v){
+// 				console.log(k+' '+v);
+// 			});
+// 			str = '<tr>'+
+// 								'<td style="padding:10px;">'+
+// 									'<div style="border:1px solid #ccc" class="p-l">'+
+// 										'<img src="'+v.imgs+'" class="user-table-td-img">'+
+// 									'</div>'+
+// 									'<div class="user-table-td-title">'+
+// 										'<span>'+v.name+'</span>'+
+// 										'<br>'+
+// 										'<span style="margin-top:-20px;">'+v.colorName+'</span>'+
+// 									'</div>'+
+// 								'</td>'+
+// 								'<td style="padding:10px;">'+v.typeTree+'</td>'+
+// 								'<td style="padding:10px;">'+v+'</td>'+
+// 								'<td style="padding:10px;">￥'+v.parice+'</td>'+
+// 								'<td style="padding:10px;">审核通过</td>'+
+// 								'<td style="padding:10px;">'+
+// 									'<a href="javascript:edit('+v.id+');"class="blue" >修改</a>|'+
+// 									'<a href="javascript:del('+v.id+');" class="blue">删除</a>'+
+// 								'</td>'+
+// 							'</tr>';
+// 		}else{
+// 			alert(data.msg);
+// 		}
+// 	});
+// });	
+</script>

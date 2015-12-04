@@ -1,0 +1,86 @@
+<!-- 引入公共头文件 -->
+<include file="Public:header" />
+<!-- 引入菜单 -->
+<include file="Public:menu" />
+   
+ <!--main content start-->
+    <section id="main-content">
+        <section class="wrapper">
+<div id="allMember" style="height:500px;border:1px solid #ccc;padding:10px;"></div> 
+<!-- main -->
+<div class="row">
+    <div class="col-md-12">
+        <!--notification start-->
+        <section class="panel">
+            <header class="panel-heading">
+               
+            </header>
+            <div class="panel-body"> 
+                      
+            </div> 
+        </section>
+        <!--notification end-->
+    </div>
+    </div> 
+    </section>
+    </section>
+    <!--main content end-->
+
+</section><!-- body section 最外围 -->
+
+<!-- 引入公共脚文件 -->
+<include file="Public:footer" />
+
+<!--common script init for all pages-->
+<script src="__PUBLIC__/Template/js/scripts.js"></script>  
+
+    <script type="text/javascript">
+    require(
+        [
+            'echarts',
+            'echarts/chart/bar',
+            'echarts/chart/line',
+        ],
+        function (ec) {
+            //--- 折柱 ---
+            var myChart = ec.init(document.getElementById('allMember'));
+            myChart.setOption({
+                tooltip : {
+                    trigger: 'axis'
+                },
+                legend: {
+                    data:['分类销量排行']
+                },
+                toolbox: {
+                    show : true,
+                    feature : { 
+                        magicType : {show: true, type: ['line', 'bar']}
+                    }
+                },
+                calculable : true,
+                xAxis : [
+                    {
+                        type : 'category',
+                        data : [{$dataName}]
+                    }
+                ],
+                yAxis : [
+                    {
+                        type : 'value',
+                        splitArea : {show : true}
+                    }
+                ],
+                series : [
+                    {
+                        name:'分类销量排行',
+                        type:'bar',
+                        data:[{$dataScore}] 
+                    }
+                ]
+            }); 
+        }
+    ); 
+    </script>
+</body>
+</html>
+

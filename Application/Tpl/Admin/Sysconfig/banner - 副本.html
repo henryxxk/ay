@@ -1,0 +1,919 @@
+<include file="Public:header" />
+
+    <!--dynamic table-->
+    <link href="__PUBLIC__/Template/assets/advanced-datatable/media/css/demo_page.css" rel="stylesheet" />
+    <link href="__PUBLIC__/Template/assets/advanced-datatable/media/css/demo_table.css" rel="stylesheet" />
+    <link rel="stylesheet" href="__PUBLIC__/Template/assets/data-tables/DT_bootstrap.css" /> 
+
+ <include file="Public:menu" />
+
+    <!--main content start-->
+    <section id="main-content" >
+        <section class="wrapper">
+            <div class="row">
+                <div class="col-md-12">
+                    <!--breadcrumbs start -->
+                    <ul class="breadcrumb">
+                        <li><a href="#"><i class="fa fa-home"></i> 首页</a></li>
+                        <li><a href="#"> 系统设置</a></li>
+                        <li class="active"> 商城基本设置</li>
+                    </ul>
+                    <!--breadcrumbs end -->
+                </div>
+            </div>
+ 
+
+            <div class="row"> 
+            <div class="col-lg-12">
+            <!--tab nav start-->
+            <section class="panel">
+                <header class="panel-heading tab-bg-dark-navy-blue ">
+                    <ul class="nav nav-tabs">
+                        <li class=" <eq name='Think.get.submenu' value='banner'>active</eq>">
+                            <a data-toggle="tab" href="#banner"> 首页轮播图</a>
+                        </li>
+                        <li class="<eq name='Think.get.submenu' value='hatword'>active</eq>">
+                            <a data-toggle="tab" href="#hatword"> 热门搜索词</a>
+                        </li>
+                        <li class="<eq name='Think.get.submenu' value='subModel'>active</eq>">
+                            <a data-toggle="tab" href="#subModel"> 首页子模块</a>
+                        </li>
+                        <li class="<eq name='Think.get.submenu' value='hatBrand'>active</eq>">
+                            <a data-toggle="tab" href="#hatBrand"> 热销品牌</a>
+                        </li>
+                        <li class=" <eq name='Think.get.submenu' value='test'>active</eq>">
+                            <a data-toggle="tab" href="#test"> 预留位</a>
+                        </li>
+                    </ul>
+                </header>
+                <div class="panel-body">
+                    <div class="tab-content">
+
+                        <div id="banner" class="tab-pane <eq name='Think.get.submenu' value='banner'>active</eq>">
+                             <!--banner-->
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <section class="panel">
+                                        <header class="panel-heading">
+                                        
+                                        <div class="form"  id="addBanner">
+                                        <form class="cmxform form-horizontal " id="AddForm" method="post" action="#">  
+                                        <!-- 上传图片 -->
+                                        <div class="form-group "> 
+                                        <div class="form-group last">
+                                            <label class="control-label col-md-3">上传图片</label>
+                                            <div class="col-md-9">
+                                                <div class="fileupload fileupload-new" data-provides="fileupload">
+                                                    <div class="fileupload-new thumbnail" style="width: 200px; height: 150px;">
+                                                        <img id="imgView" src="http://www.placehold.it/200x150/EFEFEF/AAAAAA&amp;text=no+image" alt="" />
+                                                    </div>
+                                                    <div class="fileupload-preview fileupload-exists thumbnail" style="max-width: 200px; max-height: 150px; line-height: 20px;"></div>
+                                                    <div>
+                                                               <span class="btn btn-white btn-file">
+                                                               <span class="fileupload-new fuBtn1"><i class="fa fa-paper-clip"></i> 选择图片</span>
+                                                               <span class="fileupload-exists fuBtn2"><i class="fa fa-undo"></i> 更换</span>
+                                                               <input type="file" id="uploadIcon" class="default" />
+                                                               </span>
+                                                               <!--  <a href="javascript:delImg({$k})" class="btn btn-danger fileupload-exists fuBtn3" data-dismiss="fileupload"><i class="fa fa-trash"></i> 删除</a> -->
+                                                                <input type="hidden" id="imgs" name="imgs" value="" />
+                                                        </div>
+                                                    </div> 
+                                                </div> 
+                                            </div>
+                                        </div> <!-- end 上传图片 -->
+
+                                        <div class="form-group">
+                                            <label for="desc" class="control-label col-lg-3">banner图片标题</label>
+                                            <div class="col-lg-6">
+                                                <input type="text" id="title" name="title" value="" />
+                                            </div>
+                                        </div> 
+
+                                        <div class="form-group">
+                                            <label for="desc" class="control-label col-lg-3">banner图片外链URL</label>
+                                            <div class="col-lg-6">
+                                                <input type="text" id="url" name="url" value="#" />
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="desc" class="control-label col-lg-3">排序</label>
+                                            <div class="col-lg-6">
+                                                <input type="text" id="sort" name="sort" value="0" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="col-lg-offset-3 col-lg-6">
+                                                <button class="btn btn-primary" id="btnBanner" type="button"> 新增</button>
+                                            </div>
+                                        </div>
+
+
+                                     </form>
+                                     </div>
+<!-- add  edit -->
+                                    <div class="form"  id="editBanner" style="display:none">
+                                        <form class="cmxform form-horizontal " id="AddForm" method="post" action="#">  
+                                        <!-- 上传图片 -->
+                                        <div class="form-group "> 
+                                        <div class="form-group last">
+                                            <label class="control-label col-md-3">上传图片</label>
+                                            <div class="col-md-9">
+                                                <div class="fileupload fileupload-new" data-provides="fileupload">
+                                                    <div class="fileupload-new thumbnail" style="width: 200px; height: 150px;">
+                                                        <img id="imgView2" src="http://www.placehold.it/200x150/EFEFEF/AAAAAA&amp;text=no+image" alt="" />
+                                                    </div>
+                                                    <div class="fileupload-preview fileupload-exists thumbnail" style="max-width: 200px; max-height: 150px; line-height: 20px;"></div>
+                                                    <div>
+                                                               <span class="btn btn-white btn-file">
+                                                               <span class="fileupload-new fuBtn1"><i class="fa fa-paper-clip"></i> 选择图片</span>
+                                                               <span class="fileupload-exists fuBtn2"><i class="fa fa-undo"></i> 更换</span>
+                                                               <input type="file" id="uploadIcon2" class="default" />
+                                                               </span>
+                                                               <!--  <a href="javascript:delImg({$k})" class="btn btn-danger fileupload-exists fuBtn3" data-dismiss="fileupload"><i class="fa fa-trash"></i> 删除</a> -->
+                                                                <input type="hidden" id="imgs2" name="imgs" value="" />
+                                                        </div>
+                                                    </div> 
+                                                </div> 
+                                            </div>
+                                        </div> <!-- end 上传图片 -->
+
+                                        <div class="form-group">
+                                            <label for="desc" class="control-label col-lg-3">banner图片标题</label>
+                                            <div class="col-lg-6">
+                                                <input type="text" id="title" name="title" value="" />
+                                            </div>
+                                        </div> 
+
+                                        <div class="form-group">
+                                            <label for="desc" class="control-label col-lg-3">banner图片外链URL</label>
+                                            <div class="col-lg-6">
+                                                <input type="text" id="url" name="url" value="#" />
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="desc" class="control-label col-lg-3">排序</label>
+                                            <div class="col-lg-6">
+                                                <input type="text" id="sort" name="sort" value="0" />
+                                            </div>
+                                        </div>
+                                        <input type="hidden" id="id" value="">
+                                        <div class="form-group">
+                                            <div class="col-lg-offset-3 col-lg-6">
+                                                <button class="btn btn-primary" id="btnBanner" type="button"> 修改</button>
+                                                <button class="btn btn-default cancelBtn" dataurl="/Admin/Sysconfig/banner/menu/system" type="button"> 取消</button>
+                                            </div>
+                                        </div>
+
+
+                                     </form>
+                                     </div>
+                                        </header>
+                                        <div class="panel-body"> 
+ 
+                                      <volist name="list" id="vo">
+                                          <div style="position: relative;margin:10px auto">
+                                          <a href="{$vo.imgs}" target="_blank"><img src="{$vo.imgs}" style="width:20%"></a>&nbsp;&nbsp;
+                                          <a href="javascript:edit('/Admin/Sysconfig/banneredit',{$vo.id});">修改</a>&nbsp;&nbsp;
+                                          <a href="javascript:del('你确定要删除吗','/Admin/Sysconfig/delete',{$vo.id});" style="color:red">删除</a>
+                                          </div>
+                                      </volist>
+                                     
+
+                                        </div>
+                                    </section>
+                                </div>
+                            </div>
+                            <!-- row end-->
+                        </div>
+<!--  热词 -->
+                        <div id="hatword" class="tab-pane <eq name='Think.get.submenu' value='hatword'>active</eq>">
+                                <!--hatword-->
+                                 <div class="row">
+                                <div class="col-sm-12">
+                                    <section class="panel">
+                                        <header class="panel-heading">
+                                          <!--   <button type="button" onclick="javascript:btnJump('Goods/goodsBrandAdd','')" class="btn btn-primary"><i class="fa fa-plus"></i> 热搜词</button> -->
+                                        </header>
+                                        <div class="panel-body">
+                             <div class="form">
+                                <form class="cmxform form-horizontal " id="myForm" method="post" action="#">  
+                                    <div class="form-group ">
+                                        <label for="title" class="control-label col-lg-3">热搜词</label>
+                                        <div class="col-lg-5">
+                                            <input class=" form-control" id="content" name="content" type="text" value="{$hatword.content}" />
+                                        </div>
+                                        <div class="clo-lg-3">多词逗号分割，且最多设置5个热词</div>
+                                    </div>   
+ 
+                                    <input type="hidden" name="id" value="{$hatword.id}" /> 
+
+                                    <div class="form-group">
+                                        <div class="col-lg-offset-3 col-lg-6">
+                                            <button class="btn btn-primary" id="btnHatword" type="button"> 编辑</button>
+                                            <button class="btn btn-default cancelBtn" dataurl="/Admin/Sysconfig/banner/menu/system/submenu/hatword" type="button"> 取消</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div><!-- end form -->
+                                        </div>
+                                    </section>
+                                </div>
+                            </div><!-- hatword end-->
+                        </div>
+
+<!-- 首页子模块 -->
+                        <div id="subModel" class="tab-pane <eq name='Think.get.submenu' value='subModel'>active</eq>">
+                                <!--subModel-->
+                                 <div class="row">
+                                <div class="col-sm-12">
+                                    <section class="panel">
+                                        <header class="panel-heading">
+                                        
+                                        <div class="form"  id="addsubModel">
+                                        <form class="cmxform form-horizontal " id="AddForm" method="post" action="#">  
+                                        <!-- 上传图片 -->
+                                        <div class="form-group "> 
+                                        <div class="form-group last">
+                                            <label class="control-label col-md-3">上传海报</label>
+                                            <div class="col-md-9">
+                                                <div class="fileupload fileupload-new" data-provides="fileupload">
+                                                    <div class="fileupload-new thumbnail" style="width: 200px; height: 150px;">
+                                                        <img id="imgView3" src="http://www.placehold.it/200x150/EFEFEF/AAAAAA&amp;text=no+image" alt="" />
+                                                    </div>
+                                                    <div class="fileupload-preview fileupload-exists thumbnail" style="max-width: 200px; max-height: 150px; line-height: 20px;"></div>
+                                                    <div>
+                                                               <span class="btn btn-white btn-file">
+                                                               <span class="fileupload-new fuBtn1"><i class="fa fa-paper-clip"></i> 选择图片</span>
+                                                               <span class="fileupload-exists fuBtn2"><i class="fa fa-undo"></i> 更换</span>
+                                                               <input type="file" id="uploadIcon3" class="default" />
+                                                               </span>
+                                                               <!--  <a href="javascript:delImg({$k})" class="btn btn-danger fileupload-exists fuBtn3" data-dismiss="fileupload"><i class="fa fa-trash"></i> 删除</a> -->
+                                                                <input type="hidden" id="imgs3" name="imgs" value="" />
+                                                        </div>
+                                                    </div> 
+                                                </div> 
+                                            </div>
+                                        </div> <!-- end 上传图片 -->
+
+                                        <div class="form-group">
+                                            <label for="desc" class="control-label col-lg-3">子模块标题</label>
+                                            <div class="col-lg-6">
+                                                <input type="text" id="title" name="title" value="" />
+                                            </div>
+                                        </div> 
+
+                                        <div class="form-group">
+                                            <label for="desc" class="control-label col-lg-3">海报外链URL</label>
+                                            <div class="col-lg-6">
+                                                <input type="text" id="url" name="url" value="#" />
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="desc" class="control-label col-lg-3">子模块排序</label>
+                                            <div class="col-lg-6">
+                                                <input type="text" id="sort" name="sort" value="0" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="content" class="control-label col-lg-3">首页展示商品的货号</label>
+                                            <div class="col-lg-6">
+                                                <input type="text" id="content" name="content" value="" style="width:500px" />
+                                            </div>
+                                            <div>多个逗号分割，且最多签写6个商品</div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="col-lg-offset-3 col-lg-6">
+                                                <button class="btn btn-primary" id="btnsubModel" type="button"> 新增</button>
+                                            </div>
+                                        </div>
+
+
+                                     </form>
+                                     </div>
+<!-- add  edit -->
+                                    <div class="form"  id="editsubModel" style="display:none">
+                                        <form class="cmxform form-horizontal " id="AddForm" method="post" action="#">  
+                                        <!-- 上传图片 -->
+                                        <div class="form-group "> 
+                                        <div class="form-group last">
+                                            <label class="control-label col-md-3">上传海报</label>
+                                            <div class="col-md-9">
+                                                <div class="fileupload fileupload-new" data-provides="fileupload">
+                                                    <div class="fileupload-new thumbnail" style="width: 200px; height: 150px;">
+                                                        <img id="imgView4" src="http://www.placehold.it/200x150/EFEFEF/AAAAAA&amp;text=no+image" alt="" />
+                                                    </div>
+                                                    <div class="fileupload-preview fileupload-exists thumbnail" style="max-width: 200px; max-height: 150px; line-height: 20px;"></div>
+                                                    <div>
+                                                               <span class="btn btn-white btn-file">
+                                                               <span class="fileupload-new fuBtn1"><i class="fa fa-paper-clip"></i> 选择图片</span>
+                                                               <span class="fileupload-exists fuBtn2"><i class="fa fa-undo"></i> 更换</span>
+                                                               <input type="file" id="uploadIcon4" class="default" />
+                                                               </span>
+                                                               <!--  <a href="javascript:delImg({$k})" class="btn btn-danger fileupload-exists fuBtn3" data-dismiss="fileupload"><i class="fa fa-trash"></i> 删除</a> -->
+                                                                <input type="hidden" id="imgs4" name="imgs" value="" />
+                                                        </div>
+                                                    </div> 
+                                                </div> 
+                                            </div>
+                                        </div> <!-- end 上传图片 -->
+
+                                        <div class="form-group">
+                                            <label for="desc" class="control-label col-lg-3">子模块标题</label>
+                                            <div class="col-lg-6">
+                                                <input type="text" id="title" name="title" value="" />
+                                            </div>
+                                        </div> 
+
+                                        <div class="form-group">
+                                            <label for="desc" class="control-label col-lg-3">海报外链URL</label>
+                                            <div class="col-lg-6">
+                                                <input type="text" id="url" name="url" value="#" />
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="desc" class="control-label col-lg-3">子模块排序</label>
+                                            <div class="col-lg-6">
+                                                <input type="text" id="sort" name="sort" value="0" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="content" class="control-label col-lg-3">首页展示商品的货号</label>
+                                            <div class="col-lg-6">
+                                                <input type="text" id="content" name="content" value="" style="width:500px" />
+                                            </div>
+                                            <div>多个逗号分割，且最多签写6个商品</div>
+                                        </div>
+                                        <input type="hidden" id="id" value="">
+                                        <div class="form-group">
+                                            <div class="col-lg-offset-3 col-lg-6">
+                                                <button class="btn btn-primary" id="btnsubModel" type="button"> 修改</button>
+                                                <button class="btn btn-default cancelBtn" dataurl="/Admin/Sysconfig/banner/menu/system/submenu/subModel" type="button"> 取消</button>
+                                            </div>
+                                        </div>
+
+
+                                     </form>
+                                     </div>
+                                        </header>
+                                        <div class="panel-body"> 
+ 
+                                      <volist name="listsubModel" id="vo">
+                                          <div style="position: relative;margin:10px auto;border:1px solid #eee">
+                                          <h3>{$vo.title}</h3>
+                                          <p>
+                                          <a href="{$vo.imgs}" target="_blank"><img src="{$vo.imgs}" style="height:150px;width:100px"></a>&nbsp;&nbsp;
+                                          商品货号：{$vo.content}</p>&nbsp;&nbsp;
+                                          <a href="javascript:editSubModel('/Admin/Sysconfig/banneredit',{$vo.id});">修改</a>&nbsp;&nbsp;
+                                          <a href="javascript:del('你确定要删除吗','/Admin/Sysconfig/delete',{$vo.id});" style="color:red">删除</a>
+                                          </div>
+                                      </volist>
+                                     
+
+                                        </div>
+                                    </section>
+                                </div>
+                            </div><!-- subModel end-->
+                        </div>
+<!-- 热销品牌 -->
+                        <div id="hatBrand" class="tab-pane <eq name='Think.get.submenu' value='hatBrand'>active</eq>">
+                                <!--hatBrand-->
+                                 <div class="row">
+                                <div class="col-sm-12">
+                                    <section class="panel">
+                                        <header class="panel-heading">
+                                        
+                                        <div class="form"  id="addhatBrand">
+                                        <form class="cmxform form-horizontal " id="AddForm" method="post" action="#">  
+                                        <!-- 上传图片 -->
+                                        <div class="form-group "> 
+                                        <div class="form-group last">
+                                            <label class="control-label col-md-3">上传图片</label>
+                                            <div class="col-md-9">
+                                                <div class="fileupload fileupload-new" data-provides="fileupload">
+                                                    <div class="fileupload-new thumbnail" style="width: 200px; height: 150px;">
+                                                        <img id="imgView5" src="http://www.placehold.it/200x150/EFEFEF/AAAAAA&amp;text=no+image" alt="" />
+                                                    </div>
+                                                    <div class="fileupload-preview fileupload-exists thumbnail" style="max-width: 200px; max-height: 150px; line-height: 20px;"></div>
+                                                    <div>
+                                                               <span class="btn btn-white btn-file">
+                                                               <span class="fileupload-new fuBtn1"><i class="fa fa-paper-clip"></i> 选择图片</span>
+                                                               <span class="fileupload-exists fuBtn2"><i class="fa fa-undo"></i> 更换</span>
+                                                               <input type="file" id="uploadIcon5" class="default" />
+                                                               </span>
+                                                               <!--  <a href="javascript:delImg({$k})" class="btn btn-danger fileupload-exists fuBtn3" data-dismiss="fileupload"><i class="fa fa-trash"></i> 删除</a> -->
+                                                                <input type="hidden" id="imgs5" name="imgs" value="" />
+                                                        </div>
+                                                    </div> 
+                                                </div> 
+                                            </div>
+                                        </div> <!-- end 上传图片 -->
+
+                                       <!--  <div class="form-group">
+                                            <label for="desc" class="control-label col-lg-3">banner图片标题</label>
+                                            <div class="col-lg-6">
+                                                <input type="text" id="title" name="title" value="" />
+                                            </div>
+                                        </div> 
+
+                                        <div class="form-group">
+                                            <label for="desc" class="control-label col-lg-3">banner图片外链URL</label>
+                                            <div class="col-lg-6">
+                                                <input type="text" id="url" name="url" value="#" />
+                                            </div>
+                                        </div> -->
+
+                                        <div class="form-group">
+                                            <label for="desc" class="control-label col-lg-3">排序</label>
+                                            <div class="col-lg-6">
+                                                <input type="text" id="sort" name="sort" value="0" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="col-lg-offset-3 col-lg-6">
+                                                <button class="btn btn-primary" id="btnhatBrand1" type="button"> 新增</button>
+                                            </div>
+                                        </div>
+
+
+                                     </form>
+                                     </div>
+<!-- add  edit -->
+                                    <div class="form"  id="editHatBrand" style="display:none">
+                                        <form class="cmxform form-horizontal " id="AddForm" method="post" action="#">  
+                                        <!-- 上传图片 -->
+                                        <div class="form-group "> 
+                                        <div class="form-group last">
+                                            <label class="control-label col-md-3">上传图片</label>
+                                            <div class="col-md-9">
+                                                <div class="fileupload fileupload-new" data-provides="fileupload">
+                                                    <div class="fileupload-new thumbnail" style="width: 200px; height: 150px;">
+                                                        <img id="imgView6" src="http://www.placehold.it/200x150/EFEFEF/AAAAAA&amp;text=no+image" alt="" />
+                                                    </div>
+                                                    <div class="fileupload-preview fileupload-exists thumbnail" style="max-width: 200px; max-height: 150px; line-height: 20px;"></div>
+                                                    <div>
+                                                               <span class="btn btn-white btn-file">
+                                                               <span class="fileupload-new fuBtn1"><i class="fa fa-paper-clip"></i> 选择图片</span>
+                                                               <span class="fileupload-exists fuBtn2"><i class="fa fa-undo"></i> 更换</span>
+                                                               <input type="file" id="uploadIcon6" class="default" />
+                                                               </span>
+                                                               <!--  <a href="javascript:delImg({$k})" class="btn btn-danger fileupload-exists fuBtn3" data-dismiss="fileupload"><i class="fa fa-trash"></i> 删除</a> -->
+                                                                <input type="hidden" id="imgs6" name="imgs" value="" />
+                                                        </div>
+                                                    </div> 
+                                                </div> 
+                                            </div>
+                                        </div> <!-- end 上传图片 -->
+
+                                       <!--  <div class="form-group">
+                                            <label for="desc" class="control-label col-lg-3">banner图片标题</label>
+                                            <div class="col-lg-6">
+                                                <input type="text" id="title" name="title" value="" />
+                                            </div>
+                                        </div> 
+
+                                        <div class="form-group">
+                                            <label for="desc" class="control-label col-lg-3">banner图片外链URL</label>
+                                            <div class="col-lg-6">
+                                                <input type="text" id="url" name="url" value="#" />
+                                            </div>
+                                        </div> -->
+
+                                        <div class="form-group">
+                                            <label for="desc" class="control-label col-lg-3">排序</label>
+                                            <div class="col-lg-6">
+                                                <input type="text" id="sort" name="sort" value="0" />
+                                            </div>
+                                        </div>
+                                        <input type="hidden" id="id" value="">
+                                        <div class="form-group">
+                                            <div class="col-lg-offset-3 col-lg-6">
+                                                <button class="btn btn-primary" id="btnhatBrand2" type="button"> 修改</button>
+                                                <button class="btn btn-default cancelBtn" dataurl="/Admin/Sysconfig/banner/menu/system/submenu/hatBrand" type="button"> 取消</button>
+                                            </div>
+                                        </div>
+
+
+                                     </form>
+                                     </div>
+                                        </header>
+                                        <div class="panel-body"> 
+ 
+                                      <volist name="listHatBrand" id="vo">
+                                          <div style="position: relative;margin:10px auto">
+                                          <a href="{$vo.imgs}" target="_blank"><img src="{$vo.imgs}" style="width:100px;height:100px;"></a>&nbsp;&nbsp;
+                                          <a href="javascript:editHatBrand('/Admin/Sysconfig/banneredit',{$vo.id});">修改</a>&nbsp;&nbsp;
+                                          <a href="javascript:del('你确定要删除吗','/Admin/Sysconfig/delete',{$vo.id});" style="color:red">删除</a>
+                                          </div>
+                                      </volist>
+                                     
+
+                                        </div>
+                                    </section>
+                                </div>
+                            </div><!-- hatBrand end-->
+                        </div>
+<!-- 预留 -->
+                        <div id="test" class="tab-pane <eq name='Think.get.submenu' value='test'>active</eq>">
+                                <!--test-->
+                                 <div class="row">
+                                <div class="col-sm-12">
+                                    <section class="panel">
+                                        <header class="panel-heading">
+                                          <!--   <button type="button" onclick="javascript:btnJump('Goods/goodsSizeAdd','')" class="btn btn-primary"><i class="fa fa-plus"></i> 预留</button> -->
+                                        </header>
+                                        <div class="panel-body">
+                                        
+                             <div class="form">
+                                <form class="cmxform form-horizontal " id="myForm" method="post" action="#"> 
+                                    <div class="form-group">
+                                        <label for="desc" class="control-label col-lg-3">预留</label>
+                                        <div class="col-lg-6">
+                                            <script type="text/javascript" charset="utf-8" src="__PUBLIC__/Plugin/ueditor/ueditor.config.js"></script>
+                                            <script type="text/javascript" charset="utf-8" src="__PUBLIC__/Plugin/ueditor/ueditor.all.min.js"> </script>
+                                            <script type="text/javascript" charset="utf-8" src="__PUBLIC__/Plugin/ueditor/lang/zh-cn/zh-cn.js"></script>
+                                            <script id="editor" name="content" type="text/plain" style="width:auto;height:500px;">{$test.content}</script>
+                                            <script type="text/javascript">
+                                               var ue = UE.getEditor('editor');
+                                            </script>
+                                            <!-- 百度编辑器 -->
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <div class="col-lg-offset-3 col-lg-6">
+                                            <button class="btn btn-primary" type="button"> 新增</button>
+                                            <button class="btn btn-default cancelBtn" dataurl="/Admin/Sysconfig/banner/menu/system/submenu/test" type="button"> 取消</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                                        </div>
+                                    </section>
+                                </div>
+                            </div><!-- test end-->
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+            <!--tab nav start-->
+  
+                </div> 
+            </div>
+
+
+        </section>
+    </section>
+    <!--main content end-->
+  
+</section>
+
+
+<include file="Public:footer" /> 
+<!--common script init for all pages-->
+<script src="__PUBLIC__/Template/js/scripts.js"></script>  
+<script>
+//轮播图
+$(function(){
+//addBanner
+$('#addBanner #btnBanner').click(function(){
+    var url = "__APP__/Admin/Sysconfig/bannerAdd";
+    var postData = {
+        'their':'banner',
+        'imgs':$('#banner #imgs').val(),
+        'title':$('#banner #title').val(),
+        'url':$('#banner #url').val(),
+        'sort':$('#banner #sort').val()
+    }
+    console.log(postData);
+    $.post(url,postData,function(data){
+        console.log(data);
+        if(data.code == 2000){
+            window.location.reload();
+            //$('#bannerShow').append('<img src="'+$('#banner #imgs').val()+'" />');
+        }else{
+            alert(data.msg);
+        }
+    }); 
+});
+//editBanner
+$('#editBanner #btnBanner').click(function(){
+    var url = "__APP__/Admin/Sysconfig/bannerUpdate";
+    var postData = {
+        'id':$('#editBanner #id').val(),
+        'their':'banner',
+        'imgs':$('#editBanner #imgs2').val(),
+        'title':$('#editBanner #title').val(),
+        'url':$('#editBanner #url').val(),
+        'sort':$('#editBanner #sort').val()
+    }
+    console.log(postData);
+    $.post(url,postData,function(data){
+        console.log(data);
+        if(data.code == 2000){
+            window.location.reload();
+            //$('#bannerShow').append('<img src="'+$('#banner #imgs').val()+'" />');
+        }else{
+            alert(data.msg);
+        }
+    }); 
+});
+});
+//修改banner
+function edit(url,id){
+    var postData = {
+        'id':id
+    }
+    console.log(postData);
+    $.post(url,postData,function(data){
+        console.log(data);
+        if(data.code == 2000){
+            $('#addBanner').hide();
+            $('#editBanner').show();
+            $('#editBanner #imgView2').attr('src',data.data.imgs);
+            $('#editBanner #imgs2').attr('src',data.data.imgs);
+            $('#editBanner #title').val(data.data.title);
+            $('#editBanner #url').val(data.data.url);
+            $('#editBanner #sort').val(data.data.sort);
+            $('#editBanner #id').val(data.data.id);
+        }else{
+            alert(data.msg);
+        } 
+    });
+}
+//img banner 2
+$(function(){
+    $("#uploadIcon2").localResizeIMG({
+      width: 1,
+      quality: 1,
+      success: function (result) {
+        var postData = 
+        {
+          "data":result.clearBase64,
+          "path":'./Public/Uploads/'
+        };
+        $.post("/Admin/Base/uploadImage",postData,function(data){
+            // console.log(data);
+            // eval("var data=" + data);
+            if(data["code"] == 2000){
+              $("#imgView2").attr('src',data["data"]);
+              $("#imgs2").val(data["data"]);
+              $(".fuBtn3").show();
+            } 
+        }) 
+       }
+    });
+    $("#uploadIcon3").localResizeIMG({
+      width: 1,
+      quality: 1,
+      success: function (result) {
+        var postData = 
+        {
+          "data":result.clearBase64,
+          "path":'./Public/Uploads/'
+        };
+        $.post("/Admin/Base/uploadImage",postData,function(data){
+            // console.log(data);
+            // eval("var data=" + data);
+            if(data["code"] == 2000){
+              $("#imgView3").attr('src',data["data"]);
+              $("#imgs3").val(data["data"]);
+              $(".fuBtn3").show();
+            } 
+        }) 
+       }
+    });
+    $("#uploadIcon4").localResizeIMG({
+      width: 1,
+      quality: 1,
+      success: function (result) {
+        var postData = 
+        {
+          "data":result.clearBase64,
+          "path":'./Public/Uploads/'
+        };
+        $.post("/Admin/Base/uploadImage",postData,function(data){
+            // console.log(data);
+            // eval("var data=" + data);
+            if(data["code"] == 2000){
+              $("#imgView4").attr('src',data["data"]);
+              $("#imgs4").val(data["data"]);
+              $(".fuBtn4").show();
+            } 
+        }) 
+       }
+    });
+    $("#uploadIcon5").localResizeIMG({
+      width: 1,
+      quality: 1,
+      success: function (result) {
+        var postData = 
+        {
+          "data":result.clearBase64,
+          "path":'./Public/Uploads/'
+        };
+        $.post("/Admin/Base/uploadImage",postData,function(data){
+            // console.log(data);
+            // eval("var data=" + data);
+            if(data["code"] == 2000){
+              $("#imgView5").attr('src',data["data"]);
+              $("#imgs5").val(data["data"]);
+              $(".fuBtn5").show();
+            } 
+        }) 
+       }
+    });
+    $("#uploadIcon6").localResizeIMG({
+      width: 1,
+      quality: 1,
+      success: function (result) {
+        var postData = 
+        {
+          "data":result.clearBase64,
+          "path":'./Public/Uploads/'
+        };
+        $.post("/Admin/Base/uploadImage",postData,function(data){
+            // console.log(data);
+            // eval("var data=" + data);
+            if(data["code"] == 2000){
+              $("#imgView6").attr('src',data["data"]);
+              $("#imgs6").val(data["data"]);
+              $(".fuBtn6").show();
+            } 
+        }) 
+       }
+    });
+});
+//--------------
+//热词编辑
+$(function(){
+    $('#btnHatword').click(function(){
+        var postData = {
+            'content':$('#hatword #content').val()
+        }
+        console.log(postData);
+        $.post('__APP__/Admin/Sysconfig/edithatword',postData,function(data){
+            console.log(data);
+            if(data.code == 2000){
+                $('#hatword #content').val(data.data);
+            }
+            if(data.size > 5){
+                alert('最多设置5个热门搜索词');
+            }else{
+                alert(data.msg);
+            }
+        });
+    });
+});
+//--------------
+//热卖品牌
+$(function(){
+//hatBrand
+$('#addhatBrand #btnhatBrand1').click(function(){
+    var url = "__APP__/Admin/Sysconfig/bannerAdd";
+    var postData = {
+        'their':'hatBrand',
+        'imgs':$('#addhatBrand #imgs5').val(),
+        // 'title':$('#HatBrand #title').val(),
+        // 'url':$('#HatBrand #url').val(),
+        'sort':$('#addhatBrand #sort').val()
+    }
+    console.log(postData);
+    $.post(url,postData,function(data){
+        console.log(data);
+        if(data.code == 2000){
+            //window.location.reload();
+            window.location.href = "__APP__/Admin/Sysconfig/banner/menu/system/submenu/hatBrand";
+            //$('#bannerShow').append('<img src="'+$('#banner #imgs').val()+'" />');
+        }else{
+            alert(data.msg);
+        }
+    }); 
+});
+//hatBrand
+$('#editHatBrand #btnhatBrand2').click(function(){
+    var url = "__APP__/Admin/Sysconfig/bannerUpdate";
+    var postData = {
+        'id':$('#editHatBrand #id').val(),
+        'their':'hatBrand',
+        'imgs':$('#editHatBrand #imgs6').val(),
+        // 'title':$('#hatBrand #title').val(),
+        // 'url':$('#hatBrand #url').val(),
+        'sort':$('#editHatBrand #sort').val()
+    }
+    console.log(postData);
+    $.post(url,postData,function(data){
+        console.log(data);
+        if(data.code == 2000){
+            //window.location.reload();
+            window.location.href = "__APP__/Admin/Sysconfig/banner/menu/system/submenu/hatBrand";
+            //$('#bannerShow').append('<img src="'+$('#banner #imgs').val()+'" />');
+        }else{
+            alert(data.msg);
+        }
+    }); 
+});
+});
+//修改banner
+function editHatBrand(url,id){
+    var postData = {
+        'id':id
+    }
+    console.log(postData);
+    $.post(url,postData,function(data){
+        console.log(data);
+        if(data.code == 2000){
+            $('#addhatBrand').hide();
+            $('#editHatBrand').show();
+            $('#editHatBrand #imgView6').attr('src',data.data.imgs);
+            $('#editHatBrand #imgs6').attr('src',data.data.imgs);
+            // $('#hatBrand #title').val(data.data.title);
+            // $('#hatBrand #url').val(data.data.url);
+            $('#editHatBrand #sort').val(data.data.sort);
+            $('#editHatBrand #id').val(data.data.id);
+        }else{
+            alert(data.msg);
+        }
+
+    });
+}
+//子模块
+$(function(){ 
+//addsubModel
+$('#addsubModel #btnsubModel').click(function(){
+    var url = "__APP__/Admin/Sysconfig/bannerAdd";
+    var postData = {
+        'their':'submodel',
+        'imgs':$('#addsubModel #imgs3').val(),
+        'title':$('#addsubModel #title').val(),
+        'url':$('#addsubModel #url').val(),
+        'sort':$('#addsubModel #sort').val(),
+        'content':$('#addsubModel #content').val()
+    }
+    console.log(postData);
+    $.post(url,postData,function(data){
+        console.log(data);
+        if(data.code == 2000){
+            //window.location.reload();
+            window.location.href = "__APP__/Admin/Sysconfig/banner/menu/system/submenu/subModel";
+            //$('#bannerShow').append('<img src="'+$('#banner #imgs').val()+'" />');
+        }else{
+            alert(data.msg);
+        }
+    }); 
+});
+//subModel
+$('#editsubModel #btnsubModel').click(function(){
+    var url = "__APP__/Admin/Sysconfig/bannerUpdate";
+    var postData = {
+        'id':$('#editsubModel #id').val(),
+        'their':'submodel',
+        'imgs':$('#editsubModel #imgs4').val(),
+        'title':$('#editsubModel #title').val(),
+        'url':$('#editsubModel #url').val(),
+        'sort':$('#editsubModel #sort').val(),
+        'content':$('#editsubModel #content').val()
+    }
+    console.log(postData);
+    $.post(url,postData,function(data){
+        console.log(data);
+        if(data.code == 2000){
+            //window.location.reload();
+            window.location.href = "__APP__/Admin/Sysconfig/banner/menu/system/submenu/subModel";
+            //$('#bannerShow').append('<img src="'+$('#banner #imgs').val()+'" />');
+        }else{
+            alert(data.msg);
+        }
+    }); 
+});    
+});
+//修改banner
+function editSubModel(url,id){
+    var postData = {
+        'id':id
+    }
+    console.log(postData);
+    $.post(url,postData,function(data){
+        console.log(data);
+        if(data.code == 2000){
+            $('#addsubModel').hide();
+            $('#editsubModel').show();
+            $('#editsubModel #imgView4').attr('src',data.data.imgs);
+            $('#editsubModel #imgs4').attr('src',data.data.imgs);
+            $('#editsubModel #title').val(data.data.title);
+            $('#editsubModel #url').val(data.data.url);
+            $('#editsubModel #sort').val(data.data.sort);
+            $('#editsubModel #content').val(data.data.content);
+            $('#editsubModel #id').val(data.data.id);
+        }else{
+            alert(data.msg);
+        } 
+    });
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,159 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+
+    <title>安奈优</title>
+
+    <!-- Css -->
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/Css/font-awesome-ie7.min.css">
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/Css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/Css/common.css">
+
+    <!-- Js -->
+    <script type="text/javascript" src="__PUBLIC__/Js/jquery.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/Js/jquery.nivo.slider.pack.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/Plugin/My97DatePicker/WdatePicker.js"></script>
+</head>
+<body>
+<style>
+
+    .nheader{
+        background: #000000;
+        color:#ffffff;
+        height: 34px;
+        line-height: 34px;
+        font-size: 14px;;
+    }
+    .header-icon{
+        color: #c00;
+        font-size: 14px;
+    }
+    .header-login-reg{
+        margin-left: 10px;
+    }
+    .header-cart-num{
+        color:#c00000;
+    }
+    .nheader a{
+        color:#fff;
+    }
+    .nheader .p-l{
+        margin-left:300px;
+    }
+    .nicon-user,.nicon-order,.nicon-cart,
+    .nicon-shoucang,.nicon-comm{
+        display: block;
+        width:21px;
+        height:25px;
+        margin:5px 10px;
+    }
+    .nicon-user{
+        content: url(__PUBLIC__/Image/logo-user.png);
+    }
+    .fl{
+        float: left;
+    }
+    .welcome{
+        border-right:2px #ddd9d6 solid;
+        padding-right: 10px;
+    }
+    .nicon-order{
+        content: url(__PUBLIC__/Image/logo-order.png);
+    }
+    .nicon-cart{
+        content: url(__PUBLIC__/Image/logo-cart.png);
+    }
+    .nicon-shoucang{
+        content: url(__PUBLIC__/Image/logo-shoucang.png);
+    }
+    .nicon-comm{
+        content: url(__PUBLIC__/Image/logo-comm.png);
+    }
+</style>
+<div style="display:none" data-fake360="fake360"></div>
+<if condition="$isLogin eq 1">
+    <div class="nheader">
+        <div class="container nheader">
+
+            <!--<if condition="$isLoginPage eq 1">
+            <div class="p-r">
+                <a href="{:U("Index/index")}" class="ml20">
+                    <i class="icon icon-home header-icon"></i>
+                    返回首页
+                </a>
+                <a href="{:U("GoodInfo/index")}" class="ml20">
+                    <i class="icon icon-shopping-cart header-icon"></i>
+                    购物车
+                    <font class="header-cart-num">0</font>
+                    件
+                </a>
+                <a class="helper" href="javascript:;" class="ml20">
+                    <i class="icon icon-lightbulb header-icon"></i>
+                    帮助中心
+                </a>
+            </div>
+            <else/>-->
+            <div class="p-r">
+                <div class="welcome fl" style="display: inline;">您好，欢迎光临！&nbsp;&nbsp;O(∩_∩)O</div>
+                <a href="{:U("Member/index")}" class="fl p-l header-login-reg"> <i class="icon nicon-user header-icon"></i>{$Think.session.user}</a>
+                <a href="{:U("Login/dropOut")}" class="fl p-l header-login-reg">退出</a>
+                <a href="{:U("Member/orderinfo")}">
+
+                <a href="{:U("GoodInfo/index")}" class="ml20">
+
+                <i class="p-l icon icon-shopping-cart header-icon"></i>
+                我的购物车
+                </a>
+
+                <a href="{:U("Member/index")}" class="ml20">
+                <i class="icon icon-user header-icon"></i>
+                个人中心
+                </a>
+            </div>
+            <!--</if>-->
+
+        </div>
+    </div>
+    <else />
+    <div class="nheader">
+        <div class="container nheader">
+
+
+            <div class="p-r">
+                <div class="welcome fl" style="display: inline;">您好，欢迎光临！&nbsp;&nbsp;O(∩_∩)O</div>
+                <a href="{:U("Login/index")}" class="fl header-login-reg"><i class=" fl icon nicon-user header-icon"></i>登录</a>
+                <a href="{:U("Login/register")}" class="fl header-login-reg">注册</a>
+                <a href="{:U("Member/orderinfo")}" class="fl ml20">
+                <i class="fl icon nicon-order header-icon"></i>
+                我的订单
+                </a>
+                <a href="{:U("GoodInfo/index")}" class="fl ml20">
+                <i class="fl icon nicon-cart header-icon"></i>
+                我的购物车
+                </a>
+                <a href="{:U("Member/mycoll")}" class="ml20 fl">
+                    <i class="fl icon nicon-shoucang header-icon"></i>
+                    我的收藏
+                </a>
+                <a href="/Index/article/name/联系我们" class="ml20 fl">
+                    <i class="fl icon nicon-comm header-icon"></i>
+                    联系我们
+                </a>
+            </div>
+        </div>
+    </div>
+</if>
+<script type="text/javascript" src="__PUBLIC__/Js/header.js"></script>
+<script>
+    $(function(){
+        $(".helper").click(function(){
+            var url = "{:U('Member/getArticleInfo')}";
+            var name = $(this).text();
+            name="帮助中心";
+            window.location.href = "__APP__/Index/article/name/"+name;
+        });
+    });
+</script>

@@ -1,0 +1,181 @@
+<!-- 引入公共头文件 -->
+<include file="Public:header" />
+<!-- 引入菜单 -->
+<include file="Public:menu" />
+   
+ <!--main content start-->
+    <section id="main-content">
+        <section class="wrapper">
+<div id="allMember" style="height:500px;border:1px solid #ccc;padding:10px;"></div>
+<div id="manMember" style="height:500px;border:1px solid #ccc;padding:10px;"></div>
+<div id="womanMember" style="height:500px;border:1px solid #ccc;padding:10px;"></div>
+<!-- main -->
+<div class="row">
+    <div class="col-md-12">
+        <!--notification start-->
+        <section class="panel">
+            <header class="panel-heading">
+               
+            </header>
+            <div class="panel-body"> 
+                      
+            </div> 
+        </section>
+        <!--notification end-->
+    </div>
+    </div> 
+    </section>
+    </section>
+    <!--main content end-->
+
+</section><!-- body section 最外围 -->
+
+<!-- 引入公共脚文件 -->
+<include file="Public:footer" />
+
+<!--common script init for all pages-->
+<script src="__PUBLIC__/Template/js/scripts.js"></script>  
+
+    <script type="text/javascript">
+    require(
+        [
+            'echarts',
+            'echarts/chart/bar',
+            'echarts/chart/line',
+        ],
+        function (ec) {
+            //--- 折柱 ---
+            var myChart = ec.init(document.getElementById('allMember'));
+            myChart.setOption({
+                tooltip : {
+                    trigger: 'axis'
+                },
+                legend: {
+                    data:['所有会员']
+                },
+                toolbox: {
+                    show : true,
+                    feature : { 
+                        magicType : {show: true, type: ['line', 'bar']}
+                    }
+                },
+                calculable : true,
+                xAxis : [
+                    {
+                        type : 'category',
+                        data : [{$dataName}]
+                    }
+                ],
+                yAxis : [
+                    {
+                        type : 'value',
+                        splitArea : {show : true}
+                    }
+                ],
+                series : [
+                    {
+                        name:'所有会员',
+                        type:'line',
+                        data:[{$dataScore}] 
+                    }
+                ]
+            }); 
+        }
+    );
+//------------------------ 男性会员  
+    require(
+        [
+            'echarts',
+            'echarts/chart/bar',
+            'echarts/chart/line',
+        ],
+        function (ec) {
+            //--- 折柱 ---
+            var myChart = ec.init(document.getElementById('manMember'));
+            myChart.setOption({
+                tooltip : {
+                    trigger: 'axis'
+                },
+                legend: {
+                    data:['男性会员']
+                },
+                toolbox: {
+                    show : true,
+                    feature : { 
+                        magicType : {show: true, type: ['line', 'bar']}
+                    }
+                },
+                calculable : true,
+                xAxis : [
+                    {
+                        type : 'category',
+                        data : [{$manName}]
+                    }
+                ],
+                yAxis : [
+                    {
+                        type : 'value',
+                        splitArea : {show : true}
+                    }
+                ],
+                series : [
+                    {
+                        name:'男性会员',
+                        type:'bar',
+                        data:[{$manScore}]
+                    }
+                ]
+            }); 
+        }
+    );
+//------------------------ 女性会员
+
+    require(
+        [
+            'echarts',
+            'echarts/chart/bar',
+            'echarts/chart/line',
+        ],
+        function (ec) {
+            //--- 折柱 ---
+            var myChart = ec.init(document.getElementById('womanMember'));
+            myChart.setOption({
+                tooltip : {
+                    trigger: 'axis'
+                },
+                legend: {
+                    data:['女性会员']
+                },
+                toolbox: {
+                    show : true,
+                    feature : { 
+                        magicType : {show: true, type: ['line', 'bar']}
+                    }
+                },
+                calculable : true,
+                xAxis : [
+                    {
+                        type : 'category',
+                        data : [{$womanName}]
+                    }
+                ],
+                yAxis : [
+                    {
+                        type : 'value',
+                        splitArea : {show : true}
+                    }
+                ],
+                series : [
+                    {
+                        name:'女性会员',
+                        type:'bar',
+                        data:[{$womanScore}]
+                    }
+                ]
+            }); 
+        }
+    );
+    </script>
+</body>
+</html>
+

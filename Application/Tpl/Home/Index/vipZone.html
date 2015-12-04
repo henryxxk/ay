@@ -1,0 +1,302 @@
+<include file="Public:header" />
+<include file="Public:menu" />
+<div>
+	<div id="banner">
+	</div>
+</div>
+<style>
+.active{
+	background-color:#d30909 !important;
+	color:white !important;
+}
+.active a{
+	color:white !important;
+}
+</style>
+<div class="search-score">
+    <div>
+		<div class="search-left-score">
+            <div class="search-left-top-score">
+                <div id="search-con" class="search-left-top-con-score">
+                    <ul id="default">
+                        <li>
+                            <a>按积分等级浏览</a>
+                        </li>
+                    </ul>
+                    
+                    <div class="search-left-top-con-page-score">
+                        <ul class="search-left-top-con-page-ul-first score-page">
+                             <label id="currentPageNo">1</label>/<label id="totalPage">{$totalPage}</label>
+                        </ul>
+                        <ul class="pageUp">
+                            <li><<</li>
+                        </ul>
+                        <ul class="pageDown">
+                            <li>>></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="search-left-bottom-score">
+                <volist name="searchlist" id="vo" >
+                    <dl id="{$vo.id}" class="search-right-dl">
+                        <dt>
+                            <img src="{$vo.imgs|getImgUrl}" style="width:130px; height:190px;" />
+                        </dt>
+                        <dd style="height:36px;">
+                            {$vo.name}
+                        </dd>
+                        <dd class="search-right-dl-price-score">
+                            <label>立即兑换</label>
+                        </dd>
+                    </dl>
+                </volist>
+            </div>
+            <div class="search-left-page">
+                <ul class="search-left-page-ul1 pageUp">
+                    <li>
+                        <a>< 上一页</a>
+                    </li>
+                </ul>
+                <for start="0" end="$totalPage">
+                    <if condition="$i lt 2">
+                        <ul class="bottom-pageNo active">
+                            <li>
+                                <a>{$i+1}</a>
+                            </li>
+                        </ul>
+                    <else/>
+                        <ul class="search-left-page-ul2">
+                            <li>
+                                ...
+                            </li>
+                        </ul>
+                        <ul>
+                            <li>
+                                <a>{$totalPage}</a>
+                            </li>
+                        </ul>
+                    </if>  
+                </for>
+                <div>
+                    <ul class="search-left-page-ul1 pageDown">
+                        <li>
+                            <a>下一页 ></a>
+                        </li>
+                    </ul>
+                    <ul class="search-left-page-ul2">
+                        <li>
+                            到第
+                        </li>
+                    </ul>
+                    <input id="pageNo" class="search-left-page-input search-page-input" type="text" value="1" />
+                    <ul class="search-left-page-ul2">
+                        <li>
+                            页
+                        </li>
+                    </ul>
+                    <ul id="submit" class="search-left-page-ul1">
+                        <li>
+                            <a>确定</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript" src="__PUBLIC__/Js/logic/index.js"></script>
+<include file="Public:footer" />
+<script type="text/javascript" src="__PUBLIC__/Js/scoreExchange.js"></script>
+<script>
+    function getAdvert(){
+        //获取广告
+        var url1 = "{:U('Index/getAllAdvert')}";
+        var postData = {
+            'mapStr':'banner3'
+        };
+        $.post(url1,postData,function(data){
+            if(data["code"]==2000){
+                var list = data["data"].list;
+                var imgs = "";
+                for(var i=0;i<list.length;i++){
+                    imgs += "<img style='width:100%;height:470px' src='"+list[i].imgs+"'>";
+                }
+                $("#banner").append(imgs);
+            }
+        });
+    }
+    function searchData(url,$vipName,$pageno,$pageSize){
+        var postData = {
+            'vipName':$vipName,
+            'pageNo':$pageno,
+            'pageSize':$pageSize
+        };
+        $.post(url,postData,function(data){
+            if(data["code"] == 2000){
+                var list = data["data"]["list"];
+                console.log(list);
+                
+                var $dl = "";
+                for(var i=0;i<list.length;i++){
+                    $dl += "<dl id='"+list[i].id+"' class='search-right-dl'>"+
+                                "<dt>"+
+                                    "<img src="+list[i].imgsArr[0]+" style='width:130px; height:190px;' />"+
+                                "</dt>"+
+                                "<dd style='height:36px;'>"+ list[i].name+"</dd>"+
+                                "<dd class='search-right-dl-price-score'>"+
+                                    "<label>立即兑换</label>"+
+                                "</dd>"+
+                            "</dl>";
+                }
+                $(".search-left-bottom-score dl").detach();
+                $(".search-left-bottom-score").append($dl);
+                $(".search-left-bottom-score dl").bind({
+                    mouseover:function(){
+                        $(this).css({"background-image":"url(/Public/Image/search-good-bg.png)","background-repeat":"no-repeat","cursor":"pointer"});
+                    },
+                    mouseout:function(){
+                        $(this).css({"background-image":"none","cursor":"default"});
+                    }
+                });
+                $(".search-right-dl").click(function(){
+                    var gId = $(".search-right-dl").attr("id");
+                    window.location.href = "__APP__/GoodInfo/vipexchangeInfo/gId/"+gId;
+                });
+                var totalPage = data["totalPage"];
+                var $ul = "";
+                for(var j=0;j<totalPage;j++){
+                    if((j+1)>2){
+                        $ul += "<ul class='search-left-page-ul2'>"+
+                                    "<li>"+
+                                        "..."+
+                                    "</li>"+
+                                "</ul>";
+                    }
+                    $ul += "<ul class='bottom-pageNo'>"+
+                                "<li>"+
+                                    "<a>"+(j+1)+"</a>"+
+                                "</li>"+
+                            "</ul>";
+                    
+                }
+                $("#pageUp").siblings("ul").remove();
+                $("#pageUp").after($ul);
+                $(".search-left-page ul").bind({
+                    mouseover:function(){
+                        $(this).css({"background-color":"#d30909"});
+                        $(this).children().children().css({"color":"white"});
+                        $(".search-left-page-ul2").css({"background-color":"white","color":"#000000"});
+                        $(".search-left-page-ul3").css({"background-color":"white","color":"#000000"});
+                    },
+                    mouseout:function(){
+                        $(this).css({"background-color":"#f4f4f4"});
+                        $(this).children().children().css({"color":"#000000"});
+                        $(".search-left-page-ul2").css({"background-color":"white","color":"#000000"});
+                        $(".search-left-page-ul3").css({"background-color":"white","color":"#000000"});
+                    }
+                });
+				console.log($(".bottom-pageNo").eq(0));
+				$(".bottom-pageNo").eq(0).addClass("active");
+            }
+        });
+    }
+    $(function(){
+        getAdvert();
+        var url = "{:U('Index/getAllVipLevel')}";
+        var vipName = "";
+        
+        $(".bottom-pageNo").click(function(){
+            var pageNo = $(this).children().children().text();
+            $("#currentPageNo").text(pageNo);
+            searchData(url,vipName,1,10);
+        });
+        
+        //所有的VIP等级
+        $.post(url,null,function(data){
+            if(data["code"] == 2000){
+                var list = data["data"]["list"];
+                var $ul = "";
+                for(var i=0;i<list.length;i++){
+                    $ul += "<ul class='member" + (i==0?" active":"") + "'>"+
+                                "<li>";
+                                if(i==0){
+                                    $ul +=   "<a id='"+list[i].name+"'>"+"0-"+list[i].code+"</a>";
+                                }else if(i==1){
+                                    $ul +=   "<a id='"+list[i].name+"'>"+(parseInt(list[0].code)+1)+"-"+list[i].code+"</a>";
+                                }else{
+                                    $ul +=   "<a id='"+list[i].name+"'>"+list[i].code+"以上</a>";
+                                }
+                      $ul += "</li>"+
+                            "</ul>";
+                }
+                $("#default").after($ul);
+                $(".member").bind({
+                    mouseover:function(){
+                        $(this).css({"background-color":"#d30909"});
+                        $(this).children().children().css({"color":"white"});
+                    },
+                    mouseout:function(){
+                        $(this).css({"background-color":"white"});
+                        $(this).children().children().css({"color":"#000000"});
+                    }
+                });
+                url = "{:U('Index/getGoodsByVipLevel')}";
+                $(".member").click(function(){
+					$(".member").each(function(){
+						$(this).removeClass("active");
+					});
+					$(this).addClass("active");
+                    vipName = $(this).children().children().attr("id");
+                    searchData(url,vipName,1,10);
+                });
+            }
+        });
+        
+        var $con = 2;      //当前条件
+        //分值
+        var totalPage = $("#totalPage").text();
+        
+        
+        $("#default").click(function(){
+            vipName = "";
+            searchData(url,vipName,1,10);
+        });
+        
+        
+        //上一页，下一页，确定，输入框
+        $(".pageUp").click(function(){
+            var pageNo = parseInt($("#currentPageNo").text());
+            pageNo--;
+            if(pageNo<=0){
+                pageNo = 1;
+                return;
+            }
+            $("#currentPageNo").text(pageNo);
+            searchData(url,vipName,pageNo,10);
+        });
+        $(".pageDown").click(function(){
+            var pageNo = parseInt($("#currentPageNo").text());
+            pageNo++;
+            if(pageNo>=totalPage){
+                pageNo = totalPage;
+                return;
+            }
+            $("#currentPageNo").text(pageNo);
+            searchData(url,vipName,pageNo,10);
+        });
+        $("#submit").click(function(){
+            var pageNo = $("#pageNo").val();
+            searchData(url,vipName,pageNo,10);
+        });
+        $(".search-right-dl").click(function(){
+            var gId = $(this).attr("id");
+            console.log("qq="+gId);
+            window.location.href = "__APP__/GoodInfo/vipexchangeInfo/gId/"+gId;
+        });
+        
+    });
+</script>
+

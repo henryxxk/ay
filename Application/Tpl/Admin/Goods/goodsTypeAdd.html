@@ -1,0 +1,201 @@
+<include file="Public:header" />
+
+    <!--dynamic table-->
+    <link href="__PUBLIC__/Template/assets/advanced-datatable/media/css/demo_page.css" rel="stylesheet" />
+    <link href="__PUBLIC__/Template/assets/advanced-datatable/media/css/demo_table.css" rel="stylesheet" />
+    <link rel="stylesheet" href="__PUBLIC__/Template/assets/data-tables/DT_bootstrap.css" />
+
+ <include file="Public:menu" />
+
+    <!--main content start-->
+    <section id="main-content" >
+        <section class="wrapper">
+            <div class="row">
+                <div class="col-md-12">
+                    <!--breadcrumbs start -->
+                    <ul class="breadcrumb">
+                        <li><a href="#"><i class="fa fa-home"></i> 首页</a></li>
+                        <li><a href="#"> 商品管理</a></li>
+                        <li class="active"> 商品参数管理</li>
+                    </ul>
+                    <!--breadcrumbs end -->
+                </div>
+            </div>
+ 
+
+            <div class="row"> 
+            <div class="col-lg-12">
+            <!--tab nav start-->
+            <section class="panel">
+                <header class="panel-heading tab-bg-dark-navy-blue ">
+                    <ul class="nav nav-tabs">
+                        <li class="active">
+                            <a data-toggle="tab" href="#type"> 商品分类</a>
+                        </li>
+                       <!--  <li class="">
+                            <a data-toggle="tab" href="#brand"> 商品品牌</a>
+                        </li>
+                        <li class="">
+                            <a data-toggle="tab" href="#color"> 商品颜色</a>
+                        </li>
+                        <li class="">
+                            <a data-toggle="tab" href="#size"> 商品尺码</a>
+                        </li> -->
+                    </ul>
+                </header>
+                <div class="panel-body">
+                    <div class="tab-content">
+                        <div id="type" class="tab-pane active">
+                            
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <section class="panel">
+                                        <header class="panel-heading">
+                                            <!-- <button type="button" onclick="javascript:btnJump('ruleAdd','')" class="btn btn-primary"><i class="fa fa-plus"></i> 新增分类</button> -->
+                                        </header>
+                                        <div class="panel-body"> 
+                                            <div class="form">
+                                                <form class="cmxform form-horizontal " id="typeAddForm" method="post" action="{:U('Goods/goodsTypeAddInsert')}">
+                                                    <div class="form-group ">
+                                                        <label for="parentId" class="control-label col-lg-3">选择父级分类</label>
+                                                        <div class="col-lg-6">
+                                                            <select id="parentId" name="parentId" class="form-control form-inline  m-bot15" style="width:200px;float:left;color:#000">
+                                                                <option value="0">[无父级]</option>
+                                                                <volist name="goodsType" id="vo"> 
+                                                                    <option value="{$vo.id}">{$vo.name}</option>
+                                                                    }
+                                                                </volist> 
+                                                            </select>
+
+                                                            <select id="parentId2" name="parentId2" class="form-control form-inline  m-bot15" style="width:200px;margin-left: 215px;color:#000">
+                                                                <option value="">[选择子分类]</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group ">
+                                                        <label for="name" class="control-label col-lg-3">分类名称</label>
+                                                        <div class="col-lg-6">
+                                                            <input class=" form-control" id="name" name="name" type="text" />
+                                                        </div>
+                                                    </div> 
+
+                                                    <input type="hidden" name="status" value="1" />
+
+                                                    <div class="form-group">
+                                                        <div class="col-lg-offset-3 col-lg-6">
+                                                            <button class="btn btn-primary" type="submit"> 新增</button>
+                                                            <button class="btn btn-default cancelBtn" dataurl="/Admin/Goods/goodsType/menu/order" type="button"> 取消</button>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </section>
+                                </div>
+                            </div>
+                            <!-- page end-->
+                        </div>
+
+                        <div id="brand" class="tab-pane">
+                            brand
+                        </div>
+
+                        <div id="color" class="tab-pane">
+                            color
+                        </div>
+
+                        <div id="size" class="tab-pane">
+                            size
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!--tab nav start-->
+  
+                </div> 
+            </div>
+
+
+        </section>
+    </section>
+    <!--main content end-->
+  
+</section>
+
+
+<include file="Public:footer" />
+
+<!--common script init for all pages-->
+<script src="__PUBLIC__/Template/js/scripts.js"></script>  
+<script type="text/javascript" src="__PUBLIC__/Template/js/jquery-validate/jquery.validate.min.js"></script>
+<script>
+$(function(){ 
+    $("#typeAddForm").validate({
+        rules: {
+            parentId: "required",
+            name: "required"
+        },
+        messages: {
+            parentId: "请选择分类",
+            name: "分类名称不可为空"
+        }
+    });
+});
+</script>
+<script>
+//表格
+$(function(){ 
+    dTable('#ruleTable'); 
+});
+//联动分类
+$(function(){
+    $('#parentId').change(function(){
+        var url = "/Admin/Base/getSubTypeName";
+        var postData = {
+            'pid':$('#parentId').val(),
+        };
+        console.log(postData);
+        $.post(url,postData,function(data){
+                console.log(data);
+            if(data.code == 2000){
+                $('#parentId2').html('<option value="">[选择子分类]</option>');
+                $.each(data.data,function(k,v){
+                    $('#parentId2').append('<option value="'+v.id+'">'+v.name+'</option>');
+                });
+            }
+        });
+    });
+});
+//btnJump
+function btnJump(method,id){
+    if(id != ''){
+        //alert("Auth/"+ method + "/id/" + id);
+        window.location.href = "/Admin/Auth/"+ method + "/id/" + id;
+    }else{
+        //alert("Auth/"+ method + "/");
+       window.location.href = "/Admin/Auth/"+ method + "/";
+    }
+}
+//del
+function del(method,id){
+    var url = "/Admin/Auth/" + method + "/";
+    var postData = {
+        'id':id
+    }
+    $.post(url,postData,function(data){
+        if(data.code == 2000){
+            window.location.href = "{:U('Auth/ruleIndex')}";
+        }else{
+            alert(data.msg);
+        }
+    });
+}
+//before
+function beforeDel(msg,method,id){
+    if(confirm(msg)){ 
+        del(method,id);
+    }  
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,127 @@
+<include file="Public:header" />
+
+    <!--dynamic table-->
+    <link href="__PUBLIC__/Template/assets/advanced-datatable/media/css/demo_page.css" rel="stylesheet" />
+    <link href="__PUBLIC__/Template/assets/advanced-datatable/media/css/demo_table.css" rel="stylesheet" />
+    <link rel="stylesheet" href="__PUBLIC__/Template/assets/data-tables/DT_bootstrap.css" />
+
+ <include file="Public:menu" />
+
+    <!--main content start-->
+    <section id="main-content">
+        <section class="wrapper">
+        <!-- page start--> 
+        <div class="row">
+            <div class="col-md-12">
+                <!--breadcrumbs start -->
+                <ul class="breadcrumb">
+                    <li><a href="#"><i class="fa fa-home"></i> 首页</a></li>
+                    <li><a href="#">代金券管理</a></li>
+                    <li class="active">代金券列表</li>
+                </ul>
+                <!--breadcrumbs end -->
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-12">
+                <section class="panel">
+                    <header class="panel-heading">
+                        <button type="button" onclick="javascript:btnJump('/Admin/Voucherinfo/add','')" class="btn btn-primary"><i class="fa fa-plus"></i> 新增代金券</button>
+                        <!-- <button type="button" onclick="javascript:btnJump('ruleEdit')" class="btn btn-primary"><i class="fa fa-pencil"></i> 编辑</button> -->
+                        <!-- <button type="button" class="btn btn-primary"><i class="fa  fa-mail-reply"></i> 返回</button> -->
+                        <!-- <button type="button" onclick="javascript:btnJump('ruleDel')" class="btn btn-danger"><i class="fa fa-trash-o"></i> 删除</button> -->
+                    </header>
+                    <div class="panel-body">
+                    <div class="adv-table">
+                    <table cellpadding="0" cellspacing="0" border="0" class="display table table-bordered" id="ruleTable">
+                    <thead>
+                    <tr>
+                        <th>编号</th>
+                        <!-- <th>类型</th> -->
+                        <th>名称</th>
+                        <th>数量</th>
+                        <th>使用商品</th>
+                        <th>金额</th>
+                        <!-- <th>使用条件</th> -->
+                        <th>生效时间</th>
+                        <th>失效时间</th>
+                        <th class="hidden-phone">状态</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <volist name="list" id="vo">
+                    <tr class="gradeX">
+                        <td>{$vo.id}</td>
+                        <!-- <td>{$vo.typeId}</td> -->
+                        <td>{$vo.name}</td>
+                        <td>{$vo.num}</td>
+                        <td>
+                            <volist name="vo.goodsArr" id="sub">
+                                <!-- <a t href="{:U('Goods/show',array('id'=>$vo['goodsId']))}">{$vo.goodsName}</a> -->
+                                <a target="_blank" href="{:U('Goods/show',array('id'=>$sub['goodsId']))}">{$sub.goodsName}</a><br>
+                            </volist>
+                        </td>
+                        <td>￥{$vo.money}&nbsp; </td>
+                        <!-- <td>{$vo.condition}</td> -->
+                        <td>{$vo.startTime|date="Y-m-d H:i:s",###}</td>
+                        <td>{$vo.endTime|date="Y-m-d H:i:s",###}</td> 
+                        <td>
+                            <if condition="$vo.statusTime eq 0 ">
+                                未生效
+                            <elseif condition="$vo.statusTime eq 1 " />
+                                生效
+                            <elseif condition="$vo.statusTime eq -1 " />
+                                失效
+                            </if>
+                        </td>
+                        <td>
+                            <button type="button" onclick="javascript:btnJump('/Admin/Voucherinfo/show',{$vo.id})" class="btn btn-primary"><i class="fa fa-eye"></i> 查看</button>&nbsp;&nbsp;
+                            <button type="button" onclick="javascript:btnJump('/Admin/Voucherinfo/edit',{$vo.id})" class="btn btn-primary"><i class="fa fa-eye"></i> 编辑</button>&nbsp;&nbsp;
+                             <button type="button" onclick="javascript:btnJump('/Admin/Voucherinfo/sendvoucher',{$vo.id})" class="btn btn-primary"><i class="fa fa-pencil"></i> 送优惠券</button>&nbsp;&nbsp;
+                           <!--  <button type="button" onclick="javascript:btnJump('/Admin/Voucherinfo/edit',{$vo.id})" class="btn btn-primary"><i class="fa fa-pencil"></i> 编辑</button>&nbsp;&nbsp; -->
+                        <!-- <button type="button" class="btn btn-primary"><i class="fa  fa-mail-reply"></i> 返回</button> -->
+
+                        <!-- <if condition="$vo.status eq 0 ">
+                            <button type="button" onclick="javascript:changStatus('你确定要启用吗','statuschange',{$vo.id},1)" class="btn btn-round btn-danger"><i class="fa fa-magic"></i> 激活</button>
+                        <elseif condition="$vo.status eq 1 "/>
+                            <button type="button" onclick="javascript:btnJump('edit',{$vo.id})" class="btn btn-primary"><i class="fa fa-pencil"></i> 编辑</button>&nbsp;&nbsp;
+                            <button type="button" onclick="javascript:changStatus('你确定要下架吗','statuschange',{$vo.id},2)" class="btn btn-warning"><i class="fa fa-minus-square"></i> 下架</button>
+                            <button type="button" onclick="javascript:changStatus('你确定要禁用吗','statuschange',{$vo.id},0)" class="btn btn-round btn-danger"><i class="fa fa-exclamation-triangle"></i> 屏蔽</button>
+                        <elseif condition="$vo.status eq 2 " />
+                            <button type="button" onclick="javascript:btnJump('edit',{$vo.id})" class="btn btn-primary"><i class="fa fa-pencil"></i> 编辑</button>&nbsp;&nbsp;
+                            <button type="button" onclick="javascript:changStatus('你确定要上架吗','statuschange',{$vo.id},1)" class="btn btn-success"><i class="fa fa-plus-square"></i> 上架</button>
+                            <button type="button" onclick="javascript:changStatus('你确定要禁用吗','statuschange',{$vo.id},0)" class="btn btn-round btn-danger"><i class="fa fa-exclamation-triangle"></i> 屏蔽</button>
+                        </if>    -->
+                        </td>
+                    </tr>
+                    </volist> 
+                    </tbody>
+                    </table>
+
+                    </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+        <!-- page end-->
+        </section>
+    </section>
+    <!--main content end-->
+ 
+
+</section>
+
+<include file="Public:footer" />
+
+<!--common script init for all pages-->
+<script src="__PUBLIC__/Template/js/scripts.js"></script> 
+<script>
+//表格
+$(function(){ 
+    dTable('#ruleTable'); 
+});
+</script>
+</body>
+</html>

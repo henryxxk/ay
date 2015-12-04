@@ -1,0 +1,115 @@
+<include file="Public:header" />
+
+    <!--dynamic table-->
+    <link href="__PUBLIC__/Template/assets/advanced-datatable/media/css/demo_page.css" rel="stylesheet" />
+    <link href="__PUBLIC__/Template/assets/advanced-datatable/media/css/demo_table.css" rel="stylesheet" />
+    <link rel="stylesheet" href="__PUBLIC__/Template/assets/data-tables/DT_bootstrap.css" />
+
+ <include file="Public:menu" />
+
+    <!--main content start-->
+    <section id="main-content">
+        <section class="wrapper">
+        <!-- page start--> 
+        <div class="row">
+            <div class="col-md-12">
+                <!--breadcrumbs start -->
+                <ul class="breadcrumb">
+                    <li><a href="#"><i class="fa fa-home"></i> 首页</a></li>
+                    <li><a href="#">商品管理</a></li>
+                    <li class="active">VIP兑换商品列表</li>
+                </ul>
+                <!--breadcrumbs end -->
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-12">
+                <section class="panel">
+                    <header class="panel-heading">
+                        <h2>VIP兑换专区</h2>
+                        <button type="button" onclick="javascript:btnJump('/Admin/Vip/add/menu/sales','')" class="btn btn-primary"><i class="fa fa-plus"></i> 新增VIP兑换商品</button>
+                        <button type="button" onclick="javascript:btnJump('/Admin/Vip/index2/menu/sales','')" class="btn btn-primary"> VIP用户兑换记录</button>
+                        <!-- <button type="button" onclick="javascript:btnJump('ruleEdit')" class="btn btn-primary"><i class="fa fa-pencil"></i> 编辑</button> -->
+                        <!-- <button type="button" class="btn btn-primary"><i class="fa  fa-mail-reply"></i> 返回</button> -->
+                        <!-- <button type="button" onclick="javascript:btnJump('ruleDel')" class="btn btn-danger"><i class="fa fa-trash-o"></i> 删除</button> -->
+                    </header>
+                    <div class="panel-body">
+                    <div class="adv-table">
+                    <table cellpadding="0" cellspacing="0" border="0" class="display table table-bordered" id="ruleTable">
+                    <thead>
+                    <tr>
+                        <th>编号</th>
+                        <th>货号</th>
+                        <th>名称</th>
+                        <th>图片</th>
+                        <th>市场价</th>
+                        <th>兑换积分</th>  
+                        <th class="hidden-phone">状态</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <volist name="list" id="vo">
+                    <tr class="gradeX">
+                        <td>{$vo.id}</td>
+                        <td>{$vo.goodsNum}</td>
+                        <td>{$vo.name}</td>
+                        <td><img src="{$vo.imgs}" style="width:50px;" /></td>
+                        <td>￥&nbsp;{$vo.marketPrice}&nbsp; </td>
+                        <td>&nbsp;{$vo.score}&nbsp;(积分)</td>  
+                        <td class="center hidden-phone">
+                            <if condition="$vo.status eq 1 ">
+                                已上架
+                            <elseif condition="$vo.status eq 2 " />
+                                已下架
+                            <elseif condition="$vo.status eq 0 " />
+                                已禁用
+                            </if>    
+                        </td>
+                        <td>
+                            <button type="button" onclick="javascript:btnJump('/Admin/Vip/show/menu/sales',{$vo.id})" class="btn btn-primary"><i class="fa fa-eye"></i> 查看</button>&nbsp;&nbsp;
+                        <!-- <button type="button" class="btn btn-primary"><i class="fa  fa-mail-reply"></i> 返回</button> -->
+
+                        <if condition="$vo.status eq 0 ">
+                        <!--     <button type="button" onclick="javascript:changStatus('你确定要启用吗','/Admin/Vip/statuschange',{$vo.id},1)" class="btn btn-round btn-danger"><i class="fa fa-magic"></i> 激活</button> -->
+                        <elseif condition="$vo.status eq 1 "/>
+                            <button type="button" onclick="javascript:btnJump('/Admin/Vip/edit/menu/sales',{$vo.id})" class="btn btn-primary"><i class="fa fa-pencil"></i> 编辑</button>&nbsp;&nbsp;
+                            <button type="button" onclick="javascript:changStatus('你确定要下架吗','/Admin/Vip/statuschange',{$vo.id},2)" class="btn btn-warning"><i class="fa fa-minus-square"></i> 下架</button>
+                            <!-- <button type="button" onclick="javascript:changStatus('你确定要禁用吗','/Admin/Vip/statuschange',{$vo.id},0)" class="btn btn-round btn-danger"><i class="fa fa-exclamation-triangle"></i> 屏蔽</button> -->
+                        <elseif condition="$vo.status eq 2 " />
+                            <button type="button" onclick="javascript:btnJump('/Admin/Vip/edit/menu/sales',{$vo.id})" class="btn btn-primary"><i class="fa fa-pencil"></i> 编辑</button>&nbsp;&nbsp;
+                            <button type="button" onclick="javascript:changStatus('你确定要上架吗','/Admin/Vip/statuschange',{$vo.id},1)" class="btn btn-success"><i class="fa fa-plus-square"></i> 上架</button>
+                            <!-- <button type="button" onclick="javascript:changStatus('你确定要禁用吗','/Admin/Vip/statuschange',{$vo.id},0)" class="btn btn-round btn-danger"><i class="fa fa-exclamation-triangle"></i> 屏蔽</button> -->
+                        </if>   
+                        </td>
+                    </tr>
+                    </volist> 
+                    </tbody>
+                    </table>
+
+                    </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+        <!-- page end-->
+        </section>
+    </section>
+    <!--main content end-->
+ 
+
+</section>
+
+<include file="Public:footer" />
+
+<!--common script init for all pages-->
+<script src="__PUBLIC__/Template/js/scripts.js"></script> 
+<script>
+//表格
+$(function(){ 
+    dTable('#ruleTable'); 
+});
+</script>
+</body>
+</html>

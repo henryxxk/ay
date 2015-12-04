@@ -1,0 +1,396 @@
+<include file="Public:header" />
+
+    <!--dynamic table-->
+    <link href="__PUBLIC__/Template/assets/advanced-datatable/media/css/demo_page.css" rel="stylesheet" />
+    <link href="__PUBLIC__/Template/assets/advanced-datatable/media/css/demo_table.css" rel="stylesheet" />
+    <link rel="stylesheet" href="__PUBLIC__/Template/assets/data-tables/DT_bootstrap.css" />
+
+ <include file="Public:menu" />
+
+    <!--main content start-->
+    <section id="main-content" >
+        <section class="wrapper">
+            <div class="row">
+                <div class="col-md-12">
+                    <!--breadcrumbs start -->
+                    <ul class="breadcrumb">
+                        <li><a href="#"><i class="fa fa-home"></i> 首页</a></li>
+                        <li><a href="#"> 商品管理</a></li>
+                        <li class="active"> 商品参数管理</li>
+                    </ul>
+                    <!--breadcrumbs end -->
+                </div>
+            </div>
+ 
+            <div class="row">
+                 <div class="col-md-6">
+                    <h3>01分类管理</h3><hr>
+
+                    <volist name="typelist" id="vo">
+                        <p id="type{$vo.id}"><span class="label label-default " data-id="{$vo.id}">{$vo.name}</span>&nbsp;&nbsp;&nbsp;&nbsp;
+                            <!-- <a href="javascript:void(0)" data-id="{$vo.id}" class="typeBtnAdd btn btn-info btn-xs">添加</a>&nbsp;&nbsp; -->
+                            <a href="javascript:void(0)" data-id="{$vo.id}" class="typeBtnEdit btn btn-success btn-xs">编辑</a>&nbsp;&nbsp;
+                            <a href="javascript:void(0)" data-id="{$vo.id}" class="typeBtnDel btn btn-danger btn-xs">删除</a>
+                        </p>
+                        <volist name="vo.subArr" id="sub">
+                        <p id="type{$sub.id}">|--------------------<span data-id="{$sub.id}">{$sub.name}</span>&nbsp;&nbsp;
+                            <!-- <a href="#" class="btn btn-round btn-success btn-xs">+</a>&nbsp;&nbsp; -->
+                            <a href="javascript:void(0)" data-id="{$sub.id}" class="typeBtnEdit fa fa-pencil btn btn-success btn-xs"></a>
+                            <a href="javascript:void(0)" data-id="{$sub.id}" class="typeBtnDel fa fa-trash-o btn btn-danger btn-xs"></a> 
+                        </p>
+                        </volist> 
+
+                        <p>|--------------------<input type="type" id="addTypeInput" value="" />
+                            <a href="javascript:void(0)" data-id="{$vo.id}" class="smallTypeBtnAdd btn btn-info btn-xs">添加</a>&nbsp; 
+                        </p><br><br>
+       
+                    </volist>
+
+                    <p><input type="type" value="" />
+                    <a href="javascript:void(0)" class="bigTypeBtnAdd btn btn-info btn-xs">新增大类</a>&nbsp;
+                    </p><br>
+                </div>
+                <div class="col-md-6">
+                    <h3>02品牌管理</h3><hr>
+                    <select id="bigTypeSel2">
+                        <option value="">[请选择]</option>
+                        <volist name="typelist" id="vo">
+                            <option value="{$vo.id}">{$vo.name}</option>
+                        </volist>
+                    </select>
+                    <select id="smallTypeSel2">
+                        <option value="">[请选择]</option>
+                    </select><br><br>
+                    <p>该分类下已有品牌：</p>
+                    <div id="showGoodsbrand">
+
+                    </div><br><br>
+                    <textarea cols="60" rows="5" id="goodsbrandText"></textarea>
+                    <span>多个属性使用逗号','分隔:品牌1,品牌2,品牌3</span>
+                    <br><button type="button" class="addBtnGoodsbrand btn btn-success">添加</button>
+                    <hr><br><br>
+
+                    <h3>03颜色管理</h3><hr>
+                    <select id="bigTypeSel3">
+                        <option value="">[请选择]</option>
+                        <volist name="typelist" id="vo">
+                            <option value="{$vo.id}">{$vo.name}</option>
+                        </volist>
+                    </select>
+                    <select id="smallTypeSel3">
+                        <option value="">[请选择]</option>
+                    </select><br><br>
+                    <p>该分类下已有颜色：</p>
+                    <div id="showGoodscolor">
+
+                    </div><br><br>
+                    <textarea cols="60" rows="5" id="goodscolorText"></textarea>
+                    <span>多个属性使用逗号','分隔:颜色1,颜色2,颜色3</span>
+                    <br><button type="button" class="addBtnGoodscolor btn btn-success">添加</button>
+                    <hr><br><br>
+
+                    <h3>04尺寸管理</h3><hr>
+                    <select id="bigTypeSel4">
+                        <option value="">[请选择]</option>
+                        <volist name="typelist" id="vo">
+                            <option value="{$vo.id}">{$vo.name}</option>
+                        </volist>
+                    </select>
+                    <select id="smallTypeSel4">
+                        <option value="">[请选择]</option>
+                    </select><br><br>
+                    <p>该分类下已有尺寸：</p>
+                    <div id="showGoodssize">
+
+                    </div><br><br>
+                    <textarea cols="60" rows="5" id="goodssizeText"></textarea>
+                    <span>多个属性使用逗号','分隔:尺寸1,尺寸2,尺寸3</span>
+                    <br><button type="button" class="addBtnGoodssize btn btn-success">添加</button>
+                    <hr><br><br>
+                </div>
+            </div>
+              
+        </section>
+    </section>
+    <!--main content end-->
+  
+</section>
+
+
+<include file="Public:footer" />
+
+<!--common script init for all pages-->
+<script src="__PUBLIC__/Template/js/scripts.js"></script>  
+
+<script type="text/javascript"> 
+//保存编辑分类
+function saveFun(id){ 
+    var newVal = $('#type'+id).find('input').val();
+    $('#type'+id).find('span').html(newVal); 
+
+    //保存到数据库
+    var url = "__APP__/Admin/Goods/saveGoodsType";
+    var postData = {
+        'id':id,
+        'name':newVal
+    }
+    $.post(url,postData,function(data){
+        console.log(data);
+        alert(data.msg);
+    });
+}
+//取消编辑分类
+function cancalFun(id,oldData){ 
+    // var oldVal = $('#type'+id).find('input').val();
+    // $('#type'+id).find('span').html(oldVal); 
+    $('#type'+id).find('span').html(oldData);
+}
+$(function(){
+    //添加大分类
+    $('.bigTypeBtnAdd').click(function(){
+        var val = $(this).parent().find('input').val();
+        if(val == ''){
+            alert('分类名称不可为空');
+            return;
+        }
+        var url = "__APP__/Admin/Goods/addType";
+        var postData = {
+            'name':val,
+            'parentId':0
+        }
+        console.log(postData);
+        $.post(url,postData,function(data){
+            console.log(data);
+            alert(data.msg);
+            if(data.code == 2000){
+                window.location.reload();
+            }
+        });
+    });
+    //添加子分类
+    $('.smallTypeBtnAdd').click(function(){
+        var val = $(this).parent().find('input').val();
+        if(val == ''){
+            alert('分类名称不可为空');
+            return;
+        }
+        var url = "__APP__/Admin/Goods/addType";
+        var postData = {
+            'name':val,
+            'parentId':$(this).data("id")
+        }
+        console.log(postData);
+        $.post(url,postData,function(data){
+            console.log(data);
+            alert(data.msg);
+            if(data.code == 2000){
+                window.location.reload();
+            }
+        });
+    });
+    //编辑分类
+    $('.typeBtnEdit').click(function(){
+        //alert($(this).data("id"));
+        var t = $(this).parent().find('span');
+        var oldVal = $(t).html(); 
+        var str = '<input type="type" value="'+ oldVal +'" />'+
+                  '<a href="javascript:saveFun('+ $(t).data('id') +')">保存</a>&nbsp;'+
+                  '<a href="javascript:cancalFun('+ $(t).data('id') +',\''+oldVal+'\')">取消</a>';
+        $(t).html(str);
+    }); 
+    //删除分类
+    $('.typeBtnDel').click(function(){
+        var url = '__APP__/Admin/Goods/deleteType';
+        var postData = {
+            'id':$(this).data('id')
+        }
+        $.post(url,postData,function(data){
+            console.log(data);
+            alert(data.msg);
+            if(data.code == 2000){
+                window.location.reload();
+            }
+        });
+    });
+
+/*
+---------上面 分类 下面 品牌 颜色 尺寸
+*/ 
+    //分类选择联动
+    $('#bigTypeSel2').change(function(){
+        var url = "__APP__/Admin/Base/getSubTypeName";
+        var postData = {
+            'pid':$(this).val()
+        }
+        $.post(url,postData,function(data){
+            console.log(data);
+            $('#smallTypeSel2').html('<option value="">[请选择]</option>');
+            if(data.data != null){
+                $.each(data.data,function(k,v){
+                    $('#smallTypeSel2').append('<option value="'+v.id+'">'+v.name+'</option>');
+                });
+            }
+        });
+    });
+    //品牌联动
+    $('#smallTypeSel2').change(function(){ 
+        var url = "__APP__/Admin/Base/getBrandName";
+        var postData = {
+            'typeid':$(this).val()
+        }
+        $.post(url,postData,function(data){
+            console.log(data); 
+            $('#showGoodsbrand').html('');
+            $('#goodsbrandText').val('');
+            if(data.data != null){
+                $.each(data.data,function(k,v){ 
+                    $('#showGoodsbrand').append(v.name+', ');
+                });
+            }
+        });
+    });
+    //添加品牌
+    $('.addBtnGoodsbrand').click(function(){
+        var url = "__APP__/Admin/Goods/addBtnGoodsbrand";
+        var bigTypeSel = $('#bigTypeSel2').val();
+        var smallTypeSel = $('#smallTypeSel2').val();
+        var goodsbrandText = $('#goodsbrandText').val();
+        var postData = {
+            'bigTypeSel':bigTypeSel,
+            'smallTypeSel':smallTypeSel,
+            'goodsbrandText':goodsbrandText
+        }
+        console.log(postData);
+        $('#showGoodsbrand').append(goodsbrandText);
+        $('#goodsbrandText').val('');
+        $.post(url,postData,function(data){
+            console.log(data);
+            if(data.code == 2000){
+                alert(data.msg);
+            }else{
+                alert(data.msg);
+            }
+        });
+    });
+//-----------颜色
+
+    //分类选择联动
+    $('#bigTypeSel3').change(function(){
+        var url = "__APP__/Admin/Base/getSubTypeName";
+        var postData = {
+            'pid':$(this).val()
+        }
+        $.post(url,postData,function(data){
+            console.log(data);
+            $('#smallTypeSel3').html('<option value="">[请选择]</option>');
+            if(data.data != null){
+                $.each(data.data,function(k,v){
+                    $('#smallTypeSel3').append('<option value="'+v.id+'">'+v.name+'</option>');
+                });
+            }
+        });
+    });
+    //品牌联动
+    $('#smallTypeSel3').change(function(){ 
+        var url = "__APP__/Admin/Base/getColorName";
+        var postData = {
+            'typeid':$(this).val()
+        }
+        $.post(url,postData,function(data){
+            console.log(data); 
+            $('#showGoodscolor').html('');
+            $('#goodscolorText').val('');
+            if(data.data != null){
+                $.each(data.data,function(k,v){ 
+                    $('#showGoodscolor').append(v.name+', ');
+                });
+            }
+        });
+    });
+    //添加颜色
+    $('.addBtnGoodscolor').click(function(){
+        var url = "__APP__/Admin/Goods/addBtnGoodscolor";
+        var bigTypeSel = $('#bigTypeSel3').val();
+        var smallTypeSel = $('#smallTypeSel3').val();
+        var goodsbrandText = $('#goodscolorText').val();
+        var postData = {
+            'bigTypeSel':bigTypeSel,
+            'smallTypeSel':smallTypeSel,
+            'goodsbrandText':goodsbrandText
+        }
+        console.log(postData);
+        $('#showGoodscolor').append(goodsbrandText);
+        $('#goodscolorText').val('');
+        $.post(url,postData,function(data){
+            console.log(data);
+            if(data.code == 2000){
+                alert(data.msg);
+            }else{
+                alert(data.msg);
+            }
+        });
+    });
+//-----------颜色
+
+    //分类选择联动
+    $('#bigTypeSel4').change(function(){
+        var url = "__APP__/Admin/Base/getSubTypeName";
+        var postData = {
+            'pid':$(this).val()
+        }
+        $.post(url,postData,function(data){
+            console.log(data);
+            $('#smallTypeSel4').html('<option value="">[请选择]</option>');
+            if(data.data != null){
+                $.each(data.data,function(k,v){
+                    $('#smallTypeSel4').append('<option value="'+v.id+'">'+v.name+'</option>');
+                });
+            }
+        });
+    });
+    //品牌联动
+    $('#smallTypeSel4').change(function(){ 
+        var url = "__APP__/Admin/Base/getSizeName";
+        var postData = {
+            'typeid':$(this).val()
+        }
+        $.post(url,postData,function(data){
+            console.log(data); 
+            $('#showGoodssize').html('');
+            $('#goodssizeText').val(''); 
+            if(data.data != null){
+                $.each(data.data,function(k,v){ 
+                    $('#showGoodssize').append(v.name+', ');
+                });
+            }
+        });
+    });
+    //添加尺寸
+    $('.addBtnGoodssize').click(function(){
+        var url = "__APP__/Admin/Goods/addBtnGoodssize";
+        var bigTypeSel = $('#bigTypeSel4').val();
+        var smallTypeSel = $('#smallTypeSel4').val();
+        var goodsbrandText = $('#goodssizeText').val();
+        var postData = {
+            'bigTypeSel':bigTypeSel,
+            'smallTypeSel':smallTypeSel,
+            'goodsbrandText':goodsbrandText
+        }
+        console.log(postData);
+        $('#showGoodssize').append(goodsbrandText);
+        $('#goodssizeText').val('');
+        $.post(url,postData,function(data){
+            console.log(data);
+            if(data.code == 2000){
+                alert(data.msg);
+            }else{
+                alert(data.msg);
+            }
+        });
+    });
+
+
+});
+</script>
+</body>
+</html>
